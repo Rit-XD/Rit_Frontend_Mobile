@@ -18,6 +18,7 @@ import { ThemedView } from "@/components/ThemedView";
 import { ThemedText } from "@/components/ThemedText";
 import Input from "@/components/ui/Input";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import LoginRegisterSlider from "@/components/ui/Slider";
 
 const SignInScreen = () => {
   const [email, setEmail] = useState("");
@@ -86,9 +87,10 @@ const SignInScreen = () => {
               disabled={loading}
               text={loading ? "Signing in..." : "Sign in"}
             />
-            <Link href="/register" style={styles.textButton}>
+            {/* <Link href="/register" style={styles.textButton}>
               Create an account
-            </Link>
+            </Link> */}
+            <LoginRegisterSlider />
           </View>
         </View>
       </KeyboardAwareScrollView>
