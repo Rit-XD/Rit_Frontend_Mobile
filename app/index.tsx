@@ -9,7 +9,6 @@ const index = () => {
   const { session, isLoading } = useAuth();
 
   if (isLoading) {
-    console.log(session)
     return <ActivityIndicator />;
   }
 
