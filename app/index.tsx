@@ -14,7 +14,7 @@ const index = () => {
   }
 
   if (!session) {
-    return <Redirect href={"/Login"} />;
+    return <Redirect href={"/login"} />;
   }
 
   return <Redirect href={"/(tabs)"} />;
