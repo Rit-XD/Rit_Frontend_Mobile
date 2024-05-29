@@ -7,7 +7,7 @@ import { Image } from "expo-image";
 import { useAuth } from "@/providers/AuthProvider";
 import { ThemedText } from "@/components/ThemedText";
 import { primaryColor, secondaryColor } from "@/constants/Colors";
-import { LinearGradient } from 'expo-linear-gradient';
+import { LinearGradient } from "expo-linear-gradient";
 
 export default function HomeScreen() {
   const { user } = useAuth();
@@ -15,22 +15,26 @@ export default function HomeScreen() {
 
   return (
     <ThemedView style={styles.page}>
-            <LinearGradient
+      <LinearGradient
         // Background Linear Gradient
         colors={[primaryColor, secondaryColor]}
         style={styles.headBackground}
       />
-      <View style= {styles.head}>
-        <Image 
-        source={"https://iqfcxjbnqcpjzggtcptb.supabase.co/storage/v1/object/public/profilePics/Rit-Logo.png?t=2024-05-29T09%3A24%3A23.265Z"} 
-        style={styles.image}               
-        contentFit="contain"
-        transition={1000}
-        />   
+      <View style={styles.head}>
+        <Image
+          source={
+            "https://iqfcxjbnqcpjzggtcptb.supabase.co/storage/v1/object/public/profilePics/Rit-Logo.png?t=2024-05-29T09%3A24%3A23.265Z"
+          }
+          style={styles.image}
+          contentFit="contain"
+          transition={1000}
+        />
         <View style={styles.headTextContainer}>
-          <ThemedText style={styles.headText}>Hey {user.name},</ThemedText>
-          <ThemedText style={styles.headText}>Wie pik jij vandaag op?</ThemedText>
-        </View> 
+          {/* <ThemedText style={styles.headText}>Hey {user.name},</ThemedText> */}
+          <ThemedText style={styles.headText}>
+            Wie pik jij vandaag op?
+          </ThemedText>
+        </View>
       </View>
     </ThemedView>
   );
@@ -45,18 +49,18 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     display: "flex",
     flexDirection: "row",
-    marginHorizontal: 24
+    marginHorizontal: 24,
   },
   headBackground: {
-    position: 'absolute',
+    position: "absolute",
     height: "25%",
     width: "100%",
-    opacity: 0.1
+    opacity: 0.1,
   },
   headTextContainer: {
     marginLeft: 16,
     display: "flex",
-    justifyContent: "center"
+    justifyContent: "center",
   },
   headText: {
     fontSize: 24,
@@ -64,5 +68,5 @@ const styles = StyleSheet.create({
   image: {
     width: 64,
     height: 64,
-  }
+  },
 });

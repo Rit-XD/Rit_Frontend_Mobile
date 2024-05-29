@@ -1,4 +1,12 @@
-import { View, Text, TextInput, StyleSheet, Alert, Keyboard, TouchableWithoutFeedback } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  StyleSheet,
+  Alert,
+  Keyboard,
+  TouchableWithoutFeedback,
+} from "react-native";
 import React, { useState } from "react";
 import { Link, Stack } from "expo-router";
 import { supabase } from "@/lib/supabase";
@@ -14,6 +22,7 @@ const SignInScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   async function signInWithEmail() {
     setLoading(true);
@@ -22,7 +31,7 @@ const SignInScreen = () => {
       password,
     });
 
-    if (error) Alert.alert(error.message);
+    if (error) setError("Gebruikersnaam of wachtwoord is onjuist.");
     setLoading(false);
   }
 
@@ -32,22 +41,30 @@ const SignInScreen = () => {
         <Stack.Screen options={{ headerShown: false }} />
         <View>
           <Image
-              style={styles.image}
-              source="https://iqfcxjbnqcpjzggtcptb.supabase.co/storage/v1/object/public/profilePics/Rit-Logo.png?t=2024-05-29T09%3A24%3A23.265Z" 
-              contentFit="contain"
-              transition={1000}
-            />
-          <GradientText text="Log in" fontSize={32} isGradientFill gradientColors={[primaryColor, "#FFCC00"]} fontFamily={"Cocon"} style={styles.title} fontWeight={"bold"}/>
+            style={styles.image}
+            source="https://iqfcxjbnqcpjzggtcptb.supabase.co/storage/v1/object/public/profilePics/Rit-Logo.png?t=2024-05-29T09%3A24%3A23.265Z"
+            contentFit="contain"
+            transition={1000}
+          />
+          <GradientText
+            text="Log in"
+            fontSize={32}
+            isGradientFill
+            gradientColors={[primaryColor, "#FFCC00"]}
+            fontFamily={"Cocon"}
+            style={styles.title}
+            fontWeight={"bold"}
+          />
         </View>
-    
+
         <ThemedText style={styles.label}>E-mail</ThemedText>
         <Input
+          autoComplete="email"
           value={email}
           onChangeText={setEmail}
-          placeholder="voorbeeld@rit.be"
+          placeholder="rit@care.be"
           keyboardType="email-address"
         />
-        
 
         <ThemedText style={styles.label}>Wachtwoord</ThemedText>
         <Input
@@ -56,6 +73,7 @@ const SignInScreen = () => {
           placeholder="••••••••••"
           password
         />
+        {error ? <Text style={styles.errorText}>{error}</Text> : null}
 
         <Button
           onPress={signInWithEmail}
@@ -74,7 +92,13 @@ const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 24,
     paddingVertical: 128,
-    height: '100%',
+    height: "100%",
+  },
+  errorText: {
+    textAlign: "center",
+    marginBottom: 10,
+    fontWeight: "bold",
+    color: "red",
   },
   label: {
     color: "gray",
@@ -99,7 +123,7 @@ const styles = StyleSheet.create({
     height: 100,
   },
   title: {
-    margin: 'auto',
+    margin: "auto",
     marginTop: -40,
   },
 });

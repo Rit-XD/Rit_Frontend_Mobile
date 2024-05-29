@@ -365,13 +365,25 @@ const SignUpScreen = () => {
             {isNextPressed &&
               formErrors.confirmPassword &&
               formState.password.length >= 8 && (
-                <Text style={{ color: "red" }}>
-                  Wachtwoorden komen niet overeen
+                <Text
+                  style={{
+                    color: "red",
+                    fontWeight: "bold",
+                    textAlign: "center",
+                  }}
+                >
+                  Wachtwoorden komen niet overeen.
                 </Text>
               )}
             {isNextPressed && formErrors.password && (
-              <Text style={{ color: "red" }}>
-                Wachtwoord moet minstens 8 karakters lang zijn
+              <Text
+                style={{
+                  color: "red",
+                  fontWeight: "bold",
+                  textAlign: "center",
+                }}
+              >
+                Wachtwoord moet minstens 8 karakters lang zijn.
               </Text>
             )}
             <Button
