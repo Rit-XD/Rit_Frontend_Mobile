@@ -6,21 +6,19 @@ import { useAuth } from "@/providers/AuthProvider";
 import { supabase } from "@/lib/supabase";
 
 const index = () => {
-  const { session, loading } = useAuth();
+  const { session, isLoading } = useAuth();
 
-  if (loading) {
+  if (isLoading) {
+    console.log(session)
     return <ActivityIndicator />;
   }
 
   if (!session) {
-    return <Redirect href={"/sign-in"} />;
+    return <Redirect href={"/Login"} />;
   }
 
-  return (
-    <View style={{ flex: 1, justifyContent: "center", padding: 10 }}>
-      <Button onPress={() => supabase.auth.signOut()} text="Sign out" />
-    </View>
-  );
+  return <Redirect href={"/(tabs)"} />;
+
 };
 
 export default index;

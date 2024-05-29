@@ -23,7 +23,7 @@ const SignInScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Stack.Screen options={{ title: "Sign in" }} />
+      <Stack.Screen options={{ headerShown: false }} />
 
       <Text style={styles.label}>Email</Text>
       <TextInput
@@ -47,7 +47,7 @@ const SignInScreen = () => {
         disabled={loading}
         text={loading ? "Signing in..." : "Sign in"}
       />
-      <Link href="/sign-up" style={styles.textButton}>
+      <Link href="/register" style={styles.textButton}>
         Create an account
       </Link>
     </View>

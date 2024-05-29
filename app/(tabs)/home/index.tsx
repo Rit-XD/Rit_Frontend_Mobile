@@ -6,7 +6,7 @@ import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { supabase } from "@/lib/supabase";
 import { useState } from "react";
-import { Redirect } from "expo-router";
+import { Redirect, Stack } from "expo-router";
 
 export default function HomeScreen() {
   const [logout, setLogout] = useState(false);
@@ -16,6 +16,7 @@ export default function HomeScreen() {
   }
   return (
     <View >
+      <Stack screenOptions={{headerShown: false}}/>
       <Button title="logout" onPress={signOut}></Button>
       {logout && <Redirect href={"/"} />}
     </View>

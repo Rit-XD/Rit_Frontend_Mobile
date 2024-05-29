@@ -32,14 +32,15 @@ export default function AuthProvider({ children }: PropsWithChildren) {
                 .select("*")
                 .eq('id', session.user.id)
                 .single();
+
                 setUser(data || null);
             }
-
+            console.log("isLoading", isLoading)
             setIsLoading(false);
-        }
+        };
 
         fetchSession();
-        supabase.auth.onAuthStateChange((event, session) => { 
+        supabase.auth.onAuthStateChange((_event, session) => { 
             setSession(session);
         });
     }, []);
@@ -51,4 +52,4 @@ export default function AuthProvider({ children }: PropsWithChildren) {
     )
 }
 
-export const useAuth = () => { useContext(AuthContext) };
+export const useAuth = () => useContext(AuthContext);
