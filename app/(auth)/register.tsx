@@ -19,33 +19,41 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import RNDateTimePicker from "@react-native-community/datetimepicker";
 
 const SignUpScreen = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [firstname, setFirstname] = useState("");
-  const [lastname, setLastname] = useState("");
-  const [date, setDate] = useState(new Date());
-  const [city, setCity] = useState("");
-  const [postal, setPostal] = useState("");
-  const [phone, setPhone] = useState("");
   const [license, setLicense] = useState("");
   const [step, setStep] = useState(1);
-  const [isFirstnameValid, setIsFirstnameValid] = useState(false);
-  const [isLastnameValid, setIsLastnameValid] = useState(false);
-  const [isDateValid, setIsDateValid] = useState(false);
-  const [isCityValid, setIsCityValid] = useState(false);
-  const [isPostalValid, setIsPostalValid] = useState(false);
-  const [isPhoneValid, setIsPhoneValid] = useState(false);
-  // const [isLicenseValid, setIsLicenseValid] = useState(false);
-  const [isEmailValid, setIsEmailValid] = useState(false);
-  const [isPasswordValid, setIsPasswordValid] = useState(false);
   const [isNextPressed, setIsNextPressed] = useState(false);
-  const [isConfirmPasswordValid, setIsConfirmPasswordValid] = useState(true);
+  const [formState, setFormState] = useState({
+    firstname: "",
+    lastname: "",
+    date: new Date(),
+    city: "",
+    postal: "",
+    phone: "",
+    license: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
+  const [formErrors, setFormErrors] = useState({
+    firstname: false,
+    lastname: false,
+    date: false,
+    city: false,
+    postal: false,
+    phone: false,
+    license: false,
+    email: false,
+    password: false,
+    confirmPassword: false,
+  });
 
   async function signUpWithEmail() {
     setLoading(true);
-    const { error } = await supabase.auth.signUp({ email, password });
+    const { error } = await supabase.auth.signUp({
+      email: formState.email,
+      password: formState.password,
+    });
 
     if (error) Alert.alert(error.message);
     setLoading(false);
@@ -60,6 +68,43 @@ const SignUpScreen = () => {
   function isValidPhoneNumber(phone: string) {
     const re = /^(\+32\s|0)4\s?\d{2}\s?\d{2}\s?\d{2}\s?\d{2}$/;
     return re.test(phone);
+  }
+
+  const validatePassword = (password: string) => password.length >= 8;
+  const validateConfirmPassword = (password: string, confirmPassword: string) =>
+    password === confirmPassword;
+
+  const handleSubmit = () => {
+    setIsNextPressed(true);
+
+    const isPasswordValid = validatePassword(formState.password);
+    const isConfirmPasswordValid = validateConfirmPassword(
+      formState.password,
+      formState.confirmPassword
+    );
+
+    setFormErrors({
+      ...formErrors,
+      password: !isPasswordValid,
+      confirmPassword: !isConfirmPasswordValid,
+    });
+
+    if (isPasswordValid && isConfirmPasswordValid) {
+      signUpWithEmail();
+    }
+  };
+
+  function validateDate(date: Date) {
+    const currentDate = new Date();
+    const selectedDate = new Date(date);
+    let age = currentDate.getFullYear() - selectedDate.getFullYear();
+    const m = currentDate.getMonth() - selectedDate.getMonth();
+
+    if (m < 0 || (m === 0 && currentDate.getDate() < selectedDate.getDate())) {
+      age--;
+    }
+
+    return age >= 18;
   }
 
   return (
@@ -85,76 +130,67 @@ const SignUpScreen = () => {
           <>
             <Text style={styles.label}>Voornaam</Text>
             <TextInput
-              value={firstname}
+              value={formState.firstname}
               onChangeText={(text) => {
-                setFirstname(text);
-                if (text === "") {
-                  setIsFirstnameValid(false);
-                } else {
-                  setIsFirstnameValid(true);
-                }
+                setFormState({ ...formState, firstname: text });
+                setFormErrors({ ...formErrors, firstname: !text });
               }}
               placeholder="Voornaam"
               autoComplete="given-name"
               style={[
                 styles.input,
-                isNextPressed && !isFirstnameValid && { borderColor: "red" },
+                isNextPressed && formErrors.firstname && { borderColor: "red" },
               ]}
             />
             <Text style={styles.label}>Achternaam</Text>
             <TextInput
-              value={lastname}
+              value={formState.lastname}
               onChangeText={(text) => {
-                setLastname(text);
-                if (text === "") {
-                  setIsLastnameValid(false);
-                } else {
-                  setIsLastnameValid(true);
-                }
+                setFormState({ ...formState, lastname: text });
+                setFormErrors({ ...formErrors, lastname: !text });
               }}
               placeholder="Achternaam"
               autoComplete="family-name"
               style={[
                 styles.input,
-                isNextPressed && !isLastnameValid && { borderColor: "red" },
+                isNextPressed && formErrors.lastname && { borderColor: "red" },
               ]}
             />
-
             <Text style={styles.label}>Geboortedatum</Text>
-            {!isDateValid && isNextPressed && (
+            {formErrors.date && isNextPressed && (
               <Text style={{ color: "red" }}>
                 U moet minstens 18 jaar oud zijn
               </Text>
             )}
             <RNDateTimePicker
-              value={date}
+              value={formState.date}
               display="default"
               style={[
                 styles.input,
-                isNextPressed && !isDateValid && { borderColor: "red" },
+                isNextPressed && formErrors.date && { borderColor: "red" },
               ]}
               onChange={(event, selectedDate) => {
-                const currentDate = selectedDate || date;
-                setDate(currentDate);
+                const currentDate = selectedDate || formState.date;
+                setFormState({ ...formState, date: currentDate });
+                setFormErrors({
+                  ...formErrors,
+                  date: !validateDate(currentDate),
+                });
               }}
             />
             <View style={{ flexDirection: "row" }}>
               <View style={{ flexGrow: 1, marginRight: 5 }}>
                 <Text style={styles.label}>Woonplaats</Text>
                 <TextInput
-                  value={city}
+                  value={formState.city}
                   onChangeText={(text) => {
-                    setCity(text);
-                    if (text === "") {
-                      setIsCityValid(false);
-                    } else {
-                      setIsCityValid(true);
-                    }
+                    setFormState({ ...formState, city: text });
+                    setFormErrors({ ...formErrors, city: !text });
                   }}
                   placeholder="Woonplaats"
                   style={[
                     styles.input,
-                    isNextPressed && !isCityValid && { borderColor: "red" },
+                    isNextPressed && formErrors.city && { borderColor: "red" },
                   ]}
                   autoComplete="postal-address"
                 />
@@ -162,21 +198,18 @@ const SignUpScreen = () => {
               <View>
                 <Text style={styles.label}>Postcode</Text>
                 <TextInput
-                  keyboardType="numeric"
-                  value={postal}
-                  onChangeText={(text) => {
-                    setPostal(text);
-                    if (text === "") {
-                      setIsPostalValid(false);
-                    } else {
-                      setIsPostalValid(true);
-                    }
-                  }}
-                  placeholder="Postcode"
                   style={[
                     styles.input,
-                    isNextPressed && !isPostalValid && { borderColor: "red" },
+                    isNextPressed &&
+                      formErrors.postal && { borderColor: "red" },
                   ]}
+                  keyboardType="numeric"
+                  value={formState.postal}
+                  onChangeText={(text) => {
+                    setFormState({ ...formState, postal: text });
+                    setFormErrors({ ...formErrors, postal: !text });
+                  }}
+                  placeholder="Postcode"
                   autoComplete="postal-code"
                 />
               </View>
@@ -185,49 +218,37 @@ const SignUpScreen = () => {
               text="Volgende"
               onPress={() => {
                 setIsNextPressed(true);
-                if (firstname === "") {
-                  setIsFirstnameValid(false);
-                } else {
-                  setIsFirstnameValid(true);
-                }
-                if (lastname === "") {
-                  setIsLastnameValid(false);
-                } else {
-                  setIsLastnameValid(true);
-                }
-                const currentDate = new Date();
-                const enteredDate = new Date(date);
-                let age = currentDate.getFullYear() - enteredDate.getFullYear();
-                const m = currentDate.getMonth() - enteredDate.getMonth();
+                let newErrors = { ...formErrors };
 
-                if (
-                  m < 0 ||
-                  (m === 0 && currentDate.getDate() < enteredDate.getDate())
-                ) {
-                  age--;
+                if (!formState.firstname) {
+                  newErrors = { ...newErrors, firstname: true };
+                }
+                if (!formState.lastname) {
+                  newErrors = { ...newErrors, lastname: true };
+                }
+                if (!validateDate(formState.date)) {
+                  newErrors = { ...newErrors, date: true };
+                }
+                if (!formState.city) {
+                  newErrors = { ...newErrors, city: true };
+                }
+                if (!formState.postal) {
+                  newErrors = { ...newErrors, postal: true };
                 }
 
-                if (age < 18) {
-                  setIsDateValid(false);
-                } else {
-                  setIsDateValid(true);
-                }
-                if (city === "") {
-                  setIsCityValid(false);
-                } else {
-                  setIsCityValid(true);
-                }
-                if (postal === "") {
-                  setIsPostalValid(false);
-                } else {
-                  setIsPostalValid(true);
-                }
+                setFormErrors(newErrors);
+
                 if (
-                  isFirstnameValid &&
-                  isLastnameValid &&
-                  isDateValid &&
-                  isCityValid &&
-                  isPostalValid
+                  formState.firstname &&
+                  formState.lastname &&
+                  validateDate(formState.date) &&
+                  formState.city &&
+                  formState.postal &&
+                  !newErrors.firstname &&
+                  !newErrors.lastname &&
+                  !newErrors.date &&
+                  !newErrors.city &&
+                  !newErrors.postal
                 ) {
                   setStep(2);
                 }
@@ -244,41 +265,41 @@ const SignUpScreen = () => {
             <Text style={styles.label}>Email</Text>
             <TextInput
               keyboardType="email-address"
-              value={email}
-              onChangeText={setEmail}
+              value={formState.email}
+              onChangeText={(text) => {
+                setFormState({ ...formState, email: text });
+                setFormErrors({ ...formErrors, email: !isValidEmail(text) });
+              }}
               placeholder="rit@care.be"
               style={[
                 styles.input,
-                isNextPressed && !isEmailValid && { borderColor: "red" },
+                isNextPressed && formErrors.email && { borderColor: "red" },
               ]}
               autoComplete="email"
             />
             <Text style={styles.label}>Telefoonnummer</Text>
-            {!isPhoneValid && isNextPressed && (
-              <Text style={{ color: "red" }}>
-                Voer een geldig telefoonnummer in
-              </Text>
+            {isNextPressed && formErrors.phone && (
+              <Text style={{ color: "red" }}>Ongeldig telefoonnummer</Text>
             )}
             <TextInput
               keyboardType="phone-pad"
               placeholder="Uw telefoonnummer"
-              value={phone}
+              value={formState.phone}
               onChangeText={(text) => {
-                setPhone(text);
-                if (text === "") {
-                  setIsPhoneValid(false);
-                } else {
-                  setIsPhoneValid(true);
-                }
+                setFormState({ ...formState, phone: text });
+                setFormErrors({
+                  ...formErrors,
+                  phone: !isValidPhoneNumber(text),
+                });
               }}
               style={[
                 styles.input,
-                isNextPressed && !isPhoneValid && { borderColor: "red" },
+                isNextPressed && formErrors.phone && { borderColor: "red" },
               ]}
             />
             <Text style={styles.label}>Rijbewijs</Text>
             <TextInput
-              value={license}
+              value={formState.license}
               onChangeText={setLicense}
               placeholder="Uw rijbewijsnummer"
               style={styles.input}
@@ -288,17 +309,23 @@ const SignUpScreen = () => {
               text="Volgende"
               onPress={() => {
                 setIsNextPressed(true);
-                if (!isValidEmail(email)) {
-                  setIsEmailValid(false);
-                } else {
-                  setIsEmailValid(true);
+                let newErrors = { ...formErrors };
+
+                if (!isValidEmail(formState.email)) {
+                  newErrors = { ...newErrors, email: true };
                 }
-                if (!isValidPhoneNumber(phone)) {
-                  setIsPhoneValid(false);
-                } else {
-                  setIsPhoneValid(true);
+                if (!isValidPhoneNumber(formState.phone)) {
+                  newErrors = { ...newErrors, phone: true };
                 }
-                if (isEmailValid && isPhoneValid) {
+
+                setFormErrors(newErrors);
+
+                if (
+                  isValidEmail(formState.email) &&
+                  isValidPhoneNumber(formState.phone) &&
+                  !newErrors.email &&
+                  !newErrors.phone
+                ) {
                   setStep(3);
                 }
               }}
@@ -312,47 +339,77 @@ const SignUpScreen = () => {
           <>
             <Text style={styles.label}>Wachtwoord</Text>
             <TextInput
-              value={password}
-              onChangeText={setPassword}
+              value={formState.password}
+              onChangeText={(text) => {
+                setFormState({ ...formState, password: text });
+                setFormErrors({
+                  ...formErrors,
+                  password: !validatePassword(text),
+                });
+              }}
               placeholder="Wachtwoord"
               style={[
                 styles.input,
-                isNextPressed && !isPasswordValid && { borderColor: "red" },
+                isNextPressed && formErrors.password && { borderColor: "red" },
               ]}
               secureTextEntry
             />
             <Text style={styles.label}>Bevestig wachtwoord</Text>
             <TextInput
-              value={confirmPassword}
-              onChangeText={setConfirmPassword}
+              value={formState.confirmPassword}
+              onChangeText={(text) => {
+                setFormState({ ...formState, confirmPassword: text });
+                setFormErrors({
+                  ...formErrors,
+                  confirmPassword: !validateConfirmPassword(
+                    formState.password,
+                    text
+                  ),
+                });
+              }}
               placeholder="Bevestig wachtwoord"
               style={[
                 styles.input,
                 isNextPressed &&
-                  !isConfirmPasswordValid && { borderColor: "red" },
+                  formErrors.confirmPassword && { borderColor: "red" },
               ]}
               secureTextEntry
             />
-
+            {isNextPressed &&
+              formErrors.confirmPassword &&
+              formState.password.length >= 8 && (
+                <Text style={{ color: "red" }}>
+                  Wachtwoorden komen niet overeen
+                </Text>
+              )}
+            {isNextPressed && formErrors.password && (
+              <Text style={{ color: "red" }}>
+                Wachtwoord moet minstens 8 karakters lang zijn
+              </Text>
+            )}
             <Button
               text="Registreren"
               onPress={() => {
                 setIsNextPressed(true);
-                if (password.length < 8) {
-                  setIsPasswordValid(false);
-                } else {
-                  setIsPasswordValid(true);
-                }
-                if (password !== confirmPassword) {
-                  setIsConfirmPasswordValid(false);
-                } else {
-                  setIsConfirmPasswordValid(true);
+                if (!validatePassword(formState.password)) {
+                  setFormErrors({ ...formErrors, password: true });
                 }
                 if (
-                  isPasswordValid &&
-                  isConfirmPasswordValid /* && other conditions... */
+                  !validateConfirmPassword(
+                    formState.password,
+                    formState.confirmPassword
+                  )
                 ) {
-                  signUpWithEmail();
+                  setFormErrors({ ...formErrors, confirmPassword: true });
+                }
+                if (
+                  validatePassword(formState.password) &&
+                  validateConfirmPassword(
+                    formState.password,
+                    formState.confirmPassword
+                  )
+                ) {
+                  handleSubmit();
                 }
               }}
             />
