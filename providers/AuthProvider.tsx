@@ -1,4 +1,4 @@
-import { supabaseAdmin } from "../lib/supabaseAdmin";
+import { supabase } from "../lib/supabase";
 import { Session } from "@supabase/supabase-js"
 import { PropsWithChildren, createContext, useContext, useEffect, useState } from "react";
 
@@ -23,11 +23,11 @@ export default function AuthProvider({ children }: PropsWithChildren) {
         const fetchSession = async () => { 
             const {
                 data: { session },
-            } = await supabaseAdmin.auth.getSession();
+            } = await supabase.auth.getSession();
 
             setSession(session);
             if (session?.user.id) {
-                const { data, error, status } = await supabaseAdmin
+                const { data, error, status } = await supabase
                 .from('Carecenter')
                 .select("*")
                 .eq('id', session.user.id)
@@ -39,7 +39,7 @@ export default function AuthProvider({ children }: PropsWithChildren) {
         };
 
         fetchSession();
-        supabaseAdmin.auth.onAuthStateChange((_event, session) => { 
+        supabase.auth.onAuthStateChange((_event, session) => { 
             setSession(session);
         });
     }, []);
