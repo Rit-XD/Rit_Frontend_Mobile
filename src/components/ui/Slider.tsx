@@ -1,4 +1,5 @@
 import { primaryColor } from "@/constants/Colors";
+import { useNavigation, useRouter } from "expo-router";
 import React, { useState } from "react";
 import {
   View,
@@ -10,8 +11,9 @@ import {
 } from "react-native";
 import { Easing } from "react-native-reanimated";
 
-const LoginRegisterSlider = () => {
-  const [active, setActive] = useState("login");
+const LoginRegisterSlider = ({ initialActive }: { initialActive: string }) => {
+  const router = useRouter();
+  const [active, setActive] = useState(initialActive);
   const animation = new Animated.Value(active === "login" ? 0 : 1);
 
   const handlePress = (type: any) => {
@@ -21,7 +23,9 @@ const LoginRegisterSlider = () => {
       duration: 300,
       easing: Easing.linear,
       useNativeDriver: false,
-    }).start();
+    }).start(() => {
+      router.push(type);
+    });
   };
 
   const translateX = animation.interpolate({

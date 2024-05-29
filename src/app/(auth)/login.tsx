@@ -85,12 +85,12 @@ const SignInScreen = () => {
             <Button
               onPress={signInWithEmail}
               disabled={loading}
-              text={loading ? "Signing in..." : "Sign in"}
+              text={loading ? "Inloggen..." : "Inloggen"}
             />
             {/* <Link href="/register" style={styles.textButton}>
               Create an account
             </Link> */}
-            <LoginRegisterSlider />
+            <LoginRegisterSlider initialActive="login" />
           </View>
         </View>
       </KeyboardAwareScrollView>
