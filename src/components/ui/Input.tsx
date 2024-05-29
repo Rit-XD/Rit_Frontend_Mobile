@@ -10,6 +10,7 @@ import { forwardRef } from "react";
 import { Colors, primaryColor } from "@/constants/Colors";
 import React from "react";
 import { useThemeColor } from "@/hooks/useThemeColor";
+import { Image } from "expo-image";
 
 type AutoCompleteType =
   | "additional-name"
@@ -119,12 +120,16 @@ export default function Input({
         autoComplete={autoComplete ? autoComplete : "off"}
         textContentType={email? "emailAddress" : "none"}
       />
-      {password && (
+      {password && value && (
         <Text
           onPress={() => setShowPassword(!showPassword)}
           style={styles.showPassword}
         >
-          Toon Wachtwoord
+          <Image 
+            source={"https://iqfcxjbnqcpjzggtcptb.supabase.co/storage/v1/object/public/Icons/showHide.png"} 
+            style={styles.icon}     
+            contentFit="contain"
+/>
         </Text>
       )}
     </View>
@@ -146,8 +151,14 @@ const styles = StyleSheet.create({
   },
   showPassword: {
     position: "absolute",
-    right: 10,
-    top: 23,
+    right: 16,
+    top: 27.5,
     color: primaryColor,
+    display: "flex",
+    alignItems: "center",
+  },
+  icon: {
+    width: 22*1.1,
+    height: 18*1.1,
   },
 });
