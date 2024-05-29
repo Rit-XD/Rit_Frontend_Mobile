@@ -1,8 +1,11 @@
 import { Button, Input } from '@rneui/themed'
 import React, { useState } from 'react'
-import { Alert, AppState, StyleSheet, View } from 'react-native'
-import { supabase } from '../lib/supabase'
+import { Alert, AppState, StyleSheet, Text, View } from 'react-native'
+import { supabase } from '../../lib/supabase'
 import { Image } from 'expo-image'
+import { useFonts } from "expo-font";
+import { color } from '@rneui/themed/dist/config'
+
 
 
 AppState.addEventListener('change', (state) => {
@@ -17,6 +20,13 @@ export default function Login() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
+  const [fontsLoaded] = useFonts({
+    "Cocon": require("@/assets/fonts/Cocon.otf"),
+  });
+
+  if (!fontsLoaded) {
+    return <Text>Fonts are loading</Text>;
+  }
 
   async function signInWithEmail() {
     setLoading(true)
@@ -47,7 +57,7 @@ export default function Login() {
   const blurHash = '|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[';
 
   return (
-    <View>
+    <View style={styles.container}>
       <View>
         <Image
           style={styles.image}
@@ -57,7 +67,8 @@ export default function Login() {
           transition={1000}
         />
       </View>
-      <View style={styles.container}>
+      <Text style={styles.title}>Log in</Text>
+      <View>
         <View style={[styles.verticallySpaced, styles.mt20]}>
           <Input
             label="Email"
@@ -105,6 +116,14 @@ const styles = StyleSheet.create({
   },
   image: {
     width: '100%',
-    height: 150,
-  }
+    height: 100,
+    marginBottom: 20,
+  },
+  title: {
+    fontSize: 24,
+    color: "#ED6A01",
+    fontWeight: 'bold',
+    fontFamily: 'Cocon',
+    margin: 'auto'
+  },
 })

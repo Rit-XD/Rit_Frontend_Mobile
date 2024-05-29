@@ -3,6 +3,7 @@ import { Session } from "@supabase/supabase-js";
 import { Redirect } from "expo-router";
 import { useEffect, useState } from "react";
 import { View } from "react-native";
+import Login from "@/components/auth/Login";
 
 export default function RootPage() { 
     const [session, setSession] = useState<Session | null>(null)
@@ -19,7 +20,7 @@ export default function RootPage() {
 
     return (
         <View>
-            {session && session.user ? <Redirect href={"/home"} /> : <Redirect href={"/login"} />}
+            {session && session.user ? <Redirect href={"/home"} /> : <Login />}
         </View>
     )
  }
