@@ -27,6 +27,7 @@ const SignInScreen = () => {
   }
 
   return (
+<<<<<<< HEAD
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
       <ThemedView style={styles.container}>
         <Stack.Screen options={{ headerShown: false }} />
@@ -48,6 +49,25 @@ const SignInScreen = () => {
           keyboardType="email-address"
         />
         
+=======
+    <View style={styles.container}>
+      <Stack.Screen options={{ headerShown: false }} />
+      <Image
+        style={styles.image}
+        source="https://iqfcxjbnqcpjzggtcptb.supabase.co/storage/v1/object/public/profilePics/Rit-Logo.png?t=2024-05-29T09%3A24%3A23.265Z"
+        contentFit="contain"
+        transition={1000}
+      />
+      <GradientText
+        text="Log in"
+        fontSize={24}
+        isGradientFill
+        gradientColors={["#ED6A01", "#FFCC00"]}
+        fontFamily={"Cocon"}
+        style={styles.title}
+      />
+      <Text style={styles.label}>Email</Text>
+>>>>>>> e9457e6ee225fc6c03705820cdc16e253ce83944
 
         <ThemedText style={styles.label}>Wachtwoord</ThemedText>
         <Input
@@ -95,12 +115,17 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   image: {
-    width: '100%',
+    width: "100%",
     height: 100,
   },
   title: {
+<<<<<<< HEAD
     margin: 'auto',
     marginTop: -40,
+=======
+    fontWeight: "bold",
+    margin: "auto",
+>>>>>>> e9457e6ee225fc6c03705820cdc16e253ce83944
   },
 });
 
