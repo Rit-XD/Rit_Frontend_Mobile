@@ -1,7 +1,6 @@
 import {
   View,
   Text,
-  TextInput,
   StyleSheet,
   Alert,
   TouchableWithoutFeedback,
@@ -13,10 +12,9 @@ import { Link, Stack } from "expo-router";
 import { supabase } from "@/lib/supabase";
 import { Colors } from "@/constants/Colors";
 import { Image } from "expo-image";
-import { useFonts } from "expo-font";
 import GradientText from "react-native-gradient-texts";
-import DateTimePicker from "@react-native-community/datetimepicker";
 import RNDateTimePicker from "@react-native-community/datetimepicker";
+import Input from "@/components/ui/Input";
 
 const SignUpScreen = () => {
   const [loading, setLoading] = useState(false);
@@ -128,7 +126,7 @@ const SignUpScreen = () => {
         {step === 1 && (
           <>
             <Text style={styles.label}>Voornaam</Text>
-            <TextInput
+            <Input
               value={formState.firstname}
               onChangeText={(text) => {
                 setFormState({ ...formState, firstname: text });
@@ -137,12 +135,11 @@ const SignUpScreen = () => {
               placeholder="Voornaam"
               autoComplete="given-name"
               style={[
-                styles.input,
                 isNextPressed && formErrors.firstname && { borderColor: "red" },
               ]}
             />
             <Text style={styles.label}>Achternaam</Text>
-            <TextInput
+            <Input
               value={formState.lastname}
               onChangeText={(text) => {
                 setFormState({ ...formState, lastname: text });
@@ -151,7 +148,6 @@ const SignUpScreen = () => {
               placeholder="Achternaam"
               autoComplete="family-name"
               style={[
-                styles.input,
                 isNextPressed && formErrors.lastname && { borderColor: "red" },
               ]}
             />
@@ -180,7 +176,7 @@ const SignUpScreen = () => {
             <View style={{ flexDirection: "row" }}>
               <View style={{ flexGrow: 1, marginRight: 5 }}>
                 <Text style={styles.label}>Woonplaats</Text>
-                <TextInput
+                <Input
                   value={formState.city}
                   onChangeText={(text) => {
                     setFormState({ ...formState, city: text });
@@ -188,7 +184,6 @@ const SignUpScreen = () => {
                   }}
                   placeholder="Woonplaats"
                   style={[
-                    styles.input,
                     isNextPressed && formErrors.city && { borderColor: "red" },
                   ]}
                   autoComplete="postal-address"
@@ -196,9 +191,8 @@ const SignUpScreen = () => {
               </View>
               <View>
                 <Text style={styles.label}>Postcode</Text>
-                <TextInput
+                <Input
                   style={[
-                    styles.input,
                     isNextPressed &&
                       formErrors.postal && { borderColor: "red" },
                   ]}
@@ -262,7 +256,7 @@ const SignUpScreen = () => {
         {step === 2 && (
           <>
             <Text style={styles.label}>Email</Text>
-            <TextInput
+            <Input
               keyboardType="email-address"
               value={formState.email}
               onChangeText={(text) => {
@@ -271,7 +265,6 @@ const SignUpScreen = () => {
               }}
               placeholder="rit@care.be"
               style={[
-                styles.input,
                 isNextPressed && formErrors.email && { borderColor: "red" },
               ]}
               autoComplete="email"
@@ -280,7 +273,7 @@ const SignUpScreen = () => {
             {isNextPressed && formErrors.phone && (
               <Text style={{ color: "red" }}>Ongeldig telefoonnummer</Text>
             )}
-            <TextInput
+            <Input
               keyboardType="phone-pad"
               placeholder="Uw telefoonnummer"
               value={formState.phone}
@@ -292,16 +285,14 @@ const SignUpScreen = () => {
                 });
               }}
               style={[
-                styles.input,
                 isNextPressed && formErrors.phone && { borderColor: "red" },
               ]}
             />
             <Text style={styles.label}>Rijbewijs</Text>
-            <TextInput
+            <Input
               value={formState.license}
               onChangeText={setLicense}
               placeholder="Uw rijbewijsnummer"
-              style={styles.input}
               keyboardType="numeric"
             />
             <Button
@@ -337,7 +328,7 @@ const SignUpScreen = () => {
         {step === 3 && (
           <>
             <Text style={styles.label}>Wachtwoord</Text>
-            <TextInput
+            <Input
               value={formState.password}
               onChangeText={(text) => {
                 setFormState({ ...formState, password: text });
@@ -348,13 +339,12 @@ const SignUpScreen = () => {
               }}
               placeholder="Wachtwoord"
               style={[
-                styles.input,
                 isNextPressed && formErrors.password && { borderColor: "red" },
               ]}
-              secureTextEntry
+              password
             />
             <Text style={styles.label}>Bevestig wachtwoord</Text>
-            <TextInput
+            <Input
               value={formState.confirmPassword}
               onChangeText={(text) => {
                 setFormState({ ...formState, confirmPassword: text });
@@ -368,11 +358,10 @@ const SignUpScreen = () => {
               }}
               placeholder="Bevestig wachtwoord"
               style={[
-                styles.input,
                 isNextPressed &&
                   formErrors.confirmPassword && { borderColor: "red" },
               ]}
-              secureTextEntry
+              password
             />
             {isNextPressed &&
               formErrors.confirmPassword &&
@@ -445,12 +434,12 @@ const styles = StyleSheet.create({
     color: "gray",
   },
   input: {
-    borderWidth: 1,
-    borderColor: "gray",
-    padding: 10,
+    borderWidth: 2,
+    borderColor: "#D9D9D9",
+    padding: 18,
     marginTop: 5,
     marginBottom: 20,
-    backgroundColor: "white",
+    backgroundColor: "transparent",
     borderRadius: 5,
   },
   textButton: {
