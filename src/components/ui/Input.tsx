@@ -89,6 +89,7 @@ type InputProps = {
   darkColor?: string;
   autoComplete?: AutoCompleteType;
   style?: StyleProp<TextStyle>;
+  email?: boolean;
 };
 
 export default function Input({
@@ -101,6 +102,7 @@ export default function Input({
   darkColor,
   autoComplete,
   style,
+  email,
 }: InputProps) {
   const color = useThemeColor({ light: lightColor, dark: darkColor }, "text");
   const [showPassword, setShowPassword] = React.useState(false);
@@ -115,6 +117,7 @@ export default function Input({
         keyboardType={keyboardType ? keyboardType : "default"}
         secureTextEntry={password && !showPassword ? true : false}
         autoComplete={autoComplete ? autoComplete : "off"}
+        textContentType={email? "emailAddress" : "none"}
       />
       {password && (
         <Text
