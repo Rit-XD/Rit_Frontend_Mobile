@@ -154,14 +154,13 @@ const SignUpScreen = () => {
             <Text style={styles.label}>Geboortedatum</Text>
             {formErrors.date && isNextPressed && (
               <Text style={{ color: "red" }}>
-                U moet minstens 18 jaar oud zijn
+                Je moet minstens 18 jaar oud zijn
               </Text>
             )}
             <RNDateTimePicker
               value={formState.date}
               display="default"
               style={[
-                styles.input,
                 isNextPressed && formErrors.date && { borderColor: "red" },
               ]}
               onChange={(event, selectedDate) => {
