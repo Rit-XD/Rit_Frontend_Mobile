@@ -1,25 +1,26 @@
+import { View, Text, ActivityIndicator } from "react-native";
+import React from "react";
+import Button from "../components/Button";
+import { Link, Redirect } from "expo-router";
+import { useAuth } from "@/providers/AuthProvider";
 import { supabase } from "@/lib/supabase";
-import { Session } from "@supabase/supabase-js";
-import { Redirect } from "expo-router";
-import { useEffect, useState } from "react";
-import { View } from "react-native";
 
-export default function RootPage() { 
-    const [session, setSession] = useState<Session | null>(null)
+const index = () => {
+  const { session, loading } = useAuth();
 
-    useEffect(() => {
-      supabase.auth.getSession().then(({ data: { session } }) => {
-        setSession(session)
-      })
-  
-      supabase.auth.onAuthStateChange((_event, session) => {
-        setSession(session)
-      })
-    }, [])
+  if (loading) {
+    return <ActivityIndicator />;
+  }
 
-    return (
-        <View>
-            {session && session.user ? <Redirect href={"/home"} /> : <Redirect href={"/login"} />}
-        </View>
-    )
- }
+  if (!session) {
+    return <Redirect href={"/sign-in"} />;
+  }
+
+  return (
+    <View style={{ flex: 1, justifyContent: "center", padding: 10 }}>
+      <Button onPress={() => supabase.auth.signOut()} text="Sign out" />
+    </View>
+  );
+};
+
+export default index;
