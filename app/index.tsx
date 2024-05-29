@@ -9,16 +9,15 @@ const index = () => {
   const { session, isLoading } = useAuth();
 
   if (isLoading) {
-    console.log(session)
+    console.log(session);
     return <ActivityIndicator />;
   }
 
   if (!session) {
-    return <Redirect href={"/Login"} />;
+    return <Redirect href={"/login"} />;
   }
 
   return <Redirect href={"/(tabs)"} />;
-
 };
 
 export default index;
