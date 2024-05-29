@@ -7,7 +7,7 @@ import {
   Keyboard,
 } from "react-native";
 import React, { useState } from "react";
-import Button from "../../components/Button";
+import Button from "../../components/ui/Button";
 import { Link, Stack } from "expo-router";
 import { supabase } from "@/lib/supabase";
 import { Colors } from "@/constants/Colors";
@@ -15,8 +15,7 @@ import { Image } from "expo-image";
 import GradientText from "react-native-gradient-texts";
 import RNDateTimePicker from "@react-native-community/datetimepicker";
 import Input from "@/components/ui/Input";
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 const SignUpScreen = () => {
   const [loading, setLoading] = useState(false);
@@ -158,7 +157,13 @@ const SignUpScreen = () => {
               value={formState.date}
               display="default"
               style={[
-                isNextPressed && formErrors.date && { borderColor: "red", backgroundColor: "transparent", flex:1, display: "flex" },
+                isNextPressed &&
+                  formErrors.date && {
+                    borderColor: "red",
+                    backgroundColor: "transparent",
+                    flex: 1,
+                    display: "flex",
+                  },
               ]}
               onChange={(event, selectedDate) => {
                 const currentDate = selectedDate || formState.date;
@@ -421,8 +426,7 @@ const SignUpScreen = () => {
           </>
         )}
       </View>
-      </KeyboardAwareScrollView>
-
+    </KeyboardAwareScrollView>
   );
 };
 
