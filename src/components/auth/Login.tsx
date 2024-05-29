@@ -21,7 +21,7 @@ export default function Login() {
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
   const [fontsLoaded] = useFonts({
-    "Cocon": require("@/assets/fonts/Cocon.otf"),
+    "Cocon": require("@assets/fonts/Cocon.otf"),
   });
 
   if (!fontsLoaded) {

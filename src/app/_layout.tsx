@@ -24,7 +24,7 @@ export {
   export default function RootLayout() {
     const [loaded, error] = useFonts({
         // Load a custom font from a URL.
-        'Cocon': require('@/assets/fonts/Cocon.otf'),
+        'Cocon': require('@assets/fonts/Cocon.otf'),
         ...FontAwesome.font,
         });
 

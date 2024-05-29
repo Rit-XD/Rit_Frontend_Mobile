@@ -28,7 +28,7 @@ export default function HomeScreen() {
         transition={1000}
         />   
         <View style={styles.headTextContainer}>
-          <ThemedText style={styles.headText}>Hey {user.name},</ThemedText>
+          <ThemedText style={styles.headText}>Hey {user?.name},</ThemedText>
           <ThemedText style={styles.headText}>Wie pik jij vandaag op?</ThemedText>
         </View> 
       </View>
