@@ -1,22 +1,16 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  Alert,
-  TouchableWithoutFeedback,
-  Keyboard,
-} from "react-native";
+import { View, Text, StyleSheet, Alert } from "react-native";
 import React, { useState } from "react";
-import Button from "../../components/Button";
-import { Link, Stack } from "expo-router";
+import Button from "../../components/ui/Button";
+import { Stack } from "expo-router";
 import { supabase } from "@/lib/supabase";
 import { Colors } from "@/constants/Colors";
 import { Image } from "expo-image";
 import GradientText from "react-native-gradient-texts";
 import RNDateTimePicker from "@react-native-community/datetimepicker";
 import Input from "@/components/ui/Input";
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import LoginRegisterSlider from "@/components/ui/Slider";
+// import ImagePicker from "react-native-image-picker";
 
 const SignUpScreen = () => {
   const [loading, setLoading] = useState(false);
@@ -116,17 +110,17 @@ const SignUpScreen = () => {
           contentFit="contain"
           transition={1000}
         />
-        <GradientText
-          text="Registreren"
-          fontWeight={"bold"}
-          fontSize={32}
-          isGradientFill
-          gradientColors={["#ED6A01", "#FFCC00"]}
-          fontFamily={"Cocon"}
-          style={styles.title}
-        />
         {step === 1 && (
           <>
+            <GradientText
+              text="Registreren"
+              fontWeight={"bold"}
+              fontSize={32}
+              isGradientFill
+              gradientColors={["#ED6A01", "#FFCC00"]}
+              fontFamily={"Cocon"}
+              style={styles.title}
+            />
             <Text style={styles.label}>Voornaam</Text>
             <Input
               value={formState.firstname}
@@ -158,7 +152,13 @@ const SignUpScreen = () => {
               value={formState.date}
               display="default"
               style={[
-                isNextPressed && formErrors.date && { borderColor: "red", backgroundColor: "transparent", flex:1, display: "flex" },
+                isNextPressed &&
+                  formErrors.date && {
+                    borderColor: "red",
+                    backgroundColor: "transparent",
+                    flex: 1,
+                    display: "flex",
+                  },
               ]}
               onChange={(event, selectedDate) => {
                 const currentDate = selectedDate || formState.date;
@@ -248,14 +248,24 @@ const SignUpScreen = () => {
                 }
               }}
             />
-            <Link href="/login" style={styles.textButton}>
+            {/* <Link href="/login" style={styles.textButton}>
               Log in
-            </Link>
+            </Link> */}
+            <LoginRegisterSlider initialActive="register" />
           </>
         )}
 
         {step === 2 && (
           <>
+            <GradientText
+              text="Profiel"
+              fontWeight={"bold"}
+              fontSize={32}
+              isGradientFill
+              gradientColors={["#ED6A01", "#FFCC00"]}
+              fontFamily={"Cocon"}
+              style={styles.title}
+            />
             <Text style={styles.label}>Email</Text>
             <Input
               keyboardType="email-address"
@@ -277,11 +287,14 @@ const SignUpScreen = () => {
               placeholder="Uw telefoonnummer"
               value={formState.phone}
               onChangeText={(text) => {
-                setFormState({ ...formState, phone: text });
-                setFormErrors({
-                  ...formErrors,
-                  phone: !text,
+                setFormState({
+                  ...formState,
+                  phone: text,
                 });
+                // setFormErrors({
+                //   ...formErrors,
+                //   phone: !text,
+                // });
               }}
               style={[
                 isNextPressed && formErrors.phone && { borderColor: "red" },
@@ -297,6 +310,7 @@ const SignUpScreen = () => {
             {isNextPressed && formErrors.phone && (
               <Text style={styles.error}>Ongeldig telefoonnummer</Text>
             )}
+
             <Button
               text="Volgende"
               onPress={() => {
@@ -329,6 +343,15 @@ const SignUpScreen = () => {
         )}
         {step === 3 && (
           <>
+            <GradientText
+              text="Beveiliging"
+              fontWeight={"bold"}
+              fontSize={32}
+              isGradientFill
+              gradientColors={["#ED6A01", "#FFCC00"]}
+              fontFamily={"Cocon"}
+              style={styles.title}
+            />
             <Text style={styles.label}>Wachtwoord</Text>
             <Input
               value={formState.password}
@@ -421,16 +444,18 @@ const SignUpScreen = () => {
           </>
         )}
       </View>
-      </KeyboardAwareScrollView>
-
+    </KeyboardAwareScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    padding: 50,
-    justifyContent: "center",
-    flex: 1,
+    paddingHorizontal: 24,
+    paddingVertical: 128,
+    paddingBottom: 128,
+    height: "100%",
+    backgroundColor: "white",
+    display: "flex",
   },
 
   image: {
@@ -440,8 +465,7 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    marginBottom: 20,
-    textAlign: "center",
+    margin: "auto",
     marginTop: -40,
   },
 
