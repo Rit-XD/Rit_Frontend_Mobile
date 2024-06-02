@@ -13,6 +13,10 @@ export default function HomeScreen() {
   const { user } = useAuth();
   const [logout, setLogout] = useState(false);
 
+  if (!user) {
+    return undefined;
+  }
+
   return (
     <ThemedView style={styles.page}>
       <LinearGradient
