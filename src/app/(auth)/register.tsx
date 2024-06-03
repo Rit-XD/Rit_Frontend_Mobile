@@ -1,5 +1,5 @@
-import { View, Text, StyleSheet, Alert } from "react-native";
-import React, { useState } from "react";
+import { View, Text, StyleSheet, Alert, Animated } from "react-native";
+import React, { useEffect, useRef, useState } from "react";
 import Button from "../../components/ui/Button";
 import { Stack } from "expo-router";
 import { supabase } from "@/lib/supabase";
@@ -41,6 +41,16 @@ const SignUpScreen = () => {
     password: false,
     confirmPassword: false,
   });
+
+  const position = useRef(new Animated.Value(1000)).current;
+
+  useEffect(() => {
+    Animated.timing(position, {
+      toValue: 0,
+      duration: 500,
+      useNativeDriver: true,
+    }).start();
+  }, []);
 
   async function signUpWithEmail() {
     setLoading(true);
@@ -124,294 +134,306 @@ const SignUpScreen = () => {
   }
 
   return (
-    <KeyboardAwareScrollView keyboardShouldPersistTaps={"never"}>
-      <View style={styles.container}>
-        <Image
-          style={styles.image}
-          source="https://iqfcxjbnqcpjzggtcptb.supabase.co/storage/v1/object/public/profilePics/Rit-Logo.png?t=2024-05-29T09%3A24%3A23.265Z"
-          contentFit="contain"
-          transition={1000}
-        />
-        {step === 1 && (
-          <>
-            <GradientText
-              text="Registreren"
-              fontWeight={"bold"}
-              fontSize={32}
-              isGradientFill
-              gradientColors={["#ED6A01", "#FFCC00"]}
-              fontFamily={"Cocon"}
-              style={styles.title}
-            />
-            <Text style={styles.label}>Voornaam</Text>
-            <Input
-              value={formState.firstname}
-              onChangeText={(text) => {
-                setFormState({ ...formState, firstname: text });
-                setFormErrors({ ...formErrors, firstname: !text });
-              }}
-              placeholder="Voornaam"
-              autoComplete="given-name"
-              style={[
-                isNextPressed && formErrors.firstname && { borderColor: "red" },
-              ]}
-            />
-            <Text style={styles.label}>Achternaam</Text>
-            <Input
-              value={formState.lastname}
-              onChangeText={(text) => {
-                setFormState({ ...formState, lastname: text });
-                setFormErrors({ ...formErrors, lastname: !text });
-              }}
-              placeholder="Achternaam"
-              autoComplete="family-name"
-              style={[
-                isNextPressed && formErrors.lastname && { borderColor: "red" },
-              ]}
-            />
-            <Text style={styles.label}>Geboortedatum</Text>
-            <RNDateTimePicker
-              value={formState.date}
-              display="default"
-              style={[
-                isNextPressed &&
-                  formErrors.date && {
-                    borderColor: "red",
-                    backgroundColor: "transparent",
-                    flex: 1,
-                    display: "flex",
-                  },
-              ]}
-              onChange={(event, selectedDate) => {
-                const currentDate = selectedDate || formState.date;
-                setFormState({ ...formState, date: currentDate });
-                setFormErrors({
-                  ...formErrors,
-                  date: !validateDate(currentDate),
-                });
-              }}
-            />
-            <View style={{ flexDirection: "row" }}>
-              <View style={{ flexGrow: 1, marginRight: 5 }}>
-                <Text style={styles.label}>Woonplaats</Text>
-                <Input
-                  value={formState.city}
-                  onChangeText={(text) => {
-                    setFormState({ ...formState, city: text });
-                    setFormErrors({ ...formErrors, city: !text });
-                  }}
-                  placeholder="Woonplaats"
-                  style={[
-                    isNextPressed && formErrors.city && { borderColor: "red" },
-                  ]}
-                  autoComplete="postal-address"
-                />
+    <Animated.View style={{ transform: [{ translateX: position }] }}>
+      <KeyboardAwareScrollView keyboardShouldPersistTaps={"never"}>
+        <View style={styles.container}>
+          <Image
+            style={styles.image}
+            source="https://iqfcxjbnqcpjzggtcptb.supabase.co/storage/v1/object/public/profilePics/Rit-Logo.png?t=2024-05-29T09%3A24%3A23.265Z"
+            contentFit="contain"
+            transition={1000}
+          />
+          {step === 1 && (
+            <>
+              <GradientText
+                text="Registreren"
+                fontWeight={"bold"}
+                fontSize={32}
+                isGradientFill
+                gradientColors={["#ED6A01", "#FFCC00"]}
+                fontFamily={"Cocon"}
+                style={styles.title}
+              />
+              <Text style={styles.label}>Voornaam</Text>
+              <Input
+                value={formState.firstname}
+                onChangeText={(text) => {
+                  setFormState({ ...formState, firstname: text });
+                  setFormErrors({ ...formErrors, firstname: !text });
+                }}
+                placeholder="Voornaam"
+                autoComplete="given-name"
+                style={[
+                  isNextPressed && formErrors.firstname && { borderColor: "red" },
+                ]}
+              />
+              <Text style={styles.label}>Achternaam</Text>
+              <Input
+                value={formState.lastname}
+                onChangeText={(text) => {
+                  setFormState({ ...formState, lastname: text });
+                  setFormErrors({ ...formErrors, lastname: !text });
+                }}
+                placeholder="Achternaam"
+                autoComplete="family-name"
+                style={[
+                  isNextPressed && formErrors.lastname && { borderColor: "red" },
+                ]}
+              />
+              <Text style={styles.label}>Geboortedatum</Text>
+              <RNDateTimePicker
+                value={formState.date}
+                display="default"
+                style={[
+                  isNextPressed &&
+                    formErrors.date && {
+                      borderColor: "red",
+                      backgroundColor: "transparent",
+                      flex: 1,
+                      display: "flex",
+                    },
+                ]}
+                onChange={(event, selectedDate) => {
+                  const currentDate = selectedDate || formState.date;
+                  setFormState({ ...formState, date: currentDate });
+                  setFormErrors({
+                    ...formErrors,
+                    date: !validateDate(currentDate),
+                  });
+                }}
+              />
+              <View style={{ flexDirection: "row" }}>
+                <View style={{ flexGrow: 1, marginRight: 5 }}>
+                  <Text style={styles.label}>Woonplaats</Text>
+                  <Input
+                    value={formState.city}
+                    onChangeText={(text) => {
+                      setFormState({ ...formState, city: text });
+                      setFormErrors({ ...formErrors, city: !text });
+                    }}
+                    placeholder="Woonplaats"
+                    style={[
+                      isNextPressed && formErrors.city && { borderColor: "red" },
+                    ]}
+                    autoComplete="postal-address"
+                  />
+                </View>
+                <View>
+                  <Text style={styles.label}>Postcode</Text>
+                  <Input
+                    style={[
+                      isNextPressed &&
+                        formErrors.postal && { borderColor: "red" },
+                    ]}
+                    keyboardType="numeric"
+                    value={formState.postal}
+                    onChangeText={(text) => {
+                      setFormState({ ...formState, postal: text });
+                      setFormErrors({ ...formErrors, postal: !text });
+                    }}
+                    placeholder="Postcode"
+                    autoComplete="postal-code"
+                  />
+                </View>
               </View>
-              <View>
-                <Text style={styles.label}>Postcode</Text>
-                <Input
-                  style={[
-                    isNextPressed &&
-                      formErrors.postal && { borderColor: "red" },
-                  ]}
-                  keyboardType="numeric"
-                  value={formState.postal}
-                  onChangeText={(text) => {
-                    setFormState({ ...formState, postal: text });
-                    setFormErrors({ ...formErrors, postal: !text });
-                  }}
-                  placeholder="Postcode"
-                  autoComplete="postal-code"
-                />
-              </View>
-            </View>
-            {formErrors.date && isNextPressed && (
-              <Text style={styles.error}>
-                Je moet minstens 18 jaar oud zijn
+              {formErrors.date && isNextPressed && (
+                <Text style={styles.error}>
+                  Je moet minstens 18 jaar oud zijn
+                </Text>
+              )}
+              <Button
+                text="Volgende"
+                onPress={() => {
+                  setIsNextPressed(true);
+                  let newErrors = { ...formErrors };
+
+                  if (!formState.firstname) {
+                    newErrors = { ...newErrors, firstname: true };
+                  }
+                  if (!formState.lastname) {
+                    newErrors = { ...newErrors, lastname: true };
+                  }
+                  if (!validateDate(formState.date)) {
+                    newErrors = { ...newErrors, date: true };
+                  }
+                  if (!formState.city) {
+                    newErrors = { ...newErrors, city: true };
+                  }
+                  if (!formState.postal) {
+                    newErrors = { ...newErrors, postal: true };
+                  }
+
+                  setFormErrors(newErrors);
+
+                  if (
+                    formState.firstname &&
+                    formState.lastname &&
+                    validateDate(formState.date) &&
+                    formState.city &&
+                    formState.postal &&
+                    !newErrors.firstname &&
+                    !newErrors.lastname &&
+                    !newErrors.date &&
+                    !newErrors.city &&
+                    !newErrors.postal
+                  ) {
+                    setStep(2);
+                  }
+                }}
+              />
+              {/* <Link href="/login" style={styles.textButton}>
+                Log in
+              </Link> */}
+            </>
+          )}
+
+          {step === 2 && (
+            <>
+              <GradientText
+                text="Profiel"
+                fontWeight={"bold"}
+                fontSize={32}
+                isGradientFill
+                gradientColors={["#ED6A01", "#FFCC00"]}
+                fontFamily={"Cocon"}
+                style={styles.title}
+              />
+              <Text style={styles.label}>Email</Text>
+              <Input
+                keyboardType="email-address"
+                value={formState.email}
+                onChangeText={(text) => {
+                  setFormState({ ...formState, email: text });
+                  setFormErrors({ ...formErrors, email: !text });
+                }}
+                placeholder="rit@care.be"
+                style={[
+                  isNextPressed && formErrors.email && { borderColor: "red" },
+                ]}
+                autoComplete="email"
+                email
+              />
+              <Text style={styles.label}>Telefoonnummer</Text>
+              <Input
+                keyboardType="phone-pad"
+                placeholder="Uw telefoonnummer"
+                value={formState.phone}
+                onChangeText={(text) => {
+                  setFormState({
+                    ...formState,
+                    phone: text,
+                  });
+                  // setFormErrors({
+                  //   ...formErrors,
+                  //   phone: !text,
+                  // });
+                }}
+                style={[
+                  isNextPressed && formErrors.phone && { borderColor: "red" },
+                ]}
+              />
+              <Text style={styles.label}>Rijbewijs</Text>
+              <Input
+                value={formState.license}
+                onChangeText={setLicense}
+                placeholder="Uw rijbewijsnummer"
+                keyboardType="numeric"
+              />
+              {isNextPressed && formErrors.phone && (
+                <Text style={styles.error}>Ongeldig telefoonnummer</Text>
+              )}
+
+              <Button
+                text="Volgende"
+                onPress={() => {
+                  setIsNextPressed(true);
+                  let newErrors = { ...formErrors };
+
+                  if (!isValidEmail(formState.email)) {
+                    newErrors = { ...newErrors, email: true };
+                  }
+                  if (!isValidPhoneNumber(formState.phone)) {
+                    newErrors = { ...newErrors, phone: true };
+                  }
+
+                  setFormErrors(newErrors);
+
+                  if (
+                    isValidEmail(formState.email) &&
+                    isValidPhoneNumber(formState.phone) &&
+                    !newErrors.email &&
+                    !newErrors.phone
+                  ) {
+                    setStep(3);
+                  }
+                }}
+              />
+              <Text style={styles.textButton} onPress={() => setStep(1)}>
+                Terug
               </Text>
-            )}
-            <Button
-              text="Volgende"
-              onPress={() => {
-                setIsNextPressed(true);
-                let newErrors = { ...formErrors };
-
-                if (!formState.firstname) {
-                  newErrors = { ...newErrors, firstname: true };
-                }
-                if (!formState.lastname) {
-                  newErrors = { ...newErrors, lastname: true };
-                }
-                if (!validateDate(formState.date)) {
-                  newErrors = { ...newErrors, date: true };
-                }
-                if (!formState.city) {
-                  newErrors = { ...newErrors, city: true };
-                }
-                if (!formState.postal) {
-                  newErrors = { ...newErrors, postal: true };
-                }
-
-                setFormErrors(newErrors);
-
-                if (
-                  formState.firstname &&
-                  formState.lastname &&
-                  validateDate(formState.date) &&
-                  formState.city &&
-                  formState.postal &&
-                  !newErrors.firstname &&
-                  !newErrors.lastname &&
-                  !newErrors.date &&
-                  !newErrors.city &&
-                  !newErrors.postal
-                ) {
-                  setStep(2);
-                }
-              }}
-            />
-            {/* <Link href="/login" style={styles.textButton}>
-              Log in
-            </Link> */}
-          </>
-        )}
-
-        {step === 2 && (
-          <>
-            <GradientText
-              text="Profiel"
-              fontWeight={"bold"}
-              fontSize={32}
-              isGradientFill
-              gradientColors={["#ED6A01", "#FFCC00"]}
-              fontFamily={"Cocon"}
-              style={styles.title}
-            />
-            <Text style={styles.label}>Email</Text>
-            <Input
-              keyboardType="email-address"
-              value={formState.email}
-              onChangeText={(text) => {
-                setFormState({ ...formState, email: text });
-                setFormErrors({ ...formErrors, email: !text });
-              }}
-              placeholder="rit@care.be"
-              style={[
-                isNextPressed && formErrors.email && { borderColor: "red" },
-              ]}
-              autoComplete="email"
-              email
-            />
-            <Text style={styles.label}>Telefoonnummer</Text>
-            <Input
-              keyboardType="phone-pad"
-              placeholder="Uw telefoonnummer"
-              value={formState.phone}
-              onChangeText={(text) => {
-                setFormState({
-                  ...formState,
-                  phone: text,
-                });
-                // setFormErrors({
-                //   ...formErrors,
-                //   phone: !text,
-                // });
-              }}
-              style={[
-                isNextPressed && formErrors.phone && { borderColor: "red" },
-              ]}
-            />
-            <Text style={styles.label}>Rijbewijs</Text>
-            <Input
-              value={formState.license}
-              onChangeText={setLicense}
-              placeholder="Uw rijbewijsnummer"
-              keyboardType="numeric"
-            />
-            {isNextPressed && formErrors.phone && (
-              <Text style={styles.error}>Ongeldig telefoonnummer</Text>
-            )}
-
-            <Button
-              text="Volgende"
-              onPress={() => {
-                setIsNextPressed(true);
-                let newErrors = { ...formErrors };
-
-                if (!isValidEmail(formState.email)) {
-                  newErrors = { ...newErrors, email: true };
-                }
-                if (!isValidPhoneNumber(formState.phone)) {
-                  newErrors = { ...newErrors, phone: true };
-                }
-
-                setFormErrors(newErrors);
-
-                if (
-                  isValidEmail(formState.email) &&
-                  isValidPhoneNumber(formState.phone) &&
-                  !newErrors.email &&
-                  !newErrors.phone
-                ) {
-                  setStep(3);
-                }
-              }}
-            />
-            <Text style={styles.textButton} onPress={() => setStep(1)}>
-              Terug
-            </Text>
-          </>
-        )}
-        {step === 3 && (
-          <>
-            <GradientText
-              text="Beveiliging"
-              fontWeight={"bold"}
-              fontSize={32}
-              isGradientFill
-              gradientColors={["#ED6A01", "#FFCC00"]}
-              fontFamily={"Cocon"}
-              style={styles.title}
-            />
-            <Text style={styles.label}>Wachtwoord</Text>
-            <Input
-              value={formState.password}
-              onChangeText={(text) => {
-                setFormState({ ...formState, password: text });
-                setFormErrors({
-                  ...formErrors,
-                  password: !validatePassword(text),
-                });
-              }}
-              placeholder="Wachtwoord"
-              style={[
-                isNextPressed && formErrors.password && { borderColor: "red" },
-              ]}
-              password
-            />
-            <Text style={styles.label}>Bevestig wachtwoord</Text>
-            <Input
-              value={formState.confirmPassword}
-              onChangeText={(text) => {
-                setFormState({ ...formState, confirmPassword: text });
-                setFormErrors({
-                  ...formErrors,
-                  confirmPassword: !validateConfirmPassword(
-                    formState.password,
-                    text
-                  ),
-                });
-              }}
-              placeholder="Bevestig wachtwoord"
-              style={[
-                isNextPressed &&
-                  formErrors.confirmPassword && { borderColor: "red" },
-              ]}
-              password
-            />
-            {isNextPressed &&
-              formErrors.confirmPassword &&
-              formState.password.length >= 8 && (
+            </>
+          )}
+          {step === 3 && (
+            <>
+              <GradientText
+                text="Beveiliging"
+                fontWeight={"bold"}
+                fontSize={32}
+                isGradientFill
+                gradientColors={["#ED6A01", "#FFCC00"]}
+                fontFamily={"Cocon"}
+                style={styles.title}
+              />
+              <Text style={styles.label}>Wachtwoord</Text>
+              <Input
+                value={formState.password}
+                onChangeText={(text) => {
+                  setFormState({ ...formState, password: text });
+                  setFormErrors({
+                    ...formErrors,
+                    password: !validatePassword(text),
+                  });
+                }}
+                placeholder="Wachtwoord"
+                style={[
+                  isNextPressed && formErrors.password && { borderColor: "red" },
+                ]}
+                password
+              />
+              <Text style={styles.label}>Bevestig wachtwoord</Text>
+              <Input
+                value={formState.confirmPassword}
+                onChangeText={(text) => {
+                  setFormState({ ...formState, confirmPassword: text });
+                  setFormErrors({
+                    ...formErrors,
+                    confirmPassword: !validateConfirmPassword(
+                      formState.password,
+                      text
+                    ),
+                  });
+                }}
+                placeholder="Bevestig wachtwoord"
+                style={[
+                  isNextPressed &&
+                    formErrors.confirmPassword && { borderColor: "red" },
+                ]}
+                password
+              />
+              {isNextPressed &&
+                formErrors.confirmPassword &&
+                formState.password.length >= 8 && (
+                  <Text
+                    style={{
+                      color: "red",
+                      fontWeight: "bold",
+                      textAlign: "center",
+                    }}
+                  >
+                    Wachtwoorden komen niet overeen.
+                  </Text>
+                )}
+              {isNextPressed && formErrors.password && (
                 <Text
                   style={{
                     color: "red",
@@ -419,53 +441,44 @@ const SignUpScreen = () => {
                     textAlign: "center",
                   }}
                 >
-                  Wachtwoorden komen niet overeen.
+                  Wachtwoord moet minstens 8 karakters lang zijn.
                 </Text>
               )}
-            {isNextPressed && formErrors.password && (
-              <Text
-                style={{
-                  color: "red",
-                  fontWeight: "bold",
-                  textAlign: "center",
+              <Button
+                text="Registreren"
+                onPress={() => {
+                  setIsNextPressed(true);
+                  if (!validatePassword(formState.password)) {
+                    setFormErrors({ ...formErrors, password: true });
+                  }
+                  if (
+                    !validateConfirmPassword(
+                      formState.password,
+                      formState.confirmPassword
+                    )
+                  ) {
+                    setFormErrors({ ...formErrors, confirmPassword: true });
+                  }
+                  if (
+                    validatePassword(formState.password) &&
+                    validateConfirmPassword(
+                      formState.password,
+                      formState.confirmPassword
+                    )
+                  ) {
+                    handleSubmit();
+                  }
                 }}
-              >
-                Wachtwoord moet minstens 8 karakters lang zijn.
+              />
+              <Text style={styles.textButton} onPress={() => setStep(2)}>
+                Terug
               </Text>
-            )}
-            <Button
-              text="Registreren"
-              onPress={() => {
-                setIsNextPressed(true);
-                if (!validatePassword(formState.password)) {
-                  setFormErrors({ ...formErrors, password: true });
-                }
-                if (
-                  !validateConfirmPassword(
-                    formState.password,
-                    formState.confirmPassword
-                  )
-                ) {
-                  setFormErrors({ ...formErrors, confirmPassword: true });
-                }
-                if (
-                  validatePassword(formState.password) &&
-                  validateConfirmPassword(
-                    formState.password,
-                    formState.confirmPassword
-                  )
-                ) {
-                  handleSubmit();
-                }
-              }}
-            />
-            <Text style={styles.textButton} onPress={() => setStep(2)}>
-              Terug
-            </Text>
-          </>
-        )}
-      </View>
-    </KeyboardAwareScrollView>
+            </>
+          )}
+        </View>
+      </KeyboardAwareScrollView>
+    </Animated.View>
+
   );
 };
 

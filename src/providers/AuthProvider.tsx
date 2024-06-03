@@ -29,7 +29,7 @@ export default function AuthProvider({ children }: PropsWithChildren) {
             setSession(session);
             if (session?.user.id) {
                 const { data, error, status } = await supabaseAdmin
-                .from('Carecenter')
+                .from('Driver')
                 .select("*")
                 .eq('id', session.user.id)
                 .single()
@@ -45,7 +45,7 @@ export default function AuthProvider({ children }: PropsWithChildren) {
             setSession(session);
             if (session?.user.id) {
                 const { data, error, status } = await supabaseAdmin
-                .from('Carecenter')
+                .from('Driver')
                 .select("*")
                 .eq('id', session.user.id)
                 .single()

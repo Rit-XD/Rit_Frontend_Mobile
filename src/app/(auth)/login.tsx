@@ -1,31 +1,30 @@
-import {
-  View,
-  Text,
-  TextInput,
-  StyleSheet,
-  Alert,
-  Keyboard,
-  TouchableWithoutFeedback,
-} from "react-native";
-import React, { useState } from "react";
-import { Link, Stack } from "expo-router";
+import React, { useEffect, useRef, useState } from "react";
+import { View, Text, StyleSheet, Animated } from "react-native";
 import { supabase } from "@/lib/supabase";
 import Button from "@/components/ui/Button";
-import { Colors, primaryColor } from "@/constants/Colors";
+import { primaryColor } from "@/constants/Colors";
 import { Image } from "expo-image";
 import GradientText from "react-native-gradient-texts";
 import { ThemedText } from "@/components/ThemedText";
 import Input from "@/components/ui/Input";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import LoginRegisterSlider from "@/components/ui/Slider";
 import { ThemedView } from "@/components/ThemedView";
-import { useAuth } from "@/providers/AuthProvider";
 
 const SignInScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  const position = useRef(new Animated.Value(-1000)).current;
+
+  useEffect(() => {
+    Animated.timing(position, {
+      toValue: 0,
+      duration: 500,
+      useNativeDriver: true,
+    }).start();
+  }, []);
 
   async function signInWithEmail() {
     setLoading(true);
@@ -39,59 +38,61 @@ const SignInScreen = () => {
   }
 
   return (
-      <KeyboardAwareScrollView
-        keyboardShouldPersistTaps={"never"}
-        contentContainerStyle={styles.container}
-      >
-        <ThemedView style={styles.themedView}>
-          <View>
-            <Image
-              style={styles.image}
-              source="https://iqfcxjbnqcpjzggtcptb.supabase.co/storage/v1/object/public/profilePics/Rit-Logo.png?t=2024-05-29T09%3A24%3A23.265Z"
-              contentFit="contain"
-              transition={1000}
-            />
-            <GradientText
-              text="Log in"
-              fontSize={32}
-              isGradientFill
-              gradientColors={[primaryColor, "#FFCC00"]}
-              fontFamily={"Cocon"}
-              style={styles.title}
-              fontWeight={"bold"}
-            />
-          </View>
-          <View>
-            <ThemedText style={styles.label}>E-mail</ThemedText>
-            <Input
-              autoComplete="email"
-              value={email}
-              onChangeText={setEmail}
-              placeholder="rit@care.be"
-              keyboardType="email-address"
-            />
+    <Animated.View style={{ transform: [{ translateX: position }] }}>
+        <KeyboardAwareScrollView
+          keyboardShouldPersistTaps={"never"}
+          contentContainerStyle={styles.container}
+        >
+          <ThemedView style={styles.themedView}>
+            <View>
+              <Image
+                style={styles.image}
+                source="https://iqfcxjbnqcpjzggtcptb.supabase.co/storage/v1/object/public/profilePics/Rit-Logo.png?t=2024-05-29T09%3A24%3A23.265Z"
+                contentFit="contain"
+                transition={1000}
+              />
+              <GradientText
+                text="Log in"
+                fontSize={32}
+                isGradientFill
+                gradientColors={[primaryColor, "#FFCC00"]}
+                fontFamily={"Cocon"}
+                style={styles.title}
+                fontWeight={"bold"}
+              />
+            </View>
+            <View>
+              <ThemedText style={styles.label}>E-mail</ThemedText>
+              <Input
+                autoComplete="email"
+                value={email}
+                onChangeText={setEmail}
+                placeholder="rit@care.be"
+                keyboardType="email-address"
+              />
 
-            <ThemedText style={styles.label}>Wachtwoord</ThemedText>
-            <Input
-              value={password}
-              onChangeText={setPassword}
-              placeholder="••••••••••"
-              password
-            />
-          </View>
-          <View>
-            {error ? <Text style={styles.errorText}>{error}</Text> : null}
-            <Button
-              onPress={signInWithEmail}
-              disabled={loading}
-              text={loading ? "Inloggen..." : "Inloggen"}
-            />
-            {/* <Link href="/register" style={styles.textButton}>
-              Create an account
-            </Link> */}
-          </View>
-        </ThemedView>
-      </KeyboardAwareScrollView>
+              <ThemedText style={styles.label}>Wachtwoord</ThemedText>
+              <Input
+                value={password}
+                onChangeText={setPassword}
+                placeholder="••••••••••"
+                password
+              />
+            </View>
+            <View>
+              {error ? <Text style={styles.errorText}>{error}</Text> : null}
+              <Button
+                onPress={signInWithEmail}
+                disabled={loading}
+                text={loading ? "Inloggen..." : "Inloggen"}
+              />
+              {/* <Link href="/register" style={styles.textButton}>
+                Create an account
+              </Link> */}
+            </View>
+          </ThemedView>
+        </KeyboardAwareScrollView>
+      </Animated.View>
   );
 };
 
