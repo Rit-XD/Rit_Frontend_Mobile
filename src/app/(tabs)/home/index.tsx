@@ -8,14 +8,21 @@ import { useAuth } from "@/providers/AuthProvider";
 import { ThemedText } from "@/components/ThemedText";
 import { primaryColor, secondaryColor } from "@/constants/Colors";
 import { LinearGradient } from "expo-linear-gradient";
+import { Redirect } from "expo-router";
 
 export default function HomeScreen() {
-  const { user } = useAuth();
-  const [logout, setLogout] = useState(false);
+  const { user, session } = useAuth();
+  const [data, setData] = useState(null);
 
-  if (!user) {
-    return undefined;
-  }
+  useEffect(() => {
+    setData(user);
+  }, [user]);
+
+  // if (session && !user) {
+  //   return <>
+  //     {user && <Redirect href="/home" />}
+  //   </>;
+  // }
 
   return (
     <ThemedView style={styles.page}>

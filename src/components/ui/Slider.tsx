@@ -68,6 +68,8 @@ const LoginRegisterSlider = ({ initialActive }: { initialActive: string }) => {
 const styles = StyleSheet.create({
   container: {
     marginTop: 16,
+    marginBottom: 32,
+    marginHorizontal: "auto",
     width: 345,
     height: 50,
     backgroundColor: "#fad2b3",

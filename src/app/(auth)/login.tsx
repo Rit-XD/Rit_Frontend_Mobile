@@ -18,6 +18,8 @@ import { ThemedText } from "@/components/ThemedText";
 import Input from "@/components/ui/Input";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import LoginRegisterSlider from "@/components/ui/Slider";
+import { ThemedView } from "@/components/ThemedView";
+import { useAuth } from "@/providers/AuthProvider";
 
 const SignInScreen = () => {
   const [email, setEmail] = useState("");
@@ -39,9 +41,9 @@ const SignInScreen = () => {
   return (
       <KeyboardAwareScrollView
         keyboardShouldPersistTaps={"never"}
-        style={styles.container}
+        contentContainerStyle={styles.container}
       >
-        <View style={styles.themedView}>
+        <ThemedView style={styles.themedView}>
           <View>
             <Image
               style={styles.image}
@@ -88,7 +90,7 @@ const SignInScreen = () => {
               Create an account
             </Link> */}
           </View>
-        </View>
+        </ThemedView>
       </KeyboardAwareScrollView>
   );
 };
@@ -97,18 +99,16 @@ const styles = StyleSheet.create({
   screencontainer: {
     height: "100%",
     backgroundColor: "transparent",
-    overflow: "hidden",
   },
   container: {
-    paddingHorizontal: 24,
-    paddingVertical: 128,
-    paddingBottom: 128,
     height: "100%",
     backgroundColor: "transparent",
     display: "flex",
   },
   themedView: {
-    height: "120%",
+    paddingHorizontal: 24,
+    paddingVertical: 128,
+    height: "100%",
     display: "flex",
     justifyContent: "space-between",
   },

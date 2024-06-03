@@ -1,4 +1,5 @@
 import { supabase } from '@/lib/supabase';
+import { useAuth } from '@/providers/AuthProvider';
 import { View, Text, Button, StyleSheet } from 'react-native';
 
 const ProfileScreen = () => {

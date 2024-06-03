@@ -45,14 +45,13 @@ export {
     const colorscheme = useColorScheme();
 
     return (
-
-        <ThemeProvider value={colorscheme === "dark"? DarkTheme : DefaultTheme}>
-            <AuthProvider>
-                <Stack screenOptions={{ headerShown: false, contentStyle: {backgroundColor: colorscheme === "dark"? "#151515" : "#ffffff"}}} >
-                    <Stack.Screen name="(auth)"/>
-                    <Stack.Screen name="(tabs)"/>
-                </Stack>
-            </AuthProvider>
-        </ThemeProvider>
+        <AuthProvider>
+            <ThemeProvider value={colorscheme === "dark"? DarkTheme : DefaultTheme}>
+                    <Stack screenOptions={{ headerShown: false, contentStyle: {backgroundColor: colorscheme === "dark"? "#151515" : "#ffffff"}}} >
+                        <Stack.Screen name="(auth)"/>
+                        <Stack.Screen name="(tabs)"/>
+                    </Stack>
+            </ThemeProvider>
+        </AuthProvider>
     )
   }

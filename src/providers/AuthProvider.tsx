@@ -27,6 +27,7 @@ export default function AuthProvider({ children }: PropsWithChildren) {
             } = await supabase.auth.getSession();
 
             setSession(session);
+            console.log("session", session)
             if (session?.user.id) {
                 const { data, error, status } = await supabaseAdmin
                 .from('Carecenter')
@@ -39,9 +40,19 @@ export default function AuthProvider({ children }: PropsWithChildren) {
             setIsLoading(false);
         };
 
+
         fetchSession();
-        supabase.auth.onAuthStateChange((_event, session) => { 
+        supabase.auth.onAuthStateChange(async (_event, session) => { 
             setSession(session);
+            if (session?.user.id) {
+                const { data, error, status } = await supabaseAdmin
+                .from('Carecenter')
+                .select("*")
+                .eq('id', session.user.id)
+                .single()
+
+                setUser(data || null);
+            }
         });
     }, []);
 
