@@ -10,6 +10,7 @@ import { primaryColor, secondaryColor } from "@/constants/Colors";
 import { LinearGradient } from "expo-linear-gradient";
 import { Redirect } from "expo-router";
 import Availability from "@/components/notifications/AvailabilityToggle";
+import RidesList from "@/components/rides/RidesList";
 
 export default function HomeScreen() {
   const { user, session } = useAuth();
@@ -44,7 +45,8 @@ export default function HomeScreen() {
           </ThemedText>
         </View>
       </View>
-      <Availability value={true} lightColor={primaryColor} darkColor={secondaryColor} />
+      <Availability value={true}/>
+      <RidesList filter="all"/>
     </ThemedView>
   );
 }
