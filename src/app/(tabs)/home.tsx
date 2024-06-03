@@ -9,6 +9,8 @@ import { ThemedText } from "@/components/ThemedText";
 import { primaryColor, secondaryColor } from "@/constants/Colors";
 import { LinearGradient } from "expo-linear-gradient";
 import { Redirect } from "expo-router";
+import Availability from "@/components/notifications/AvailabilityToggle";
+import RidesList from "@/components/rides/RidesList";
 
 export default function HomeScreen() {
   const { user, session } = useAuth();
@@ -43,6 +45,8 @@ export default function HomeScreen() {
           </ThemedText>
         </View>
       </View>
+      <Availability value={true}/>
+      <RidesList filter="all"/>
     </ThemedView>
   );
 }
@@ -60,7 +64,7 @@ const styles = StyleSheet.create({
   },
   headBackground: {
     position: "absolute",
-    height: "25%",
+    height: "45%",
     width: "100%",
     opacity: 0.1,
   },
