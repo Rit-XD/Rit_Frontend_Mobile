@@ -12,7 +12,7 @@ const ProfileScreen = () => {
       <Text>Profile</Text>
 
       <Button
-        text="Sign out"
+        text="Uitloggen"
         onPress={async () => await supabase.auth.signOut()}
       />
     </View>
