@@ -82,7 +82,7 @@ const SignUpScreen = () => {
   }
 
   function isValidPhoneNumber(phone: string) {
-    const re = /^(0|\+32)\s?4\s?70\s?42\s?93\s?61$/;
+    const re = /^(0|\+32)\s?4\s?\d{2}\s?\d{2}\s?\d{2}\s?\d{2}$/;
     return re.test(phone);
   }
 
