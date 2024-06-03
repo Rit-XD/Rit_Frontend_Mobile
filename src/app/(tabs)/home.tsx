@@ -45,8 +45,8 @@ export default function HomeScreen() {
           </ThemedText>
         </View>
       </View>
-      <Availability value={true}/>
-      <RidesList filter="all"/>
+      <Availability value={true} />
+      <RidesList filter="all" />
     </ThemedView>
   );
 }
