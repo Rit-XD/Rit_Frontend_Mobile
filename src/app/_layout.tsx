@@ -2,7 +2,7 @@ import { SplashScreen, Stack } from 'expo-router';
 import { useFonts } from 'expo-font';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { useEffect } from 'react';
-import { useColorScheme } from 'react-native';
+import { ScrollView, View, useColorScheme } from 'react-native';
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import AuthProvider from '@/providers/AuthProvider';
 
@@ -48,9 +48,9 @@ export {
 
         <ThemeProvider value={colorscheme === "dark"? DarkTheme : DefaultTheme}>
             <AuthProvider>
-                <Stack>
-                    <Stack.Screen name="(auth)" options={{headerShown: false}} />
-                    <Stack.Screen name="(tabs)" options={{headerShown: false}} />
+                <Stack screenOptions={{ headerShown: false, contentStyle: {backgroundColor: colorscheme === "dark"? "#151515" : "#ffffff"}}} >
+                    <Stack.Screen name="(auth)"/>
+                    <Stack.Screen name="(tabs)"/>
                 </Stack>
             </AuthProvider>
         </ThemeProvider>

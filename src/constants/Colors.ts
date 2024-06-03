@@ -11,7 +11,8 @@ const tintColorDark = primaryColor;
 export const Colors = {
   light: {
     text: "#11181C",
-    background: "#fff",
+    background: "#ffffff",
+    backgroundColor: "red",
     tint: tintColorLight,
     icon: primaryColor,
     tabIconDefault: primaryColor,

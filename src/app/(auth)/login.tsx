@@ -14,7 +14,6 @@ import Button from "@/components/ui/Button";
 import { Colors, primaryColor } from "@/constants/Colors";
 import { Image } from "expo-image";
 import GradientText from "react-native-gradient-texts";
-import { ThemedView } from "@/components/ThemedView";
 import { ThemedText } from "@/components/ThemedText";
 import Input from "@/components/ui/Input";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
@@ -38,13 +37,11 @@ const SignInScreen = () => {
   }
 
   return (
-    <ThemedView>
       <KeyboardAwareScrollView
         keyboardShouldPersistTaps={"never"}
         style={styles.container}
       >
         <View style={styles.themedView}>
-          <Stack.Screen options={{ headerShown: false }} />
           <View>
             <Image
               style={styles.image}
@@ -90,21 +87,24 @@ const SignInScreen = () => {
             {/* <Link href="/register" style={styles.textButton}>
               Create an account
             </Link> */}
-            <LoginRegisterSlider initialActive="login" />
           </View>
         </View>
       </KeyboardAwareScrollView>
-    </ThemedView>
   );
 };
 
 const styles = StyleSheet.create({
+  screencontainer: {
+    height: "100%",
+    backgroundColor: "transparent",
+    overflow: "hidden",
+  },
   container: {
     paddingHorizontal: 24,
     paddingVertical: 128,
     paddingBottom: 128,
     height: "100%",
-    backgroundColor: "white",
+    backgroundColor: "transparent",
     display: "flex",
   },
   themedView: {

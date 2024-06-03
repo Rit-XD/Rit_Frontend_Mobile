@@ -9,7 +9,6 @@ import GradientText from "react-native-gradient-texts";
 import RNDateTimePicker from "@react-native-community/datetimepicker";
 import Input from "@/components/ui/Input";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import LoginRegisterSlider from "@/components/ui/Slider";
 // import ImagePicker from "react-native-image-picker";
 
 const SignUpScreen = () => {
@@ -103,7 +102,6 @@ const SignUpScreen = () => {
   return (
     <KeyboardAwareScrollView keyboardShouldPersistTaps={"never"}>
       <View style={styles.container}>
-        <Stack.Screen options={{ headerShown: false }} />
         <Image
           style={styles.image}
           source="https://iqfcxjbnqcpjzggtcptb.supabase.co/storage/v1/object/public/profilePics/Rit-Logo.png?t=2024-05-29T09%3A24%3A23.265Z"
@@ -251,7 +249,6 @@ const SignUpScreen = () => {
             {/* <Link href="/login" style={styles.textButton}>
               Log in
             </Link> */}
-            <LoginRegisterSlider initialActive="register" />
           </>
         )}
 
