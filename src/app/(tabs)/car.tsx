@@ -3,7 +3,7 @@ import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/providers/AuthProvider";
 import { View, Text, StyleSheet } from "react-native";
 
-const ProfileScreen = () => {
+const CarScreen = () => {
   return (
     <View style={styles.container}>
       <Text>Voertuig</Text>
@@ -11,7 +11,7 @@ const ProfileScreen = () => {
   );
 };
 
-export default ProfileScreen;
+export default CarScreen;
 
 const styles = StyleSheet.create({
   container: {
