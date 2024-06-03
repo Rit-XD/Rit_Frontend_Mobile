@@ -18,12 +18,6 @@ export default function HomeScreen() {
     setData(user);
   }, [user]);
 
-  // if (session && !user) {
-  //   return <>
-  //     {user && <Redirect href="/home" />}
-  //   </>;
-  // }
-
   return (
     <ThemedView style={styles.page}>
       <LinearGradient
@@ -41,9 +35,13 @@ export default function HomeScreen() {
           transition={1000}
         />
         <View style={styles.headTextContainer}>
-          <ThemedText style={styles.headText}>Hey {user?.firstname},</ThemedText>
-          <ThemedText style={styles.headText}>Wie pik jij vandaag op?</ThemedText>
-        </View> 
+          <ThemedText style={styles.headText}>
+            Hey {user?.firstname},
+          </ThemedText>
+          <ThemedText style={styles.headText}>
+            Wie pik jij vandaag op?
+          </ThemedText>
+        </View>
       </View>
     </ThemedView>
   );
