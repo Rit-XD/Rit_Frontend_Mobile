@@ -21,7 +21,12 @@ export default function RidesList({filter}: AvailabilityProps) {
     return (
         <View style={styles.container}>
             <ThemedView style={styles.rideContainer}>
-            <ThemedText>{availableRides[0]? availableRides[0].id : "No ride"}</ThemedText>
+            {availableRides.length? (
+                <ThemedText>{availableRides[0].origin}</ThemedText>
+            ) : (
+                <ThemedText>Geen ritten</ThemedText>
+            )}
+            
             </ThemedView>
 
         </View>

@@ -33,31 +33,6 @@ export default function AuthProvider({ children }: PropsWithChildren) {
   const [availableRides, setAvailableRides] = useState<Ride[]>([]);
   const [acceptedRides, setAcceptedRides] = useState<Ride[]>([]);
 
-  const fetchUser = async () => {
-    const { data, error, status } = await supabaseAdmin
-      .from("Driver")
-      .select("*")
-      .eq("id", session?.user.id)
-      .single();
-
-    setUser(data || null);
-  }
-  const fetchRides = async () => {
-    const { data: availableRides, error, status } = await supabaseAdmin
-      .from("Ride")
-      .select("*")
-      .eq("driver", null);
-
-    setAvailableRides(availableRides || []);
-
-    const { data: acceptedRides, error: acceptedError, status: acceptedStatus } = await supabaseAdmin
-      .from("Ride")
-      .select("*")
-      .eq("driver", session?.user.id);
-
-    setAcceptedRides(acceptedRides || []);
-  }
-
   useEffect(() => {
     const fetchSession = async () => {
       const {
@@ -66,8 +41,27 @@ export default function AuthProvider({ children }: PropsWithChildren) {
 
       setSession(session);
       if (session?.user.id) {
-        fetchUser();
-        fetchRides();
+        const { data, error, status } = await supabaseAdmin
+        .from("Driver")
+        .select("*")
+        .eq("id", session?.user.id)
+        .single();
+  
+        setUser(data || null);
+        
+        const { data: availableRides, error: arError, status: arStatus } = await supabaseAdmin
+        .from("Rides")
+        .select("*")
+        .is("driver", null);
+
+        setAvailableRides(availableRides || []);
+
+        const { data: acceptedRides, error: acceptedError, status: acceptedStatus } = await supabaseAdmin
+        .from("Rides")
+        .select("*")
+        .eq("driver", session?.user.id);
+  
+        setAcceptedRides(acceptedRides || []);
       }
       setIsLoading(false);
     };
@@ -76,8 +70,27 @@ export default function AuthProvider({ children }: PropsWithChildren) {
     supabase.auth.onAuthStateChange(async (_event, session) => {
       setSession(session);
       if (session?.user.id) {
-        fetchUser();
-        fetchRides();
+        const { data, error, status } = await supabaseAdmin
+        .from("Driver")
+        .select("*")
+        .eq("id", session?.user.id)
+        .single();
+  
+        setUser(data || null);
+        
+        const { data: availableRides, error: arError, status: arStatus } = await supabaseAdmin
+        .from("Rides")
+        .select("*")
+        .is("driver", null);
+
+        setAvailableRides(availableRides || []);
+
+        const { data: acceptedRides, error: acceptedError, status: acceptedStatus } = await supabaseAdmin
+        .from("Rides")
+        .select("*")
+        .eq("driver", session?.user.id);
+  
+        setAcceptedRides(acceptedRides || []);
       }
     });
   }, []);
