@@ -1,24 +1,31 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { useThemeColor } from "@/hooks/useThemeColor";
 import { ThemedView } from "../ThemedView";
 import { ThemedText } from "../ThemedText";
+import { useAuth } from "@/providers/AuthProvider";
 
 type AvailabilityProps = {
   filter: "all" | "accepted";
 };
 
 export default function RidesList({filter}: AvailabilityProps) {
-  const color = useThemeColor({ light: "#fefefe", dark: "#fff" }, 'background');
+    const { availableRides, acceptedRides } = useAuth();
+    const color = useThemeColor({ light: "#fefefe", dark: "#fff" }, 'background');
 
-  return (
-    <View style={styles.container}>
-        <ThemedView style={styles.rideContainer}>
-        <ThemedText>Ride</ThemedText>
-        </ThemedView>
+    useEffect(() => {
+        console.log(availableRides);
+        console.log(acceptedRides);
+    }, [availableRides, acceptedRides]);
 
-    </View>
-  );
+    return (
+        <View style={styles.container}>
+            <ThemedView style={styles.rideContainer}>
+            <ThemedText>{availableRides[0]? availableRides[0].id : "No ride"}</ThemedText>
+            </ThemedView>
+
+        </View>
+    );
 };
 
 const styles = StyleSheet.create({
