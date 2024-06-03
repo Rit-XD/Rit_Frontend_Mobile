@@ -13,12 +13,20 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "config": {
+        "googleMapsApiKey": "AIzaSyBKhixrksRyCcnWxY2koJMH2GfDx6ywZgA"
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
+      },
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyBKhixrksRyCcnWxY2koJMH2GfDx6ywZgA"
+        }
       }
     },
     "web": {
@@ -27,13 +35,22 @@
       "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "Geef Rit toestemming om je locatie te gebruiken"
+        }
+      ],
       "expo-router",
       [
         "expo-font",
         {
-          "fonts": ["./assets/fonts/SpaceMono-Regular.ttf", "./assets/fonts/Cocon.otf"]
+          "fonts": [
+            "./assets/fonts/SpaceMono-Regular.ttf",
+            "./assets/fonts/Cocon.otf"
+          ]
         }
-    ]
+      ]
     ],
     "experiments": {
       "typedRoutes": true
