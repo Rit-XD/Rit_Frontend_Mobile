@@ -18,12 +18,6 @@ export default function HomeScreen() {
     setData(user);
   }, [user]);
 
-  // if (session && !user) {
-  //   return <>
-  //     {user && <Redirect href="/home" />}
-  //   </>;
-  // }
-
   return (
     <ThemedView style={styles.page}>
       <LinearGradient
