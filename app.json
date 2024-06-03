@@ -2,6 +2,7 @@
   "expo": {
     "name": "Rit_Frontend_Mobile",
     "slug": "Rit_Frontend_Mobile",
+    "owner": "ritapp",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -66,7 +67,7 @@
         "origin": false
       },
       "eas": {
-        "projectId": "c1e091cc-af16-4780-bb5e-b1643bc250f6"
+        "projectId": "0c85217c-4bf8-44bb-bbcb-ea950e6e8922"
       }
     }
   }
