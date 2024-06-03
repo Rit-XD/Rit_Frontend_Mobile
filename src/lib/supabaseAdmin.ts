@@ -6,11 +6,11 @@ export const supabaseAdmin = createClient(
   process.env.EXPO_PUBLIC_SUPABASE_URL!,
   process.env.EXPO_PUBLIC_SUPABASE_SERVICE_ROLE_KEY!,
   {
-    // auth: {
-    //   storage: AsyncStorage,
-    //   autoRefreshToken: true,
-    //   persistSession: true,
-    //   detectSessionInUrl: false,
-    // },
+    auth: {
+      storage: AsyncStorage,
+      autoRefreshToken: true,
+      persistSession: true,
+      detectSessionInUrl: false,
+    },
   }
 );
