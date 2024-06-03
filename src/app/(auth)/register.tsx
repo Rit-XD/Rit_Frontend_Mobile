@@ -9,6 +9,7 @@ import GradientText from "react-native-gradient-texts";
 import RNDateTimePicker from "@react-native-community/datetimepicker";
 import Input from "@/components/ui/Input";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { supabaseAdmin } from "@/lib/supabaseAdmin";
 // import ImagePicker from "react-native-image-picker";
 
 const SignUpScreen = () => {
@@ -43,12 +44,35 @@ const SignUpScreen = () => {
 
   async function signUpWithEmail() {
     setLoading(true);
-    const { error } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
       email: formState.email,
       password: formState.password,
     });
 
-    if (error) Alert.alert(error.message);
+    if (error) {
+      Alert.alert(error.message);
+    } else if (data?.user) {
+      const { data: insertData, error: insertError } = await supabaseAdmin
+        .from("Driver")
+        .insert([
+          {
+            id: data.user.id,
+            firstname: formState.firstname,
+            lastname: formState.lastname,
+            date_of_birth: formState.date,
+            city: formState.city,
+            postal: formState.postal,
+            phone: formState.phone,
+            license: formState.license,
+            email: formState.email,
+          },
+        ]);
+      console.log(insertData, insertError);
+
+      if (insertError) {
+        Alert.alert(insertError.message);
+      }
+    }
     setLoading(false);
   }
 
