@@ -34,8 +34,9 @@ const CarScreen = () => {
         style={styles.map}
         initialRegion={origin}
         // provider={PROVIDER_GOOGLE}
-        showsUserLocation={true}
-        showsMyLocationButton={true}
+        showsUserLocation
+        showsMyLocationButton
+        showsTraffic
       />
     </View>
   );
