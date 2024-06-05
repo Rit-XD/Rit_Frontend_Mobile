@@ -16,10 +16,11 @@
     "assetBundlePatterns": ["assets/fonts/*", "assets/images/*"],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "ios",
+      "bundleIdentifier": "EGP52YRNH4.care.rit.mobile",
       "config": {
         "googleMapsApiKey": "AIzaSyBKhixrksRyCcnWxY2koJMH2GfDx6ywZgA"
-      }
+      },
+      "buildNumber": "6"
     },
     "android": {
       "adaptiveIcon": {
