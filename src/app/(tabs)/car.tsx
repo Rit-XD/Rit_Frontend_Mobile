@@ -5,6 +5,7 @@ import * as Location from "expo-location";
 import BottomSheetComponent from "@/components/cars/BottomSheet";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { ThemedView } from "@/components/ThemedView";
+import CarBottomSheetComponent from "@/components/cars/BottomSheet";
 
 const CarScreen = () => {
   const [location, setLocation] = useState<Location.LocationObject | null>(
@@ -42,7 +43,7 @@ const CarScreen = () => {
           showsMyLocationButton
           showsTraffic
         />
-        <BottomSheetComponent />
+        <CarBottomSheetComponent />
       </ThemedView>
     </GestureHandlerRootView>
   );

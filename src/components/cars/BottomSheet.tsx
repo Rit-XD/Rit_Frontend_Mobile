@@ -1,7 +1,6 @@
-import { View, Text, StyleSheet } from "react-native";
-import React, { useCallback, useMemo } from "react";
+import { View, Text, StyleSheet, Image } from "react-native";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
-import { Image } from "expo-image";
 import Button from "../ui/Button";
 import { Icon } from "@rneui/themed";
 import {
@@ -14,9 +13,15 @@ import { ThemedView } from "../ThemedView";
 import { ThemedText } from "../ThemedText";
 import { useThemeColor } from "@/hooks/useThemeColor";
 import { primaryColor } from "@/constants/Colors";
+import { supabaseAdmin } from "@/lib/supabaseAdmin";
+import { Car } from "@/types/Car.type";
+import { useAuth } from "@/providers/AuthProvider";
 
-const BottomSheetComponent = () => {
+const CarBottomSheetComponent = () => {
+  const [car, setCar] = useState<Car | null>(null);
   const snapPoints = useMemo(() => ["22%", "87%"], []);
+
+  const { acceptedRides } = useAuth();
 
   const renderBackdrop = useCallback(
     (props: any) => (
@@ -48,7 +53,21 @@ const BottomSheetComponent = () => {
 
   const arrow = useThemeColor({ light: "black", dark: "#fefefe" }, "icon");
 
-  // const;
+  useEffect(() => {
+    const fetchCar = async () => {
+      const { data, error } = await supabaseAdmin
+        .from("Car")
+        .select("*")
+        // .eq("id", acceptedRides[0].car)
+        .eq("id", "4daa75d4-39a4-499b-a0a0-8fa843ca2ecc")
+        .limit(1)
+        .single();
+
+      if (error) console.log(error);
+      setCar(data || null);
+    };
+    fetchCar();
+  }, []);
 
   return (
     <BottomSheet
@@ -60,12 +79,17 @@ const BottomSheetComponent = () => {
     >
       <ThemedView>
         <ThemedView style={styles.centeredView}>
-          <Image
-            source={require("@assets/images/testcar.webp")}
-            style={styles.carImage}
-          />
-          <ThemedText style={styles.carTitle}>Volkswagen Caddy</ThemedText>
-          <ThemedText style={styles.carSubtitle}>2-DGT-215</ThemedText>
+          {car?.picture && (
+            <Image
+              source={{ uri: car?.picture }}
+              style={styles.carImage}
+              resizeMode="contain"
+            />
+          )}
+          <ThemedText style={styles.carTitle}>
+            {car?.brand} {car?.model}
+          </ThemedText>
+          <ThemedText style={styles.carSubtitle}>{car?.plate}</ThemedText>
         </ThemedView>
 
         <ThemedView style={styles.specsContainer}>
@@ -75,7 +99,9 @@ const BottomSheetComponent = () => {
               name="gears"
               size={16}
             />
-            <ThemedText style={styles.text}>Automatisch</ThemedText>
+            <ThemedText style={styles.text}>
+              {car?.automatic === true ? "Automaat" : "Manueel"}
+            </ThemedText>
           </ThemedView>
           <ThemedView style={styles.specsRow}>
             <FontAwesome5
@@ -83,7 +109,7 @@ const BottomSheetComponent = () => {
               name="gas-pump"
               size={16}
             />
-            <ThemedText style={styles.text}>Benzine</ThemedText>
+            <ThemedText style={styles.text}>{car?.fuel}</ThemedText>
           </ThemedView>
           <ThemedView style={styles.specsRow}>
             <FontAwesome5
@@ -91,7 +117,11 @@ const BottomSheetComponent = () => {
               size={16}
               style={{ color: primaryColor }}
             />
-            <ThemedText style={styles.text}>1 plaats</ThemedText>
+            <ThemedText style={styles.text}>
+              {car?.wheelchaircapacity === 1
+                ? `${car?.wheelchaircapacity} plaats`
+                : `${car?.wheelchaircapacity} plaatsen`}
+            </ThemedText>
           </ThemedView>
         </ThemedView>
         <ThemedView>
@@ -104,7 +134,7 @@ const BottomSheetComponent = () => {
               />
               <ThemedText style={styles.text}>Bereik</ThemedText>
             </ThemedView>
-            <ThemedText style={styles.infoText}>350 km</ThemedText>
+            <ThemedText style={styles.infoText}>{car?.range} km</ThemedText>
           </ThemedView>
           <ThemedView style={styles.infoRow}>
             <ThemedView style={styles.specsRow}>
@@ -113,10 +143,12 @@ const BottomSheetComponent = () => {
                 name="person-outline"
                 size={16}
               />
-              <ThemedText style={styles.text}>Zit plaatsen</ThemedText>
+              <ThemedText style={styles.text}>Zitplaatsen</ThemedText>
             </ThemedView>
             <ThemedText style={styles.infoText}>
-              4 Zitplaatsen + 1 bestuurder
+              {car?.seats === 1
+                ? `${car?.seats} passagier`
+                : `${car?.seats} passagiers`}
             </ThemedText>
           </ThemedView>
         </ThemedView>
@@ -160,7 +192,7 @@ const BottomSheetComponent = () => {
   );
 };
 
-export default BottomSheetComponent;
+export default CarBottomSheetComponent;
 
 const styles = StyleSheet.create({
   centeredView: {
