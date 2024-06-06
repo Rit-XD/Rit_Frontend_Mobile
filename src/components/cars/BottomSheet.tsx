@@ -8,17 +8,18 @@ const BottomSheetComponent = () => {
   const snapPoints = useMemo(() => ["20%", "80%"], []);
 
   return (
-    <>
       <BottomSheet
         index={0}
         snapPoints={snapPoints}
         // handleIndicatorStyle={{ backgroundColor: "#f0f0f0" }}
+        
       >
         <View
           style={{
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
+            overflow: "visible",
           }}
         >
           <Image
@@ -28,7 +29,8 @@ const BottomSheetComponent = () => {
               width: 130,
               aspectRatio: 115 / 75,
               marginBottom: 16,
-              top: -50,
+              top: 0,
+              transform: [{ translateY: -50 }],
             }}
           />
           <Text style={{ fontSize: 24, fontWeight: "bold", marginTop: 24 }}>
@@ -55,7 +57,6 @@ const BottomSheetComponent = () => {
           <Text>1 plaats</Text>
         </View>
       </BottomSheet>
-    </>
   );
 };
 
