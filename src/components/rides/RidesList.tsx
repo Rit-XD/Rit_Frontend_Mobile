@@ -6,6 +6,8 @@ import { ThemedText } from "../ThemedText";
 import { useAuth } from "@/providers/AuthProvider";
 import { primaryColor, secondaryColor } from "@/constants/Colors";
 import { Ionicons } from "@expo/vector-icons";
+import RideDetails from "./RideDetails";
+import { Ride } from "@/types/Ride.type";
 
 
 
@@ -14,6 +16,8 @@ export default function RidesList() {
     const color = useThemeColor({ light: "#fefefe", dark: "#fff" }, 'background');
     const chevronColor = useThemeColor({ light: "#151515", dark: "#fefefe" }, 'background');
     const [filter, setFilter] = React.useState<"all" | "accepted">("all");
+    const [selectedRide, setSelectedRide] = React.useState<Ride | null>(null);
+    const [showDetails, setShowDetails] = React.useState<boolean>(false);
 
     const parseAddress = (address: string) => {
         return address.split(",")[0];
@@ -36,6 +40,10 @@ export default function RidesList() {
         else if (addDays(d2, 7) > d1) return styles.yellow;
         else return styles.green;
     }
+    function closeDetails(){
+        setSelectedRide(null);
+    }
+        
 
         return (
             <View style={styles.container}>
@@ -57,7 +65,7 @@ export default function RidesList() {
                             <View style={styles.rideContainerInner}>
                                 <View style={[styles.colorCode, determineColor(ride.timestamp)]}></View>
                                 <View style={styles.content}>
-                                    <ThemedText style={styles.origin}>{parseAddress(ride.destination)}</ThemedText>
+                                    <ThemedText style={styles.origin} onPress={() => {setSelectedRide(ride)}}>{parseAddress(ride.destination)}</ThemedText>
                                     <ThemedText style={styles.destination}>{parseDateTime(ride.timestamp)}</ThemedText>
                                 </View>
                             </View>
@@ -78,6 +86,7 @@ export default function RidesList() {
                     )}
                     </View>
                 </ScrollView>
+                { selectedRide && <RideDetails ride={selectedRide} closeDetails={closeDetails}/>}
             </View>
         );
 };
