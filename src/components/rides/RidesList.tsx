@@ -5,12 +5,14 @@ import { ThemedView } from "../ThemedView";
 import { ThemedText } from "../ThemedText";
 import { useAuth } from "@/providers/AuthProvider";
 import { primaryColor, secondaryColor } from "@/constants/Colors";
+import { Ionicons } from "@expo/vector-icons";
 
 
 
 export default function RidesList() {
     const { availableRides, acceptedRides } = useAuth();
     const color = useThemeColor({ light: "#fefefe", dark: "#fff" }, 'background');
+    const chevronColor = useThemeColor({ light: "#151515", dark: "#fefefe" }, 'background');
     const [filter, setFilter] = React.useState<"all" | "accepted">("all");
 
     const parseAddress = (address: string) => {
@@ -58,6 +60,9 @@ export default function RidesList() {
                                     <ThemedText style={styles.origin}>{parseAddress(ride.destination)}</ThemedText>
                                     <ThemedText style={styles.destination}>{parseDateTime(ride.timestamp)}</ThemedText>
                                 </View>
+                            </View>
+                            <View>
+                                <Ionicons name="chevron-forward" size={24} style={{marginRight: 16}} color={chevronColor}/>
                             </View>
                         </ThemedView>
                         ))}
