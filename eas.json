@@ -13,6 +13,12 @@
     "production": {}
   },
   "submit": {
-    "production": {}
+    "production": {
+      "ios": {
+        "appleId": "bram.colleman@outlook.com",
+        "ascAppId": "6503949025",
+        "appleTeamId": "EGP52YRNH4"
+      }
+    }
   }
 }
