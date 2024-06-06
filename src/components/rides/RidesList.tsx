@@ -51,7 +51,7 @@ export default function RidesList() {
                     {(filter==="all"? availableRides.length : acceptedRides.length)? (
                         <>
                         {(filter==="all"? availableRides : acceptedRides).map((ride) => (
-                        <ThemedView style={styles.rideContainer} key={ride.id}>
+                        <ThemedView style={styles.rideContainer} key={ride.id} darkColor="#303030">
                             <View style={styles.rideContainerInner}>
                                 <View style={[styles.colorCode, determineColor(ride.timestamp)]}></View>
                                 <View style={styles.content}>
