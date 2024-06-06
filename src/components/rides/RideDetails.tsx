@@ -52,7 +52,7 @@ const RideDetails = ({ride, closeDetails}:detailsProps) => {
             />
             <View style={{position: 'absolute', top: 64, left: 32}}>
                 <Button onPress={closeDetails} style={{backgroundColor: "white"}} mod={["white", "square"]}>
-                    <AntDesign name='arrowleft'/>
+                    <AntDesign name='arrowleft' size={24} color={themeColor}/>
                 </Button>
             </View>
             <View style={{position: 'absolute', bottom: 64, width: '100%', height: 250}}>
