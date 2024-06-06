@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import * as Location from "expo-location";
+import BottomSheetComponent from "@/components/cars/BottomSheet";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 const CarScreen = () => {
   const [location, setLocation] = useState<Location.LocationObject | null>(
@@ -29,16 +31,19 @@ const CarScreen = () => {
   }, []);
 
   return (
-    <View style={styles.container}>
-      <MapView
-        style={styles.map}
-        initialRegion={origin}
-        // provider={PROVIDER_GOOGLE}
-        showsUserLocation
-        showsMyLocationButton
-        showsTraffic
-      />
-    </View>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <View style={styles.container}>
+        <MapView
+          style={styles.map}
+          initialRegion={origin}
+          // provider={PROVIDER_GOOGLE}
+          showsUserLocation
+          showsMyLocationButton
+          showsTraffic
+        />
+        <BottomSheetComponent />
+      </View>
+    </GestureHandlerRootView>
   );
 };
 
