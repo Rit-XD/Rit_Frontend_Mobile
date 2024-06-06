@@ -185,7 +185,9 @@ const CarBottomSheetComponent = () => {
           </ThemedView>
         </ThemedView>
         <ThemedView style={styles.buttonContainer}>
-          <Button text="Open wagen" style={styles.button} />
+          <Button>
+            <Text style={styles.buttonText}>Ontgrendel wagen</Text>
+          </Button>
         </ThemedView>
       </ThemedView>
     </BottomSheet>
@@ -217,9 +219,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
     paddingVertical: 10,
   },
-  button: {
-    flex: 1,
-  },
+
   specsContainer: {
     width: "100%",
     display: "flex",
@@ -281,5 +281,11 @@ const styles = StyleSheet.create({
     marginVertical: 16,
     position: "relative",
     paddingVertical: 10,
+  },
+
+  buttonText: {
+    color: "white",
+    fontSize: 16,
+    fontWeight: "bold",
   },
 });

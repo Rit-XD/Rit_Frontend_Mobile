@@ -1,4 +1,4 @@
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleProp, StyleSheet, Text, View } from "react-native";
 import { forwardRef } from "react";
 import { Colors, primaryColor } from "@/constants/Colors";
 import { AntDesign } from "@expo/vector-icons";
@@ -6,15 +6,36 @@ import { useThemeColor } from "@/hooks/useThemeColor";
 
 type ButtonProps = {
   children?: React.ReactNode;
-  mod?: ["white"?, "square"?]; 
+  mod?: ["white"?, "square"?];
+  style?: StyleProp<any>;
 } & React.ComponentPropsWithoutRef<typeof Pressable>;
 
 const Button = forwardRef<View | null, ButtonProps>(
-  ({ children, mod, ...pressableProps }, ref) => {
-  const whiteColor = useThemeColor({ light: "white", dark: "#151515" }, "text");
+  ({ children, style, mod, ...pressableProps }, ref) => {
+    const whiteColor = useThemeColor(
+      { light: "white", dark: "#303030" },
+      "text"
+    );
 
     return (
-      <Pressable ref={ref} {...pressableProps} style={[styles.container, mod?.includes("white")? {backgroundColor: whiteColor, shadowColor: "rgba(0, 0, 0, 0.25)", shadowOffset: { width: 0, height: 1 }, shadowRadius: 9, shadowOpacity: 1,}: {}, mod?.includes("square")? {borderRadius: 15}: {}]}>
+      <Pressable
+        ref={ref}
+        {...pressableProps}
+        style={[
+          styles.container,
+          mod?.includes("white")
+            ? {
+                backgroundColor: whiteColor,
+                shadowColor: "rgba(0, 0, 0, 0.25)",
+                shadowOffset: { width: 0, height: 1 },
+                shadowRadius: 9,
+                shadowOpacity: 1,
+              }
+            : {},
+          mod?.includes("square") ? { borderRadius: 15 } : {},
+          style,
+        ]}
+      >
         {children}
       </Pressable>
     );

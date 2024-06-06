@@ -46,9 +46,25 @@ export default function RootLayout() {
 function RootLayoutNav() {
   const colorscheme = useColorScheme();
 
+  const RitTheme = {
+    ...DefaultTheme,
+    colors: {
+      ...DefaultTheme.colors,
+      background: "white",
+    },
+  };
+
+  const RitThemeDark = {
+    ...DarkTheme,
+    colors: {
+      ...DarkTheme.colors,
+      background: "#151515",
+    },
+  };
+
   return (
     <AuthProvider>
-      <ThemeProvider value={colorscheme === "dark" ? DarkTheme : DefaultTheme}>
+      <ThemeProvider value={colorscheme === "dark" ? RitThemeDark : RitTheme}>
         <Stack
           screenOptions={{
             headerShown: false,

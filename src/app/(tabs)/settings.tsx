@@ -1,65 +1,141 @@
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
+import Availability from "@/components/notifications/AvailabilityToggle";
 import Button from "@/components/ui/Button";
 import { useThemeColor } from "@/hooks/useThemeColor";
 import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/providers/AuthProvider";
 import { Icon } from "@rneui/themed";
 import { View, Text, StyleSheet } from "react-native";
+import { GestureHandlerRootView, Switch } from "react-native-gesture-handler";
+import { primaryColor } from "@/constants/Colors";
+import { useState } from "react";
+import { Ionicons, AntDesign } from "@expo/vector-icons";
 
 const SettingsScreen = () => {
+  const [notification, setNotification] = useState(true);
   async function signOut() {
     await supabase.auth.signOut();
   }
+
+  const colorTrack = useThemeColor(
+    { light: "#fefefe", dark: "#fff" },
+    "background"
+  );
+  const colorThumb = useThemeColor(
+    { light: "#c3c3c3", dark: "#444444" },
+    "background"
+  );
 
   const infoBackground = useThemeColor(
     { light: "white", dark: "#303030" },
     "background"
   );
 
-  const arrow = useThemeColor({ light: "black", dark: "#fefefe" }, "icon");
+  const icons = useThemeColor({ light: "black", dark: "#fefefe" }, "icon");
+
   return (
     <ThemedView style={styles.container}>
       <ThemedText style={styles.title}>Algemeen</ThemedText>
       <ThemedView
         style={[styles.infoContainer, { backgroundColor: infoBackground }]}
       >
-        <ThemedView
-          style={[styles.otherRow, { backgroundColor: infoBackground }]}
-        >
-          <ThemedText style={styles.text}>
-            Informatie van het voertuig
-          </ThemedText>
-          <Icon iconStyle={{ color: arrow }} name="chevron-right" size={28} />
+        <ThemedView style={[styles.row, { backgroundColor: infoBackground }]}>
+          <ThemedView style={styles.iconWord}>
+            <Ionicons
+              style={{ color: icons }}
+              name="person-outline"
+              size={20}
+            />
+            <ThemedText style={styles.text}>Account</ThemedText>
+          </ThemedView>
+          <Icon iconStyle={{ color: icons }} name="chevron-right" size={28} />
         </ThemedView>
-        <ThemedView
-          style={[styles.otherRow, { backgroundColor: infoBackground }]}
-        >
-          <ThemedText style={styles.text}>Verzekering</ThemedText>
-          <Icon iconStyle={{ color: arrow }} name="chevron-right" size={28} />
+        <ThemedView style={[styles.row, { backgroundColor: infoBackground }]}>
+          <ThemedView style={styles.iconWord}>
+            <Ionicons style={{ color: icons }} name="key-outline" size={20} />
+            <ThemedText style={styles.text}>Wijzig wachtwoord</ThemedText>
+          </ThemedView>
+          <Icon iconStyle={{ color: icons }} name="chevron-right" size={28} />
         </ThemedView>
-        <ThemedView
-          style={[styles.otherRow, { backgroundColor: infoBackground }]}
-        >
-          <ThemedText style={styles.text}>Inschrijvingsformulier</ThemedText>
-          <Icon iconStyle={{ color: arrow }} name="chevron-right" size={28} />
+        <ThemedView style={[styles.row, { backgroundColor: infoBackground }]}>
+          <ThemedView style={styles.iconWord}>
+            <Ionicons
+              style={{ color: icons }}
+              name="notifications-outline"
+              size={20}
+            />
+            <ThemedText style={styles.text}>Meldingen</ThemedText>
+          </ThemedView>
+          <GestureHandlerRootView>
+            <Switch
+              style={styles.slider}
+              trackColor={{ true: primaryColor, false: colorTrack }}
+              thumbColor={notification ? "white" : colorThumb}
+              ios_backgroundColor={colorTrack}
+              onValueChange={() => setNotification(!notification)}
+              value={notification}
+            />
+          </GestureHandlerRootView>
         </ThemedView>
+        <ThemedView style={[styles.row, { backgroundColor: infoBackground }]}>
+          <ThemedView style={styles.iconWord}>
+            <AntDesign style={{ color: icons }} name="idcard" size={20} />
+            <ThemedText style={styles.text}>Rijbewijs</ThemedText>
+          </ThemedView>
+          <Icon iconStyle={{ color: icons }} name="chevron-right" size={28} />
+        </ThemedView>
+        <ThemedView style={[styles.row, { backgroundColor: infoBackground }]}>
+          <ThemedView style={styles.iconWord}>
+            <Ionicons style={{ color: icons }} name="card-outline" size={20} />
+            <ThemedText style={styles.text}>Bestuurderspas</ThemedText>
+          </ThemedView>
+          <Icon iconStyle={{ color: icons }} name="chevron-right" size={28} />
+        </ThemedView>
+      </ThemedView>
+      <ThemedText style={styles.title}>Thema</ThemedText>
+      <ThemedView
+        style={[styles.infoContainer, { backgroundColor: infoBackground }]}
+      >
         <ThemedView
-          style={[styles.otherRow, { backgroundColor: infoBackground }]}
+          style={[styles.oneRow, { backgroundColor: infoBackground }]}
         >
-          <ThemedText style={styles.text}>Contacteer zorginstelling</ThemedText>
-          <Icon iconStyle={{ color: arrow }} name="chevron-right" size={28} />
+          <ThemedView style={styles.iconWord}>
+            <Ionicons style={{ color: icons }} name="moon-outline" size={20} />
+            <ThemedText style={styles.text}>Appweergave</ThemedText>
+          </ThemedView>
+          <Icon iconStyle={{ color: icons }} name="chevron-right" size={28} />
+        </ThemedView>
+      </ThemedView>
+      <ThemedText style={styles.title}>Support</ThemedText>
+      <ThemedView
+        style={[styles.infoContainer, { backgroundColor: infoBackground }]}
+      >
+        <ThemedView
+          style={[styles.oneRow, { backgroundColor: infoBackground }]}
+        >
+          <ThemedView style={styles.iconWord}>
+            <Ionicons
+              style={{ color: icons }}
+              name="help-circle-outline"
+              size={20}
+            />
+            <ThemedText style={styles.text}>FAQ</ThemedText>
+          </ThemedView>
+          <Icon iconStyle={{ color: icons }} name="chevron-right" size={28} />
         </ThemedView>
       </ThemedView>
 
-      <View style={{ position: "absolute", bottom: 16, width: "100%" }}>
-        <Button
-          onPress={async () => await supabase.auth.signOut()}
-          mod={["white", "square"]}
-        >
-          <ThemedText style={{ color: "red" }}>Uitloggen</ThemedText>
-        </Button>
-      </View>
+      <Button
+        style={styles.button}
+        onPress={async () => await supabase.auth.signOut()}
+        mod={["white", "square"]}
+      >
+        <View style={styles.iconWord}>
+          <Ionicons name="log-out-outline" size={20} style={{ color: "red" }} />
+          <ThemedText style={{ color: "red" }}>Afmelden</ThemedText>
+        </View>
+      </Button>
     </ThemedView>
   );
 };
@@ -68,7 +144,7 @@ export default SettingsScreen;
 
 const styles = StyleSheet.create({
   container: {
-    marginHorizontal: 24,
+    paddingHorizontal: 24,
     marginTop: 50,
     paddingVertical: 24,
     height: "100%",
@@ -80,11 +156,16 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
 
+  slider: {
+    marginLeft: "auto",
+    marginRight: 8,
+  },
+
   title: {
     fontFamily: "Cocon",
     fontSize: 16,
     fontWeight: "bold",
-    marginBottom: 16,
+    marginVertical: 10,
   },
 
   infoContainer: {
@@ -97,19 +178,23 @@ const styles = StyleSheet.create({
     shadowRadius: 9,
     shadowOpacity: 1,
     borderRadius: 15,
-    marginHorizontal: 16,
-    marginVertical: 16,
-    position: "relative",
+    marginVertical: 8,
     paddingVertical: 10,
   },
 
-  infoRow: {
+  iconWord: {
     display: "flex",
     flexDirection: "row",
-    justifyContent: "space-between",
-    marginTop: 20,
-    paddingHorizontal: 24,
-    paddingVertical: 10,
+    alignItems: "center",
+    gap: 10,
+    backgroundColor: "transparent",
+  },
+
+  button: {
+    width: "100%",
+    position: "absolute",
+    marginHorizontal: 24,
+    bottom: 0,
   },
 
   infoText: {
@@ -117,7 +202,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
 
-  otherRow: {
+  row: {
     width: "100%",
     display: "flex",
     flexDirection: "row",
@@ -125,6 +210,15 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     paddingLeft: 24,
     paddingRight: 10,
-    paddingVertical: 10,
+    paddingVertical: 16,
+  },
+  oneRow: {
+    width: "100%",
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingLeft: 24,
+    paddingRight: 10,
   },
 });
