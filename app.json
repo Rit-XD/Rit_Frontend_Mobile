@@ -1,13 +1,13 @@
 {
   "expo": {
-    "name": "Rit_Frontend_Mobile",
+    "name": "Rit",
     "slug": "Rit_Frontend_Mobile",
     "owner": "ritapp",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "myapp",
     "userInterfaceStyle": "automatic",
+    "scheme": "rit",
     "splash": {
       "image": "./assets/images/splash.png",
       "resizeMode": "contain",
@@ -16,7 +16,7 @@
     "assetBundlePatterns": ["assets/fonts/*", "assets/images/*"],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "EGP52YRNH4.care.rit.mobile",
+      "bundleIdentifier": "care.rit.mobile",
       "config": {
         "googleMapsApiKey": "AIzaSyBKhixrksRyCcnWxY2koJMH2GfDx6ywZgA"
       },

@@ -1,14 +1,12 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 
 import { ThemedView } from "@/components/ThemedView";
-import { supabase } from "@/lib/supabase";
 import { useEffect, useState } from "react";
 import { Image } from "expo-image";
 import { useAuth } from "@/providers/AuthProvider";
 import { ThemedText } from "@/components/ThemedText";
 import { primaryColor, secondaryColor } from "@/constants/Colors";
 import { LinearGradient } from "expo-linear-gradient";
-import { Redirect } from "expo-router";
 import Availability from "@/components/notifications/AvailabilityToggle";
 import RidesList from "@/components/rides/RidesList";
 
@@ -46,7 +44,7 @@ export default function HomeScreen() {
         </View>
       </View>
       <Availability value={true} />
-      <RidesList filter="all" />
+      <RidesList/>
     </ThemedView>
   );
 }
@@ -64,7 +62,7 @@ const styles = StyleSheet.create({
   },
   headBackground: {
     position: "absolute",
-    height: "45%",
+    height: "40%",
     width: "100%",
     opacity: 0.1,
   },
