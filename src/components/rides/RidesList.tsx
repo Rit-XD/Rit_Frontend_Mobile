@@ -1,5 +1,5 @@
 import React from "react";
-import { ScrollView, StyleSheet, View } from "react-native";
+import { Pressable, ScrollView, StyleSheet, View } from "react-native";
 import { useThemeColor } from "@/hooks/useThemeColor";
 import { ThemedView } from "../ThemedView";
 import { ThemedText } from "../ThemedText";
@@ -61,18 +61,20 @@ export default function RidesList() {
                     {(filter==="all"? availableRides.length : acceptedRides.length)? (
                         <>
                         {(filter==="all"? availableRides : acceptedRides).map((ride) => (
-                        <ThemedView style={styles.rideContainer} key={ride.id} darkColor="#303030">
-                            <View style={styles.rideContainerInner}>
-                                <View style={[styles.colorCode, determineColor(ride.timestamp)]}></View>
-                                <View style={styles.content}>
-                                    <ThemedText style={styles.origin} onPress={() => {setSelectedRide(ride)}}>{parseAddress(ride.destination)}</ThemedText>
-                                    <ThemedText style={styles.destination}>{parseDateTime(ride.timestamp)}</ThemedText>
+                        <Pressable onPress={() => setSelectedRide(ride)} key={ride.id}>
+                            <ThemedView style={styles.rideContainer}  darkColor="#303030">
+                                <View style={styles.rideContainerInner}>
+                                    <View style={[styles.colorCode, determineColor(ride.timestamp)]}></View>
+                                    <View style={styles.content}>
+                                        <ThemedText style={styles.origin}>{parseAddress(ride.destination)}</ThemedText>
+                                        <ThemedText style={styles.destination}>{parseDateTime(ride.timestamp)}</ThemedText>
+                                    </View>
                                 </View>
-                            </View>
-                            <View>
-                                <Ionicons name="chevron-forward" size={24} style={{marginRight: 16}} color={chevronColor}/>
-                            </View>
-                        </ThemedView>
+                                <View>
+                                    <Ionicons name="chevron-forward" size={24} style={{marginRight: 16}} color={chevronColor}/>
+                                </View>
+                            </ThemedView>
+                        </Pressable>
                         ))}
                         </>
                     ) : (

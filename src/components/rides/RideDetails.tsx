@@ -51,15 +51,17 @@ const RideDetails = ({ride, closeDetails}:detailsProps) => {
             showsTraffic
             />
             <View style={{position: 'absolute', top: 64, left: 32}}>
-                <Button onPress={closeDetails} style={{backgroundColor: "white"}} text='' icon='arrowleft' family='antdesign' mod={["white", "square"]}/>
+                <Button onPress={closeDetails} style={{backgroundColor: "white"}} mod={["white", "square"]}>
+                    <AntDesign name='arrowleft'/>
+                </Button>
             </View>
             <View style={{position: 'absolute', bottom: 64, width: '100%', height: 250}}>
                 <ThemedView style={{flex: 1, marginHorizontal: 24, alignItems: "center", borderRadius: 15, padding: 16}}>
                     <ThemedText style={styles.name}>{passenger?.firstname}</ThemedText>
                     <ThemedText style={styles.distance}>{ride.distance? Math.round(ride.distance/1000) : ""} km</ThemedText>
-                    <ThemedText style={styles.name}>{ride.timestamp? new Date(ride.timestamp).toLocaleDateString("nl-BE", {day: 'numeric', month: "long", year: 'numeric'}) : "1 jan 0000"}</ThemedText>
-                    <ThemedText style={styles.name}>{ride.timestamp? new Date(ride.timestamp).toLocaleTimeString("nl-BE", {hour: "numeric", minute: "numeric"}) : "00.00"}</ThemedText>
-                    <View style={{borderBottomColor: "#fefefe", borderBottomWidth: 1}}/>
+                    <ThemedText style={styles.date}>{ride.timestamp? new Date(ride.timestamp).toLocaleDateString("nl-BE", {day: 'numeric', month: "long", year: 'numeric'}) : "1 jan 0000"}</ThemedText>
+                    <ThemedText style={styles.time}>{ride.timestamp? new Date(ride.timestamp).toLocaleTimeString("nl-BE", {hour: "numeric", minute: "numeric"}) : "00.00"}</ThemedText>
+                    <View style={{borderBottomColor: themeColor, borderBottomWidth: 1, width: "100%", opacity: .2, height: 8}}/>
                 </ThemedView>
             </View>
         </Modal>
@@ -87,9 +89,12 @@ const styles = StyleSheet.create({
     distance: {
         fontSize: 32,
         fontFamily: "Cocon",
-        height: 100,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
+        paddingVertical: 16,
+    },
+    date: {
+        fontSize: 18,
+    },
+    time: {
+        fontSize: 18,
     }
 })
