@@ -4,6 +4,7 @@ import { StyleSheet, Text, View } from "react-native";
 import * as Location from "expo-location";
 import BottomSheetComponent from "@/components/cars/BottomSheet";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { ThemedView } from "@/components/ThemedView";
 
 const CarScreen = () => {
   const [location, setLocation] = useState<Location.LocationObject | null>(
@@ -32,7 +33,7 @@ const CarScreen = () => {
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <View style={styles.container}>
+      <ThemedView style={styles.container}>
         <MapView
           style={styles.map}
           initialRegion={origin}
@@ -42,7 +43,7 @@ const CarScreen = () => {
           showsTraffic
         />
         <BottomSheetComponent />
-      </View>
+      </ThemedView>
     </GestureHandlerRootView>
   );
 };
