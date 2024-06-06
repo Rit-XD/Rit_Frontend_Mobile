@@ -52,14 +52,17 @@ export default function AuthProvider({ children }: PropsWithChildren) {
         const { data: availableRides, error: arError, status: arStatus } = await supabaseAdmin
         .from("Rides")
         .select("*")
-        .is("driver", null);
+        .is("driver", null)
+        .order("timestamp", { ascending: true });
 
         setAvailableRides(availableRides || []);
 
         const { data: acceptedRides, error: acceptedError, status: acceptedStatus } = await supabaseAdmin
         .from("Rides")
         .select("*")
-        .eq("driver", session?.user.id);
+        .eq("driver", session?.user.id)
+        .order("timestamp", { ascending: true });
+
   
         setAcceptedRides(acceptedRides || []);
       }
@@ -81,14 +84,18 @@ export default function AuthProvider({ children }: PropsWithChildren) {
         const { data: availableRides, error: arError, status: arStatus } = await supabaseAdmin
         .from("Rides")
         .select("*")
-        .is("driver", null);
+        .is("driver", null)
+        .order("timestamp", { ascending: true });
+
 
         setAvailableRides(availableRides || []);
 
         const { data: acceptedRides, error: acceptedError, status: acceptedStatus } = await supabaseAdmin
         .from("Rides")
         .select("*")
-        .eq("driver", session?.user.id);
+        .eq("driver", session?.user.id)
+        .order("timestamp", { ascending: true });
+
   
         setAcceptedRides(acceptedRides || []);
       }

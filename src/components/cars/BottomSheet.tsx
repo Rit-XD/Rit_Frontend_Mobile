@@ -46,102 +46,94 @@ const BottomSheetComponent = () => {
   // const;
 
   return (
-    <>
-      <BottomSheet
-        index={0}
-        snapPoints={snapPoints}
-        backdropComponent={renderBackdrop}
-        handleStyle={{ backgroundColor: background }}
-        handleIndicatorStyle={{ backgroundColor: handleIndicator }}
-      >
-        <ThemedView style={styles.centeredView}>
-          <Image
-            source={require("@assets/images/testcar.webp")}
-            style={styles.carImage}
-          />
-          <ThemedText style={styles.carTitle}>Volkswagen Caddy</ThemedText>
-          <ThemedText style={styles.carSubtitle}>2-DGT-215</ThemedText>
-        </ThemedView>
+    <BottomSheet
+      index={0}
+      snapPoints={snapPoints}
+      backdropComponent={renderBackdrop}
+      handleStyle={{ backgroundColor: background }}
+      handleIndicatorStyle={{ backgroundColor: handleIndicator }}
+    >
+      <ThemedView style={styles.centeredView}>
+        <Image
+          source={require("@assets/images/testcar.webp")}
+          style={styles.carImage}
+        />
+        <ThemedText style={styles.carTitle}>Volkswagen Caddy</ThemedText>
+        <ThemedText style={styles.carSubtitle}>2-DGT-215</ThemedText>
+      </ThemedView>
 
-        <ThemedView style={styles.specsContainer}>
+      <ThemedView style={styles.specsContainer}>
+        <ThemedView style={styles.specsRow}>
+          <FontAwesome style={{ color: primaryColor }} name="gears" size={16} />
+          <ThemedText style={styles.text}>Automatisch</ThemedText>
+        </ThemedView>
+        <ThemedView style={styles.specsRow}>
+          <FontAwesome5
+            style={{ color: primaryColor }}
+            name="gas-pump"
+            size={16}
+          />
+          <ThemedText style={styles.text}>Benzine</ThemedText>
+        </ThemedView>
+        <ThemedView style={styles.specsRow}>
+          <FontAwesome5
+            name="wheelchair"
+            size={16}
+            style={{ color: primaryColor }}
+          />
+          <ThemedText style={styles.text}>1 plaats</ThemedText>
+        </ThemedView>
+      </ThemedView>
+      <ThemedView>
+        <ThemedView style={styles.infoRow}>
           <ThemedView style={styles.specsRow}>
-            <FontAwesome
+            <SimpleLineIcons
               style={{ color: primaryColor }}
-              name="gears"
+              name="speedometer"
               size={16}
             />
-            <ThemedText style={styles.text}>Automatisch</ThemedText>
+            <ThemedText style={styles.text}>Bereik</ThemedText>
           </ThemedView>
+          <ThemedText style={styles.infoText}>350 km</ThemedText>
+        </ThemedView>
+        <ThemedView style={styles.infoRow}>
           <ThemedView style={styles.specsRow}>
-            <FontAwesome5
+            <Ionicons
               style={{ color: primaryColor }}
-              name="gas-pump"
+              name="person-outline"
               size={16}
             />
-            <ThemedText style={styles.text}>Benzine</ThemedText>
+            <ThemedText style={styles.text}>Zit plaatsen</ThemedText>
           </ThemedView>
-          <ThemedView style={styles.specsRow}>
-            <FontAwesome5
-              name="wheelchair"
-              size={16}
-              style={{ color: primaryColor }}
-            />
-            <ThemedText style={styles.text}>1 plaats</ThemedText>
-          </ThemedView>
+          <ThemedText style={styles.infoText}>
+            4 Zitplaatsen + 1 bestuurder
+          </ThemedText>
         </ThemedView>
-        <ThemedView>
-          <ThemedView style={styles.infoRow}>
-            <ThemedView style={styles.specsRow}>
-              <SimpleLineIcons
-                style={{ color: primaryColor }}
-                name="speedometer"
-                size={16}
-              />
-              <ThemedText style={styles.text}>Bereik</ThemedText>
-            </ThemedView>
-            <ThemedText style={styles.infoText}>350 km</ThemedText>
-          </ThemedView>
-          <ThemedView style={styles.infoRow}>
-            <ThemedView style={styles.specsRow}>
-              <Ionicons
-                style={{ color: primaryColor }}
-                name="person-outline"
-                size={16}
-              />
-              <ThemedText style={styles.text}>Zit plaatsen</ThemedText>
-            </ThemedView>
-            <ThemedText style={styles.infoText}>
-              4 Zitplaatsen + 1 bestuurder
-            </ThemedText>
-          </ThemedView>
+      </ThemedView>
+      <ThemedView style={styles.infoContainer}>
+        <ThemedView style={styles.otherRow}>
+          <ThemedText style={styles.text}>
+            Informatie van het voertuig
+          </ThemedText>
+          <Icon iconStyle={{ color: arrow }} name="chevron-right" size={28} />
         </ThemedView>
-        <ThemedView style={styles.infoContainer}>
-          <ThemedView style={styles.otherRow}>
-            <ThemedText style={styles.text}>
-              Informatie van het voertuig
-            </ThemedText>
-            <Icon iconStyle={{ color: arrow }} name="chevron-right" size={28} />
-          </ThemedView>
-          <ThemedView style={styles.otherRow}>
-            <ThemedText style={styles.text}>Verzekering</ThemedText>
-            <Icon iconStyle={{ color: arrow }} name="chevron-right" size={28} />
-          </ThemedView>
-          <ThemedView style={styles.otherRow}>
-            <ThemedText style={styles.text}>Inschrijvingsformulier</ThemedText>
-            <Icon iconStyle={{ color: arrow }} name="chevron-right" size={28} />
-          </ThemedView>
-          <ThemedView style={styles.otherRow}>
-            <ThemedText style={styles.text}>
-              Contacteer zorginstelling
-            </ThemedText>
-            <Icon iconStyle={{ color: arrow }} name="chevron-right" size={28} />
-          </ThemedView>
+        <ThemedView style={styles.otherRow}>
+          <ThemedText style={styles.text}>Verzekering</ThemedText>
+          <Icon iconStyle={{ color: arrow }} name="chevron-right" size={28} />
         </ThemedView>
-        <ThemedView style={styles.buttonContainer}>
-          <Button text="Open wagen" style={styles.button} />
+        <ThemedView style={styles.otherRow}>
+          <ThemedText style={styles.text}>Inschrijvingsformulier</ThemedText>
+          <Icon iconStyle={{ color: arrow }} name="chevron-right" size={28} />
         </ThemedView>
-      </BottomSheet>
-    </>
+        <ThemedView style={styles.otherRow}>
+          <ThemedText style={styles.text}>Contacteer zorginstelling</ThemedText>
+          <Icon iconStyle={{ color: arrow }} name="chevron-right" size={28} />
+        </ThemedView>
+      </ThemedView>
+      <ThemedView style={styles.buttonContainer}>
+        <Button text="Open wagen" style={styles.button} />
+      </ThemedView>
+    </BottomSheet>
   );
 };
 

@@ -1,78 +1,85 @@
-import React, { useEffect } from "react";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import React from "react";
+import { ScrollView, StyleSheet, View } from "react-native";
 import { useThemeColor } from "@/hooks/useThemeColor";
 import { ThemedView } from "../ThemedView";
 import { ThemedText } from "../ThemedText";
 import { useAuth } from "@/providers/AuthProvider";
-import { Ride } from "@/types/Ride.type";
-import { primaryColor } from "@/constants/Colors";
-import { color } from "@rneui/themed/dist/config";
+import { primaryColor, secondaryColor } from "@/constants/Colors";
+import { Ionicons } from "@expo/vector-icons";
 
 
 
 export default function RidesList() {
     const { availableRides, acceptedRides } = useAuth();
     const color = useThemeColor({ light: "#fefefe", dark: "#fff" }, 'background');
+    const chevronColor = useThemeColor({ light: "#151515", dark: "#fefefe" }, 'background');
     const [filter, setFilter] = React.useState<"all" | "accepted">("all");
 
-    if (filter === "all") {
+    const parseAddress = (address: string) => {
+        return address.split(",")[0];
+    }
+    const parseDateTime = (timestamp: string) => {
+        const date = new Date(timestamp);
+        return date.toLocaleDateString("nl-BE", {day: "numeric", month: "long", year: "numeric"}) + " - " + date.toLocaleTimeString("nl-BE", {hour: "2-digit", minute: "2-digit"});
+    }
+
+    function addDays(date: Date, days: number) {
+        var result = new Date(date);
+        result.setDate(result.getDate() + days);
+        return result;
+      }
+    const determineColor = (timestamp: string) => {
+        const d1 = new Date(timestamp);
+        const d2 = new Date();
+        if(addDays(d2, 1) > d1) return styles.red;
+        else if (addDays(d2, 3) > d1) return styles.orange;
+        else if (addDays(d2, 7) > d1) return styles.yellow;
+        else return styles.green;
+    }
+
         return (
             <View style={styles.container}>
                 <View style={{display: "flex", flexDirection: "row", width: "100%", justifyContent: "space-around", paddingHorizontal: 24}}>
-                    <View style={{ borderBottomColor: primaryColor, borderBottomWidth: 4}}>
-                        <ThemedText style={{paddingTop: 24,paddingBottom: 4, paddingHorizontal: 8, fontSize: 22, color: primaryColor}}>Aanvragen</ThemedText>
+                    <View style={filter==="all"?{ borderBottomColor: primaryColor, borderBottomWidth: 4} : {}}>
+                        <ThemedText style={[{paddingTop: 24,paddingBottom: 4, paddingHorizontal: 8, fontSize: 22}, filter==="all"? styles.active : {}]} onPress={() => {setFilter("all")}}>Aanvragen</ThemedText>
                     </View>
-                    <ThemedText style={{paddingTop: 24,paddingBottom: 4, paddingHorizontal: 8, fontSize: 22}} onPress={() => {setFilter("accepted")}}>Ritten</ThemedText>
+                    <View style={filter==="accepted"?{ borderBottomColor: primaryColor, borderBottomWidth: 4} : {}}>
+                        <ThemedText style={[{paddingTop: 24,paddingBottom: 4, paddingHorizontal: 8, fontSize: 22}, filter==="accepted"? styles.active : {}]} onPress={() => {setFilter("accepted")}}>Ritten</ThemedText>
+                    </View>
     
                 </View>
                 <ScrollView>
-                    {availableRides.length && (
+                    <View style={styles.listContainer}>
+                    {(filter==="all"? availableRides.length : acceptedRides.length)? (
                         <>
-                        {availableRides.map((ride) => (
-                            <ThemedView style={styles.rideContainer} key={ride.id}>
-                                <View style={styles.rideContainerInner}>
-                                    <View style={styles.colorCode}></View>
-                                    <View style={styles.content}>
-                                        <ThemedText>{ride.origin}</ThemedText>
-                                        <ThemedText>{ride.destination}</ThemedText>
-                                    </View>
+                        {(filter==="all"? availableRides : acceptedRides).map((ride) => (
+                        <ThemedView style={styles.rideContainer} key={ride.id} darkColor="#303030">
+                            <View style={styles.rideContainerInner}>
+                                <View style={[styles.colorCode, determineColor(ride.timestamp)]}></View>
+                                <View style={styles.content}>
+                                    <ThemedText style={styles.origin}>{parseAddress(ride.destination)}</ThemedText>
+                                    <ThemedText style={styles.destination}>{parseDateTime(ride.timestamp)}</ThemedText>
                                 </View>
-                            </ThemedView>
+                            </View>
+                            <View>
+                                <Ionicons name="chevron-forward" size={24} style={{marginRight: 16}} color={chevronColor}/>
+                            </View>
+                        </ThemedView>
                         ))}
                         </>
+                    ) : (
+                        <View style={{display: "flex", width: "100%", alignItems: "center"}}>
+                            {filter==="all"? (
+                                <ThemedText>Er zijn momenteel geen openstaande aanvragen.</ThemedText>
+                            ) : (
+                                <ThemedText>Je hebt momenteel geen ritten gepland.</ThemedText>
+                            )}
+                        </View>
                     )}
-                </ScrollView>
-            </View>
-        );
-    } else {
-        return (
-            <View style={styles.container}>
-                <View style={{display: "flex", flexDirection: "row", width: "100%", justifyContent: "space-around", paddingHorizontal: 24}}>
-                    <ThemedText style={{paddingTop: 24,paddingBottom: 4, paddingHorizontal: 8, fontSize: 22}} onPress={() => {setFilter("all")}}>Aanvragen</ThemedText>
-                    <View style={{borderBottomColor: primaryColor, borderBottomWidth: 4}}>
-                        <ThemedText style={{paddingTop: 24,paddingBottom: 4, paddingHorizontal: 8, fontSize: 22, color: primaryColor}}>Ritten</ThemedText>
                     </View>
-                </View>
-                <ScrollView>
-                    {acceptedRides.length && (
-                        <>
-                        {acceptedRides.map((ride) => (
-                            <ThemedView style={styles.rideContainer} key={ride.id}>
-                                <View style={styles.rideContainerInner}>
-                                    <View style={styles.colorCode}></View>
-                                    <View style={styles.content}>
-                                        <ThemedText>{ride.origin}</ThemedText>
-                                        <ThemedText>{ride.destination}</ThemedText>
-                                    </View>
-                                </View>
-                            </ThemedView>
-                        ))}
-                        </>
-                    )}
                 </ScrollView>
             </View>
         );
-    }
 };
 
 const styles = StyleSheet.create({
@@ -80,12 +87,18 @@ const styles = StyleSheet.create({
         flex: 1,
         marginTop: -16,
     },
+    active: {
+        color: primaryColor,
+    },
+    listContainer: {
+        marginVertical: 16,
+    },
     rideContainer: {
         display: "flex",
         flexDirection: "row",
         justifyContent: "space-between",
         alignItems: "center",
-        height: 64,
+        height: 80,
         padding: 0,
         shadowColor: "rgba(0, 0, 0, 0.25)",
         shadowOffset: { width: 0, height: 1 },
@@ -111,7 +124,25 @@ const styles = StyleSheet.create({
         position: "absolute",
         width: 8,
         height: "100%",
-        backgroundColor: primaryColor,
     },
-
+    red: {
+        backgroundColor: "red",
+    },
+    orange: {
+        backgroundColor: "orange",
+    },
+    yellow: {
+        backgroundColor: "#FFDE5A",
+    },
+    green: {
+        backgroundColor: "#29CC6A",
+    },
+    origin: {
+        fontSize: 18,
+        fontWeight: "bold",
+    },
+    destination: {
+        fontSize: 16,
+        color: "#666",
+    }
 });
