@@ -6,7 +6,7 @@ import { useThemeColor } from "@/hooks/useThemeColor";
 import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/providers/AuthProvider";
 import { Icon } from "@rneui/themed";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Modal, TouchableOpacity } from "react-native";
 import { GestureHandlerRootView, Switch } from "react-native-gesture-handler";
 import { primaryColor } from "@/constants/Colors";
 import { useState } from "react";
@@ -14,6 +14,8 @@ import { Ionicons, AntDesign } from "@expo/vector-icons";
 
 const SettingsScreen = () => {
   const [notification, setNotification] = useState(true);
+  const [modalVisible, setModalVisible] = useState(false);
+
   async function signOut() {
     await supabase.auth.signOut();
   }
@@ -126,9 +128,51 @@ const SettingsScreen = () => {
         </ThemedView>
       </ThemedView>
 
+      {/* Modal for sign out confirmation */}
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <ThemedView style={styles.overlay}>
+          <ThemedView style={styles.modalView}>
+            <ThemedText style={styles.modalTitle}>Afmelden?</ThemedText>
+            <ThemedText style={styles.modalText}>
+              U staat op het punt om af te melden.
+            </ThemedText>
+            <ThemedView style={styles.buttonContainer}>
+              <TouchableOpacity
+                style={[styles.modalButton, styles.cancelButton]}
+                onPress={() => setModalVisible(false)}
+              >
+                <ThemedText
+                  style={[styles.buttonText, styles.cancelButtonText]}
+                >
+                  Terug
+                </ThemedText>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.modalButton, styles.confirmButton]}
+                onPress={() => {
+                  setModalVisible(false);
+                  signOut();
+                }}
+              >
+                <ThemedText
+                  style={[styles.buttonText, styles.confirmButtonText]}
+                >
+                  Afmelden
+                </ThemedText>
+              </TouchableOpacity>
+            </ThemedView>
+          </ThemedView>
+        </ThemedView>
+      </Modal>
+
       <Button
         style={styles.button}
-        onPress={async () => await supabase.auth.signOut()}
+        onPress={() => setModalVisible(true)}
         mod={["white", "square"]}
       >
         <View style={styles.iconWord}>
@@ -151,23 +195,19 @@ const styles = StyleSheet.create({
     flex: 1,
     position: "relative",
   },
-
   text: {
     fontSize: 16,
   },
-
   slider: {
     marginLeft: "auto",
     marginRight: 8,
   },
-
   title: {
     fontFamily: "Cocon",
     fontSize: 16,
     fontWeight: "bold",
     marginVertical: 10,
   },
-
   infoContainer: {
     display: "flex",
     justifyContent: "space-between",
@@ -181,7 +221,6 @@ const styles = StyleSheet.create({
     marginVertical: 8,
     paddingVertical: 10,
   },
-
   iconWord: {
     display: "flex",
     flexDirection: "row",
@@ -189,19 +228,16 @@ const styles = StyleSheet.create({
     gap: 10,
     backgroundColor: "transparent",
   },
-
   button: {
     width: "100%",
     position: "absolute",
     marginHorizontal: 24,
     bottom: 0,
   },
-
   infoText: {
     fontFamily: "Cocon",
     fontSize: 16,
   },
-
   row: {
     width: "100%",
     display: "flex",
@@ -220,5 +256,63 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     paddingLeft: 24,
     paddingRight: 10,
+  },
+  overlay: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  modalView: {
+    width: 300,
+    borderRadius: 10,
+    padding: 20,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  modalTitle: {
+    fontSize: 18,
+    color: "red",
+    marginBottom: 15,
+    textAlign: "center",
+  },
+  modalText: {
+    fontSize: 16,
+    marginBottom: 15,
+    textAlign: "center",
+  },
+  buttonContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "100%",
+  },
+  modalButton: {
+    flex: 1,
+    padding: 10,
+    borderRadius: 5,
+    marginHorizontal: 5,
+    alignItems: "center",
+  },
+  cancelButton: {
+    backgroundColor: "#f0f0f0",
+  },
+  confirmButton: {
+    backgroundColor: "red",
+  },
+  buttonText: {
+    fontSize: 16,
+  },
+  cancelButtonText: {
+    color: "black",
+  },
+  confirmButtonText: {
+    color: "white",
   },
 });

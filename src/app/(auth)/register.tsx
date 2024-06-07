@@ -1,15 +1,15 @@
-import { View, Text, StyleSheet, Alert, Animated } from "react-native";
+import { Text, StyleSheet, Alert, Animated } from "react-native";
 import React, { useEffect, useRef, useState } from "react";
 import Button from "../../components/ui/Button";
-import { Stack } from "expo-router";
 import { supabase } from "@/lib/supabase";
-import { Colors } from "@/constants/Colors";
 import { Image } from "expo-image";
 import GradientText from "react-native-gradient-texts";
 import RNDateTimePicker from "@react-native-community/datetimepicker";
 import Input from "@/components/ui/Input";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { supabaseAdmin } from "@/lib/supabaseAdmin";
+import { ThemedView } from "@/components/ThemedView";
+import { ThemedText } from "@/components/ThemedText";
 // import ImagePicker from "react-native-image-picker";
 
 const SignUpScreen = () => {
@@ -136,7 +136,7 @@ const SignUpScreen = () => {
   return (
     <Animated.View style={{ transform: [{ translateX: position }] }}>
       <KeyboardAwareScrollView keyboardShouldPersistTaps={"never"}>
-        <View style={styles.container}>
+        <ThemedView style={styles.container}>
           <Image
             style={styles.image}
             source="https://iqfcxjbnqcpjzggtcptb.supabase.co/storage/v1/object/public/profilePics/Rit-Logo.png?t=2024-05-29T09%3A24%3A23.265Z"
@@ -154,7 +154,7 @@ const SignUpScreen = () => {
                 fontFamily={"Cocon"}
                 style={styles.title}
               />
-              <Text style={styles.label}>Voornaam</Text>
+              <ThemedText style={styles.label}>Voornaam</ThemedText>
               <Input
                 value={formState.firstname}
                 onChangeText={(text) => {
@@ -164,10 +164,11 @@ const SignUpScreen = () => {
                 placeholder="Voornaam"
                 autoComplete="given-name"
                 style={[
-                  isNextPressed && formErrors.firstname && { borderColor: "red" },
+                  isNextPressed &&
+                    formErrors.firstname && { borderColor: "red" },
                 ]}
               />
-              <Text style={styles.label}>Achternaam</Text>
+              <ThemedText style={styles.label}>Achternaam</ThemedText>
               <Input
                 value={formState.lastname}
                 onChangeText={(text) => {
@@ -177,7 +178,8 @@ const SignUpScreen = () => {
                 placeholder="Achternaam"
                 autoComplete="family-name"
                 style={[
-                  isNextPressed && formErrors.lastname && { borderColor: "red" },
+                  isNextPressed &&
+                    formErrors.lastname && { borderColor: "red" },
                 ]}
               />
               <Text style={styles.label}>Geboortedatum</Text>
@@ -202,9 +204,9 @@ const SignUpScreen = () => {
                   });
                 }}
               />
-              <View style={{ flexDirection: "row" }}>
-                <View style={{ flexGrow: 1, marginRight: 5 }}>
-                  <Text style={styles.label}>Woonplaats</Text>
+              <ThemedView style={{ flexDirection: "row" }}>
+                <ThemedView style={{ flexGrow: 1, marginRight: 5 }}>
+                  <ThemedText style={styles.label}>Woonplaats</ThemedText>
                   <Input
                     value={formState.city}
                     onChangeText={(text) => {
@@ -213,13 +215,14 @@ const SignUpScreen = () => {
                     }}
                     placeholder="Woonplaats"
                     style={[
-                      isNextPressed && formErrors.city && { borderColor: "red" },
+                      isNextPressed &&
+                        formErrors.city && { borderColor: "red" },
                     ]}
                     autoComplete="postal-address"
                   />
-                </View>
-                <View>
-                  <Text style={styles.label}>Postcode</Text>
+                </ThemedView>
+                <ThemedView>
+                  <ThemedText style={styles.label}>Postcode</ThemedText>
                   <Input
                     style={[
                       isNextPressed &&
@@ -234,15 +237,14 @@ const SignUpScreen = () => {
                     placeholder="Postcode"
                     autoComplete="postal-code"
                   />
-                </View>
-              </View>
+                </ThemedView>
+              </ThemedView>
               {formErrors.date && isNextPressed && (
-                <Text style={styles.error}>
+                <ThemedText style={styles.error}>
                   Je moet minstens 18 jaar oud zijn
-                </Text>
+                </ThemedText>
               )}
               <Button
-                text="Volgende"
                 onPress={() => {
                   setIsNextPressed(true);
                   let newErrors = { ...formErrors };
@@ -280,7 +282,9 @@ const SignUpScreen = () => {
                     setStep(2);
                   }
                 }}
-              />
+              >
+                <Text style={styles.textButton}>Volgende</Text>
+              </Button>
               {/* <Link href="/login" style={styles.textButton}>
                 Log in
               </Link> */}
@@ -298,7 +302,7 @@ const SignUpScreen = () => {
                 fontFamily={"Cocon"}
                 style={styles.title}
               />
-              <Text style={styles.label}>Email</Text>
+              <ThemedText style={styles.label}>Email</ThemedText>
               <Input
                 keyboardType="email-address"
                 value={formState.email}
@@ -313,7 +317,7 @@ const SignUpScreen = () => {
                 autoComplete="email"
                 email
               />
-              <Text style={styles.label}>Telefoonnummer</Text>
+              <ThemedText style={styles.label}>Telefoonnummer</ThemedText>
               <Input
                 keyboardType="phone-pad"
                 placeholder="Uw telefoonnummer"
@@ -332,7 +336,7 @@ const SignUpScreen = () => {
                   isNextPressed && formErrors.phone && { borderColor: "red" },
                 ]}
               />
-              <Text style={styles.label}>Rijbewijs</Text>
+              <ThemedText style={styles.label}>Rijbewijs</ThemedText>
               <Input
                 value={formState.license}
                 onChangeText={setLicense}
@@ -340,11 +344,12 @@ const SignUpScreen = () => {
                 keyboardType="numeric"
               />
               {isNextPressed && formErrors.phone && (
-                <Text style={styles.error}>Ongeldig telefoonnummer</Text>
+                <ThemedText style={styles.error}>
+                  Ongeldig telefoonnummer
+                </ThemedText>
               )}
 
               <Button
-                text="Volgende"
                 onPress={() => {
                   setIsNextPressed(true);
                   let newErrors = { ...formErrors };
@@ -367,7 +372,9 @@ const SignUpScreen = () => {
                     setStep(3);
                   }
                 }}
-              />
+              >
+                <ThemedText>Volgende</ThemedText>
+              </Button>
               <Text style={styles.textButton} onPress={() => setStep(1)}>
                 Terug
               </Text>
@@ -384,7 +391,7 @@ const SignUpScreen = () => {
                 fontFamily={"Cocon"}
                 style={styles.title}
               />
-              <Text style={styles.label}>Wachtwoord</Text>
+              <ThemedText style={styles.label}>Wachtwoord</ThemedText>
               <Input
                 value={formState.password}
                 onChangeText={(text) => {
@@ -396,11 +403,12 @@ const SignUpScreen = () => {
                 }}
                 placeholder="Wachtwoord"
                 style={[
-                  isNextPressed && formErrors.password && { borderColor: "red" },
+                  isNextPressed &&
+                    formErrors.password && { borderColor: "red" },
                 ]}
                 password
               />
-              <Text style={styles.label}>Bevestig wachtwoord</Text>
+              <ThemedText style={styles.label}>Bevestig wachtwoord</ThemedText>
               <Input
                 value={formState.confirmPassword}
                 onChangeText={(text) => {
@@ -423,7 +431,7 @@ const SignUpScreen = () => {
               {isNextPressed &&
                 formErrors.confirmPassword &&
                 formState.password.length >= 8 && (
-                  <Text
+                  <ThemedText
                     style={{
                       color: "red",
                       fontWeight: "bold",
@@ -431,10 +439,10 @@ const SignUpScreen = () => {
                     }}
                   >
                     Wachtwoorden komen niet overeen.
-                  </Text>
+                  </ThemedText>
                 )}
               {isNextPressed && formErrors.password && (
-                <Text
+                <ThemedText
                   style={{
                     color: "red",
                     fontWeight: "bold",
@@ -442,10 +450,9 @@ const SignUpScreen = () => {
                   }}
                 >
                   Wachtwoord moet minstens 8 karakters lang zijn.
-                </Text>
+                </ThemedText>
               )}
               <Button
-                text="Registreren"
                 onPress={() => {
                   setIsNextPressed(true);
                   if (!validatePassword(formState.password)) {
@@ -469,16 +476,17 @@ const SignUpScreen = () => {
                     handleSubmit();
                   }
                 }}
-              />
+              >
+                <Text style={styles.textButton}>Registreren</Text>
+              </Button>
               <Text style={styles.textButton} onPress={() => setStep(2)}>
                 Terug
               </Text>
             </>
           )}
-        </View>
+        </ThemedView>
       </KeyboardAwareScrollView>
     </Animated.View>
-
   );
 };
 
@@ -488,7 +496,6 @@ const styles = StyleSheet.create({
     paddingVertical: 128,
     paddingBottom: 128,
     height: "100%",
-    backgroundColor: "white",
     display: "flex",
   },
 
@@ -516,10 +523,10 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   textButton: {
+    color: "white",
+    fontSize: 18,
     alignSelf: "center",
     fontWeight: "bold",
-    color: Colors.light.tint,
-    marginVertical: 10,
   },
   error: {
     textAlign: "center",
