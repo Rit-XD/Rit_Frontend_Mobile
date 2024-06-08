@@ -8,9 +8,10 @@ import { primaryColor, secondaryColor } from "@/constants/Colors";
 import { Ionicons } from "@expo/vector-icons";
 import RideDetails from "./RideDetails";
 import { Ride } from "@/types/Ride.type";
+import { GestureHandlerRootView, RefreshControl } from "react-native-gesture-handler";
 
 export default function RidesList() {
-  const { availableRides, acceptedRides } = useAuth();
+  const { availableRides, acceptedRides, fetchRides } = useAuth();
   const color = useThemeColor({ light: "#fefefe", dark: "#fff" }, "background");
   const chevronColor = useThemeColor(
     { light: "#151515", dark: "#fefefe" },
@@ -19,6 +20,7 @@ export default function RidesList() {
   const [filter, setFilter] = React.useState<"all" | "accepted">("all");
   const [selectedRide, setSelectedRide] = React.useState<Ride | null>(null);
   const [showDetails, setShowDetails] = React.useState<boolean>(false);
+  const [refreshing, setRefreshing] = React.useState<boolean>(false);
 
   const parseAddress = (address: string) => {
     return address.split(",")[0];
@@ -113,7 +115,13 @@ export default function RidesList() {
           </ThemedText>
         </View>
       </View>
-      <ScrollView>
+      <ScrollView
+        refreshControl={
+          <GestureHandlerRootView style={{height: 0}}>
+            <RefreshControl refreshing={refreshing} onRefresh={fetchRides} tintColor={primaryColor}/>
+          </GestureHandlerRootView>
+        }
+      >
         <View style={styles.listContainer}>
           {(filter === "all" ? availableRides.length : acceptedRides.length) ? (
             <>

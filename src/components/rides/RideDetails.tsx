@@ -21,7 +21,7 @@ type detailsProps = {
     closeDetails: () => void
 }
 const RideDetails = ({ride, closeDetails}:detailsProps) => {
-    const {user} = useAuth();
+    const {user, fetchRides} = useAuth();
     const themeColor = useThemeColor({ light: "#151515", dark: "#fefefe" }, 'background');
     const [passenger, setPassenger]= React.useState<Passenger | null>(null);
     const origin = {address: ride.origin.split(", ")[0], city: ride.origin.split(", ")[1].split(" ")[1]};
@@ -76,15 +76,19 @@ const RideDetails = ({ride, closeDetails}:detailsProps) => {
     }, [ride.passenger_1]);
 
     const acceptRide = async () => {
-        console.log(ride.id);
-        console.log(user.id);
         let query = supabaseAdmin
             .from("Rides")
             .update({driver: user.id})
             .eq("id", ride.id)
             .single();
-            const res = await query;
-        console.log("data",res);
+            const res = query.then(
+                (res) => {
+                    fetchRides();
+                    closeDetails();
+                }
+            )
+        
+
     }
 
   return (

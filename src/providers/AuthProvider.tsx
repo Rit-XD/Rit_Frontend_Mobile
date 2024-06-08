@@ -16,6 +16,7 @@ type AuthData = {
   isLoading: boolean;
   availableRides: Ride[],
   acceptedRides: Ride[],
+  fetchRides: () => void;
 };
 
 const AuthContext = createContext<AuthData>({
@@ -24,6 +25,7 @@ const AuthContext = createContext<AuthData>({
   isLoading: true,
   availableRides: [],
   acceptedRides: [],
+  fetchRides: async () => {},
 });
 
 export default function AuthProvider({ children }: PropsWithChildren) {
@@ -32,6 +34,23 @@ export default function AuthProvider({ children }: PropsWithChildren) {
   const [isLoading, setIsLoading] = useState(true);
   const [availableRides, setAvailableRides] = useState<Ride[]>([]);
   const [acceptedRides, setAcceptedRides] = useState<Ride[]>([]);
+
+  const fetchRides = async () => {
+    const { data: availableRides, error: arError, status: arStatus } = await supabaseAdmin
+    .from("Rides")
+    .select("*")
+    .is("driver", null)
+    .order("timestamp", { ascending: true });
+
+    setAvailableRides(availableRides || []);
+
+    const { data: acceptedRides, error: acceptedError, status: acceptedStatus } = await supabaseAdmin
+    .from("Rides")
+    .select("*")
+    .eq("driver", session?.user.id)
+    .order("timestamp", { ascending: true });
+    setAcceptedRides(acceptedRides || []);
+  }
 
   useEffect(() => {
     const fetchSession = async () => {
@@ -103,7 +122,7 @@ export default function AuthProvider({ children }: PropsWithChildren) {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ session, user, isLoading, availableRides, acceptedRides }}>
+    <AuthContext.Provider value={{ session, user, isLoading, availableRides, acceptedRides, fetchRides }}>
       {children}
     </AuthContext.Provider>
   );
