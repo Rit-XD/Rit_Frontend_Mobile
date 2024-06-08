@@ -1,22 +1,26 @@
 import React from "react";
-import { Button, StyleSheet } from "react-native";
+import {  Modal, StyleSheet } from "react-native";
 import { ThemedView } from "../ThemedView";
 import { ThemedText } from "../ThemedText";
+import  Button from "../ui/Button";
+import { Text } from "react-native-svg";
 
 const ThemeSelector: React.FC = () => {
   return (
-    <ThemedView style={styles.container}>
-      <ThemedText style={styles.title}>Kies een thema</ThemedText>
-      <Button
-        title="Light"
-        onPress={() => console.log("Light Theme Selected")}
-      />
-      <Button title="Dark" onPress={() => console.log("Dark Theme Selected")} />
-      <Button
-        title="System"
-        onPress={() => console.log("System Theme Selected")}
-      />
-    </ThemedView>
+    <Modal>
+      <ThemedView style={styles.container}>
+        <ThemedText style={styles.title}>Kies een thema</ThemedText>
+        <Button onPress={() => console.log("Light Theme Selected")} >
+          <Text>Light</Text>
+        </Button>
+        <Button onPress={() => console.log("Dark Theme Selected")}>
+          <Text>Dark</Text>
+        </Button>
+        <Button onPress={() => console.log("System Theme Selected")} >
+          <Text>System</Text>
+        </Button>
+      </ThemedView>
+    </Modal>
   );
 };
 

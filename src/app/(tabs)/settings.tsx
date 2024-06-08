@@ -6,15 +6,16 @@ import { useThemeColor } from "@/hooks/useThemeColor";
 import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/providers/AuthProvider";
 import { Icon } from "@rneui/themed";
-import { View, Text, StyleSheet, Modal, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, Modal, TouchableOpacity, Pressable } from "react-native";
 import { GestureHandlerRootView, Switch } from "react-native-gesture-handler";
 import { primaryColor } from "@/constants/Colors";
 import { useState } from "react";
 import { Ionicons, AntDesign } from "@expo/vector-icons";
+import ThemeSelector from "@/components/settings/ThemeSelector";
 
 const SettingsScreen = () => {
   const [notification, setNotification] = useState(true);
-  const [modalVisible, setModalVisible] = useState(false);
+  const [modalVisible, setModalVisible] = useState<"logout" | "theme" | null>(null);
 
   async function signOut() {
     await supabase.auth.signOut();
@@ -102,10 +103,10 @@ const SettingsScreen = () => {
         <ThemedView
           style={[styles.oneRow, { backgroundColor: infoBackground }]}
         >
-          <ThemedView style={styles.iconWord}>
+          <Pressable style={styles.iconWord} onPress={() => setModalVisible("theme")}>
             <Ionicons style={{ color: icons }} name="moon-outline" size={20} />
             <ThemedText style={styles.text}>Appweergave</ThemedText>
-          </ThemedView>
+          </Pressable>
           <Icon iconStyle={{ color: icons }} name="chevron-right" size={28} />
         </ThemedView>
       </ThemedView>
@@ -132,8 +133,8 @@ const SettingsScreen = () => {
       <Modal
         animationType="slide"
         transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => setModalVisible(false)}
+        visible={modalVisible==="logout"}
+        onRequestClose={() => setModalVisible(null)}
       >
         <ThemedView style={styles.overlay}>
           <ThemedView style={styles.modalView}>
@@ -144,7 +145,7 @@ const SettingsScreen = () => {
             <ThemedView style={styles.buttonContainer}>
               <TouchableOpacity
                 style={[styles.modalButton, styles.cancelButton]}
-                onPress={() => setModalVisible(false)}
+                onPress={() => setModalVisible(null)}
               >
                 <ThemedText
                   style={[styles.buttonText, styles.cancelButtonText]}
@@ -155,7 +156,7 @@ const SettingsScreen = () => {
               <TouchableOpacity
                 style={[styles.modalButton, styles.confirmButton]}
                 onPress={() => {
-                  setModalVisible(false);
+                  setModalVisible(null);
                   signOut();
                 }}
               >
@@ -172,7 +173,7 @@ const SettingsScreen = () => {
 
       <Button
         style={styles.button}
-        onPress={() => setModalVisible(true)}
+        onPress={() => setModalVisible("logout")}
         mod={["white", "square"]}
       >
         <View style={styles.iconWord}>
@@ -180,6 +181,9 @@ const SettingsScreen = () => {
           <ThemedText style={{ color: "red" }}>Afmelden</ThemedText>
         </View>
       </Button>
+      
+      {modalVisible === "theme" && <ThemeSelector/>}
+
     </ThemedView>
   );
 };
