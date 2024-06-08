@@ -1,5 +1,4 @@
 import { StyleSheet, View } from "react-native";
-
 import { ThemedView } from "@/components/ThemedView";
 import { useEffect, useState } from "react";
 import { Image } from "expo-image";
@@ -13,7 +12,7 @@ import RidesList from "@/components/rides/RidesList";
 export default function HomeScreen() {
   const { user, session } = useAuth();
   const [data, setData] = useState(null);
-
+  
   useEffect(() => {
     setData(user);
   }, [user]);

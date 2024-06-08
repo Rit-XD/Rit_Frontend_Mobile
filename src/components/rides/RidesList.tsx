@@ -9,6 +9,8 @@ import { Ionicons } from "@expo/vector-icons";
 import RideDetails from "./RideDetails";
 import { Ride } from "@/types/Ride.type";
 import { GestureHandlerRootView, RefreshControl } from "react-native-gesture-handler";
+import Modal from 'react-native-modal';
+import { SlideInRight } from "react-native-reanimated";
 
 export default function RidesList() {
   const { availableRides, acceptedRides, fetchRides } = useAuth();
@@ -179,9 +181,14 @@ export default function RidesList() {
           )}
         </View>
       </ScrollView>
-      {selectedRide && (
-        <RideDetails ride={selectedRide} closeDetails={closeDetails} />
-      )}
+        <Modal
+        isVisible={selectedRide !== null}
+        animationIn={"slideInRight"}
+        animationOut={"tada"}
+        style={{margin: 0}}
+        >
+          {selectedRide? ( <RideDetails ride={selectedRide} closeDetails={closeDetails} /> ) : <></>}
+        </Modal>
     </View>
   );
 }

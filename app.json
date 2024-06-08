@@ -13,14 +13,21 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": ["assets/fonts/*", "assets/images/*"],
+    "assetBundlePatterns": [
+      "assets/fonts/*",
+      "assets/images/*"
+    ],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "care.rit.mobile",
       "config": {
         "googleMapsApiKey": "AIzaSyBKhixrksRyCcnWxY2koJMH2GfDx6ywZgA"
       },
-      "buildNumber": "6"
+      "buildNumber": "6",
+      "infoPlist": {
+        "NSCalendarsUsageDescription": "This app uses the calendar to add events to your calendar",
+        "NSRemindersUsageDescription": "This app uses the reminders to add reminders to your reminders"
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -59,7 +66,14 @@
             "./assets/fonts/Cocon.otf"
           ]
         }
-      ]
+      ],
+      [
+        "expo-calendar",
+        {
+          "calendarPermission": "The app needs to access your calendar."
+        }
+      ],
+      "expo-localization"
     ],
     "experiments": {
       "typedRoutes": true

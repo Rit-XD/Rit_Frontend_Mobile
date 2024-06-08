@@ -18,6 +18,7 @@
     "react-native-svg": "15.2.0"
   },
   "dependencies": {
+    "@atiladev/usecalendar": "^0.3.3",
     "@expo/ngrok": "^4.1.0",
     "@expo/vector-icons": "^14.0.0",
     "@gorhom/bottom-sheet": "^4.6.3",
@@ -27,6 +28,7 @@
     "@rneui/themed": "^4.0.0-rc.8",
     "@supabase/supabase-js": "^2.43.4",
     "expo": "~51.0.9",
+    "expo-calendar": "~13.0.5",
     "expo-constants": "~16.0.2",
     "expo-dev-client": "~4.0.15",
     "expo-device": "~6.0.2",
@@ -34,6 +36,7 @@
     "expo-image": "~1.12.10",
     "expo-linear-gradient": "~13.0.2",
     "expo-linking": "~6.3.1",
+    "expo-localization": "~15.0.3",
     "expo-location": "~17.0.1",
     "expo-notifications": "~0.28.7",
     "expo-router": "~3.5.15",

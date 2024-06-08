@@ -1,8 +1,8 @@
 import { Modal, Pressable, StyleSheet, Text, View } from 'react-native'
 import React, { useEffect } from 'react'
 import { Ride } from '@/types/Ride.type'
-import MapView, { Marker } from 'react-native-maps'
-import { Ionicons, AntDesign, FontAwesome6 } from '@expo/vector-icons'
+import MapView from 'react-native-maps'
+import { Ionicons, AntDesign, FontAwesome6, FontAwesome5 } from '@expo/vector-icons'
 import { useThemeColor } from '@/hooks/useThemeColor'
 import Button from '../ui/Button'
 import { ThemedView } from '../ThemedView'
@@ -11,10 +11,23 @@ import { supabaseAdmin } from '@/lib/supabaseAdmin'
 import { Passenger } from '@/types/Passenger.type'
 import { primaryColor } from '@/constants/Colors'
 import MapViewDirections from 'react-native-maps-directions'
-import Geocoder from 'react-native-geocoding';
+import Geocoder from 'react-native-geocoding'
 import { useAuth } from '@/providers/AuthProvider'
+import { Redirect } from 'expo-router'
+import { Platform } from 'react-native'
+import { StatusBar } from 'expo-status-bar';
+import useCalendar from '@atiladev/usecalendar';
 
 Geocoder.init(process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY!, {language: 'nl'});
+
+const {
+    getPermission,
+    createCalendar,
+    addEventsToCalendar,
+    deleteCalendar,
+    openSettings,
+    isThereEvents,
+  } = useCalendar('Rit planning', primaryColor, 'Planning Rit');
 
 type detailsProps = {
     ride: Ride,
@@ -88,13 +101,31 @@ const RideDetails = ({ride, closeDetails}:detailsProps) => {
                     closeDetails(true);
                 }
             )
-        
-
     }
+    const redirectToChat = (passengerId: string) => {
+        return () => {
+            closeDetails();
+            return <Redirect href={`/chat`}/>
+        }
+    }
+
+    const createCalAndEvent = async () => {
+        const granted = await getPermission();
+        if (granted) {
+          await createCalendar();    
+            // console.log(new Date(ride.duration!).getTime() + (ride.duration!*1000));
+            try {
+              addEventsToCalendar(`Rit met ${passenger?.firstname}`, new Date(ride.timestamp), new Date(new Date(ride.timestamp).getTime() + (ride.duration!*1000)));
+            } catch (e) {
+              console.log(e);
+            }
+        } else {
+          openSettings();
+        }
+      };
 
   return (
     <View style={styles.modalContainer}>
-        <Modal animationType='slide'>
             <MapView
             key={mapcenter.latitude+mapcenter.longitude}
             style={styles.map}
@@ -122,7 +153,16 @@ const RideDetails = ({ride, closeDetails}:detailsProps) => {
                     <ThemedText style={styles.name}>{passenger?.firstname}</ThemedText>
                     <ThemedText style={styles.distance}>{ride.distance? Math.round(ride.distance/1000) : ""} km</ThemedText>
                     <ThemedText style={styles.date}>{ride.timestamp? new Date(ride.timestamp).toLocaleDateString("nl-BE", {day: 'numeric', month: "long", year: 'numeric'}) : "1 jan 0000"}</ThemedText>
-                    <ThemedText style={styles.time}>{ride.timestamp? new Date(ride.timestamp).toLocaleTimeString("nl-BE", {hour: "numeric", minute: "numeric"}) : "00.00"}</ThemedText>
+                    <View style={{flexDirection: "row", position: 'relative', width: '100%', justifyContent: 'center'}}>
+                        <ThemedText style={styles.time}>{ride.timestamp? new Date(ride.timestamp).toLocaleTimeString("nl-BE", {hour: "numeric", minute: "numeric"}) : "00.00"}</ThemedText>
+                        {ride.driver === user.id && (
+                            <View style={{position: 'absolute', right: 0}}>
+                                <FontAwesome5 name="calendar-plus" size={24} color={themeColor} 
+                                    onPress={createCalAndEvent}/>
+                            </View>
+                        )}
+                    </View>
+
                     <View style={{borderBottomColor: themeColor, borderBottomWidth: 1, width: "100%", opacity: .2, height: 8}}/>
                     <View style={styles.route}>
                         <View style={{alignItems: 'center', gap: 8, marginRight: 8}}>
@@ -141,8 +181,8 @@ const RideDetails = ({ride, closeDetails}:detailsProps) => {
                             </View>
                         </View>
                     </View>
-                    <Pressable style={{position: 'absolute', bottom: 0, backgroundColor: primaryColor, width: "150%", height: 48, alignItems: 'center', justifyContent: 'center'}} onPress={() => setShowAcceptModal(true)}>
-                        <Text style={{color: 'white', fontSize: 18, fontWeight: 'bold'}}>Accepteer</Text>
+                    <Pressable style={{position: 'absolute', bottom: 0, backgroundColor: primaryColor, width: "150%", height: 48, alignItems: 'center', justifyContent: 'center'}} onPress={ride.driver !== user.id ?() => setShowAcceptModal(true) : redirectToChat(ride.passenger_1)}>
+                        <Text style={{color: 'white', fontSize: 18, fontWeight: 'bold'}}>{ride.driver !== user.id? 'Accepteer': 'Stuur bericht'}</Text>
                     </Pressable>
                 </ThemedView>
             </View>
@@ -163,7 +203,6 @@ const RideDetails = ({ride, closeDetails}:detailsProps) => {
                     </ThemedView>
                 </Modal>
             )}
-        </Modal>
     </View>
   )
 }
