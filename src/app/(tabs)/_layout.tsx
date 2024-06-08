@@ -7,7 +7,7 @@ import { useColorScheme } from "@/hooks/useColorScheme";
 import { useAuth } from "@/providers/AuthProvider";
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
+  const {colorScheme} = useAuth();
   const { session } = useAuth();
 
   if (!session) return <Redirect href="/login" />;
@@ -17,7 +17,7 @@ export default function TabLayout() {
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
         headerShown: false,
-        tabBarStyle: { bottom: 0, height: 90, paddingTop: 10 },
+        tabBarStyle: { bottom: 0, height: 90, paddingTop: 10, backgroundColor: colorScheme === "dark" ? "#101010" : "#fff", borderTopWidth: 0, shadowColor: "rgba(0, 0, 0, 0.25)", shadowOffset: { width: 0, height: 1 }, shadowRadius: 9, shadowOpacity: 1 }
       }}
     >
       <Tabs.Screen name="index" options={{ href: null }} />

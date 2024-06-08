@@ -18,7 +18,7 @@ Geocoder.init(process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY!, {language: 'nl'});
 
 type detailsProps = {
     ride: Ride,
-    closeDetails: () => void
+    closeDetails: (returnToRides?: boolean) => void
 }
 const RideDetails = ({ride, closeDetails}:detailsProps) => {
     const {user, fetchRides} = useAuth();
@@ -29,6 +29,7 @@ const RideDetails = ({ride, closeDetails}:detailsProps) => {
     const [geocodedOrigin, setGeocodedOrigin] = React.useState({latitude: 0, longitude: 0});
     const [geocodedDestination, setGeocodedDestination] = React.useState({latitude: 0, longitude: 0});
     const [mapcenter, setMapCenter] = React.useState({latitude: 0, longitude: 0, latitudeDelta: .125, longitudeDelta: .125});
+    const [showAcceptModal, setShowAcceptModal] = React.useState(false);
 
     const geocode = async (location: string) => {
     const geocodedOrigin = Geocoder.from(location).then(json => {
@@ -84,7 +85,7 @@ const RideDetails = ({ride, closeDetails}:detailsProps) => {
             const res = query.then(
                 (res) => {
                     fetchRides();
-                    closeDetails();
+                    closeDetails(true);
                 }
             )
         
@@ -112,7 +113,7 @@ const RideDetails = ({ride, closeDetails}:detailsProps) => {
                 />
             </MapView>
             <View style={{position: 'absolute', top: 64, left: 32}}>
-                <Button onPress={closeDetails} mod={["white", "square"]}>
+                <Button onPress={() => closeDetails()} mod={["white", "square"]}>
                     <AntDesign name='arrowleft' size={24} color={themeColor}/>
                 </Button>
             </View>
@@ -140,11 +141,28 @@ const RideDetails = ({ride, closeDetails}:detailsProps) => {
                             </View>
                         </View>
                     </View>
-                    <Pressable style={{position: 'absolute', bottom: 0, backgroundColor: primaryColor, width: "150%", height: 48, alignItems: 'center', justifyContent: 'center'}} onPress={acceptRide}>
+                    <Pressable style={{position: 'absolute', bottom: 0, backgroundColor: primaryColor, width: "150%", height: 48, alignItems: 'center', justifyContent: 'center'}} onPress={() => setShowAcceptModal(true)}>
                         <Text style={{color: 'white', fontSize: 18, fontWeight: 'bold'}}>Accepteer</Text>
                     </Pressable>
                 </ThemedView>
             </View>
+            {showAcceptModal && (
+                <Modal transparent>
+                    <Pressable style={{height: "100%", width: "100%", backgroundColor: "black", opacity: .75, position: 'absolute' }} onPress={() => setShowAcceptModal(false)}/>
+                    <ThemedView style={{margin: 'auto', width: "75%", alignItems: 'center', borderRadius: 15, overflow: 'hidden'}}>
+                        <Text style={{marginVertical: 16, color: primaryColor, fontSize: 18, fontWeight: 'bold'}}>Rit accepteren?</Text>
+                        <ThemedText style={{textAlign: 'center', marginBottom: 16}}>Ben je zeker dat je deze rit wilt accepteren?</ThemedText>
+                        <View style= {{flexDirection: "row", alignItems: 'center'}}>
+                            <Pressable style={{flex: 50, alignItems: 'center', paddingVertical: 16, borderColor: "#CCCCCC", borderRightWidth: .5, borderTopWidth: .5}} onPress={() => setShowAcceptModal(false)}>
+                                <ThemedText>Terug</ThemedText>
+                            </Pressable>
+                            <Pressable style={{flex: 50, alignItems: 'center', paddingVertical: 16, borderColor: "#CCCCCC", borderTopWidth: .5, backgroundColor: primaryColor}} onPress={acceptRide}>
+                                <Text style={{lineHeight: 24, fontSize: 16, color: 'white', fontWeight: 'bold'}}>Accepteer</Text>
+                            </Pressable>
+                        </View>
+                    </ThemedView>
+                </Modal>
+            )}
         </Modal>
     </View>
   )

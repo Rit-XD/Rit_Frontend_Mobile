@@ -19,7 +19,6 @@ export default function RidesList() {
   );
   const [filter, setFilter] = React.useState<"all" | "accepted">("all");
   const [selectedRide, setSelectedRide] = React.useState<Ride | null>(null);
-  const [showDetails, setShowDetails] = React.useState<boolean>(false);
   const [refreshing, setRefreshing] = React.useState<boolean>(false);
 
   const parseAddress = (address: string) => {
@@ -51,8 +50,9 @@ export default function RidesList() {
     else if (addDays(d2, 7) > d1) return styles.yellow;
     else return styles.green;
   };
-  function closeDetails() {
+  function closeDetails(returnToRides: boolean = false) {
     setSelectedRide(null);
+    if (returnToRides) setFilter("accepted");
   }
 
   return (

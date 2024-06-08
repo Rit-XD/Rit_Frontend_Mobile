@@ -6,12 +6,13 @@ import { useThemeColor } from "@/hooks/useThemeColor";
 import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/providers/AuthProvider";
 import { Icon } from "@rneui/themed";
-import { View, Text, StyleSheet, Modal, TouchableOpacity, Pressable } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, Pressable } from "react-native";
 import { GestureHandlerRootView, Switch } from "react-native-gesture-handler";
 import { primaryColor } from "@/constants/Colors";
 import { useState } from "react";
 import { Ionicons, AntDesign } from "@expo/vector-icons";
 import ThemeSelector from "@/components/settings/ThemeSelector";
+import Modal from "react-native-modal";
 
 const SettingsScreen = () => {
   const [notification, setNotification] = useState(true);
@@ -100,15 +101,13 @@ const SettingsScreen = () => {
       <ThemedView
         style={[styles.infoContainer, { backgroundColor: infoBackground }]}
       >
-        <ThemedView
-          style={[styles.oneRow, { backgroundColor: infoBackground }]}
-        >
-          <Pressable style={styles.iconWord} onPress={() => setModalVisible("theme")}>
+        <Pressable  onPress={() => setModalVisible("theme")} style={[styles.oneRow, { backgroundColor: infoBackground }]}>
+          <View style={styles.iconWord}>
             <Ionicons style={{ color: icons }} name="moon-outline" size={20} />
             <ThemedText style={styles.text}>Appweergave</ThemedText>
-          </Pressable>
+          </View>
           <Icon iconStyle={{ color: icons }} name="chevron-right" size={28} />
-        </ThemedView>
+        </Pressable>
       </ThemedView>
       <ThemedText style={styles.title}>Support</ThemedText>
       <ThemedView
@@ -131,10 +130,10 @@ const SettingsScreen = () => {
 
       {/* Modal for sign out confirmation */}
       <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible==="logout"}
-        onRequestClose={() => setModalVisible(null)}
+        animationIn="fadeIn"
+        animationOut="fadeOut"
+        isVisible={modalVisible==="logout"}
+        style={{ margin: 0 }}
       >
         <ThemedView style={styles.overlay}>
           <ThemedView style={styles.modalView}>
@@ -182,7 +181,9 @@ const SettingsScreen = () => {
         </View>
       </Button>
       
-      {modalVisible === "theme" && <ThemeSelector/>}
+      <Modal isVisible={modalVisible !== null} animationIn="slideInRight" animationOut="slideOutRight" style={{margin: 0}}>
+        {modalVisible==="theme" && <ThemeSelector onClose={() => setModalVisible(null)}/>}
+      </Modal>
 
     </ThemedView>
   );

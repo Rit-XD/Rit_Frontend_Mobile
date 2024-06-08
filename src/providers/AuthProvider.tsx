@@ -9,6 +9,7 @@ import {
   useState,
 } from "react";
 import { Ride } from "@/types/Ride.type";
+import { ColorSchemeName, useColorScheme } from "react-native";
 
 type AuthData = {
   session: Session | null;
@@ -17,7 +18,10 @@ type AuthData = {
   availableRides: Ride[],
   acceptedRides: Ride[],
   fetchRides: () => void;
+  colorScheme: ColorSchemeName;
+  updateUserTheme?: (theme: Theme) => void;
 };
+type Theme = "dark" | "light" | "auto";
 
 const AuthContext = createContext<AuthData>({
   session: null,
@@ -26,6 +30,7 @@ const AuthContext = createContext<AuthData>({
   availableRides: [],
   acceptedRides: [],
   fetchRides: async () => {},
+  colorScheme: null,
 });
 
 export default function AuthProvider({ children }: PropsWithChildren) {
@@ -34,6 +39,22 @@ export default function AuthProvider({ children }: PropsWithChildren) {
   const [isLoading, setIsLoading] = useState(true);
   const [availableRides, setAvailableRides] = useState<Ride[]>([]);
   const [acceptedRides, setAcceptedRides] = useState<Ride[]>([]);
+  const [colorScheme, setColorScheme] = useState<ColorSchemeName>(useColorScheme());
+  const [userTheme, setUserTheme] = useState<"dark" | "light" | "auto">("auto");
+  const colorSchemeValue = useColorScheme();
+
+  const updateUserTheme = (theme: "dark" | "light" | "auto") => {
+    setUserTheme(theme);
+  }
+  useEffect(() => {
+    if (userTheme === "auto") {
+      setColorScheme(colorSchemeValue);
+    } else if (userTheme === "dark") {
+      setColorScheme("dark");
+    } else {
+      setColorScheme("light");
+    }
+  }, [useColorScheme(), userTheme]);
 
   const fetchRides = async () => {
     const { data: availableRides, error: arError, status: arStatus } = await supabaseAdmin
@@ -122,7 +143,7 @@ export default function AuthProvider({ children }: PropsWithChildren) {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ session, user, isLoading, availableRides, acceptedRides, fetchRides }}>
+    <AuthContext.Provider value={{ session, user, isLoading, availableRides, acceptedRides, fetchRides, colorScheme, updateUserTheme  }}>
       {children}
     </AuthContext.Provider>
   );

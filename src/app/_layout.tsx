@@ -8,7 +8,7 @@ import {
   DefaultTheme,
   ThemeProvider,
 } from "@react-navigation/native";
-import AuthProvider from "@/providers/AuthProvider";
+import AuthProvider, { useAuth } from "@/providers/AuthProvider";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -44,7 +44,7 @@ export default function RootLayout() {
 }
 
 function RootLayoutNav() {
-  const colorscheme = useColorScheme();
+  const { colorScheme } = useAuth(); 
 
   const RitTheme = {
     ...DefaultTheme,
@@ -64,12 +64,12 @@ function RootLayoutNav() {
 
   return (
     <AuthProvider>
-      <ThemeProvider value={colorscheme === "dark" ? RitThemeDark : RitTheme}>
+      <ThemeProvider value={colorScheme === "dark" ? RitThemeDark : RitTheme}>
         <Stack
           screenOptions={{
             headerShown: false,
             contentStyle: {
-              backgroundColor: colorscheme === "dark" ? "#151515" : "#ffffff",
+              backgroundColor: colorScheme === "dark" ? "#151515" : "#ffffff",
             },
           }}
         >
