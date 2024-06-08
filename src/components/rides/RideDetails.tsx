@@ -115,7 +115,7 @@ const RideDetails = ({ride, closeDetails}:detailsProps) => {
           await createCalendar();    
             // console.log(new Date(ride.duration!).getTime() + (ride.duration!*1000));
             try {
-              addEventsToCalendar(`Rit met ${passenger?.firstname}`, new Date(ride.timestamp), new Date(new Date(ride.timestamp).getTime() + (ride.duration!*1000)));
+              addEventsToCalendar(`Rit met ${passenger?.firstname}`, new Date(ride.timestamp), new Date(new Date(ride.timestamp).getTime() + ((ride.duration! + 450)*2000)));
             } catch (e) {
               console.log(e);
             }
