@@ -42,7 +42,7 @@ const RideDetails = ({ride, closeDetails}:detailsProps) => {
     const [geocodedOrigin, setGeocodedOrigin] = React.useState({latitude: 0, longitude: 0});
     const [geocodedDestination, setGeocodedDestination] = React.useState({latitude: 0, longitude: 0});
     const [mapcenter, setMapCenter] = React.useState({latitude: 0, longitude: 0, latitudeDelta: .125, longitudeDelta: .125});
-    const [showAcceptModal, setShowAcceptModal] = React.useState(false);
+    const [showAcceptModal, setShowAcceptModal] = React.useState<"accept" | "calendar" | null>(null);
 
     const geocode = async (location: string) => {
     const geocodedOrigin = Geocoder.from(location).then(json => {
@@ -116,6 +116,7 @@ const RideDetails = ({ride, closeDetails}:detailsProps) => {
             // console.log(new Date(ride.duration!).getTime() + (ride.duration!*1000));
             try {
               addEventsToCalendar(`Rit met ${passenger?.firstname}`, new Date(ride.timestamp), new Date(new Date(ride.timestamp).getTime() + ((ride.duration! + 450)*2000)));
+              setShowAcceptModal(null);
             } catch (e) {
               console.log(e);
             }
@@ -158,7 +159,7 @@ const RideDetails = ({ride, closeDetails}:detailsProps) => {
                         {ride.driver === user.id && (
                             <View style={{position: 'absolute', right: 0}}>
                                 <FontAwesome5 name="calendar-plus" size={24} color={themeColor} 
-                                    onPress={createCalAndEvent}/>
+                                    onPress={() => setShowAcceptModal("calendar")}/>
                             </View>
                         )}
                     </View>
@@ -181,23 +182,40 @@ const RideDetails = ({ride, closeDetails}:detailsProps) => {
                             </View>
                         </View>
                     </View>
-                    <Pressable style={{position: 'absolute', bottom: 0, backgroundColor: primaryColor, width: "150%", height: 48, alignItems: 'center', justifyContent: 'center'}} onPress={ride.driver !== user.id ?() => setShowAcceptModal(true) : redirectToChat(ride.passenger_1)}>
+                    <Pressable style={{position: 'absolute', bottom: 0, backgroundColor: primaryColor, width: "150%", height: 48, alignItems: 'center', justifyContent: 'center'}} onPress={ride.driver !== user.id ?() => setShowAcceptModal("accept") : redirectToChat(ride.passenger_1)}>
                         <Text style={{color: 'white', fontSize: 18, fontWeight: 'bold'}}>{ride.driver !== user.id? 'Accepteer': 'Stuur bericht'}</Text>
                     </Pressable>
                 </ThemedView>
             </View>
-            {showAcceptModal && (
+            {showAcceptModal === "accept" && (
                 <Modal transparent>
-                    <Pressable style={{height: "100%", width: "100%", backgroundColor: "black", opacity: .75, position: 'absolute' }} onPress={() => setShowAcceptModal(false)}/>
+                    <Pressable style={{height: "100%", width: "100%", backgroundColor: "black", opacity: .75, position: 'absolute' }} onPress={() => setShowAcceptModal(null)}/>
                     <ThemedView style={{margin: 'auto', width: "75%", alignItems: 'center', borderRadius: 15, overflow: 'hidden'}}>
                         <Text style={{marginVertical: 16, color: primaryColor, fontSize: 18, fontWeight: 'bold'}}>Rit accepteren?</Text>
                         <ThemedText style={{textAlign: 'center', marginBottom: 16}}>Ben je zeker dat je deze rit wilt accepteren?</ThemedText>
                         <View style= {{flexDirection: "row", alignItems: 'center'}}>
-                            <Pressable style={{flex: 50, alignItems: 'center', paddingVertical: 16, borderColor: "#CCCCCC", borderRightWidth: .5, borderTopWidth: .5}} onPress={() => setShowAcceptModal(false)}>
+                            <Pressable style={{flex: 1, alignItems: 'center', paddingVertical: 16, borderColor: "#CCCCCC", borderRightWidth: .5, borderTopWidth: .5}} onPress={() => setShowAcceptModal(null)}>
                                 <ThemedText>Terug</ThemedText>
                             </Pressable>
-                            <Pressable style={{flex: 50, alignItems: 'center', paddingVertical: 16, borderColor: "#CCCCCC", borderTopWidth: .5, backgroundColor: primaryColor}} onPress={acceptRide}>
+                            <Pressable style={{flex: 1, alignItems: 'center', paddingVertical: 16, borderColor: "#CCCCCC", borderTopWidth: .5, backgroundColor: primaryColor}} onPress={acceptRide}>
                                 <Text style={{lineHeight: 24, fontSize: 16, color: 'white', fontWeight: 'bold'}}>Accepteer</Text>
+                            </Pressable>
+                        </View>
+                    </ThemedView>
+                </Modal>
+            )}
+            {showAcceptModal === "calendar" && (
+                <Modal transparent>
+                    <Pressable style={{height: "100%", width: "100%", backgroundColor: "black", opacity: .75, position: 'absolute' }} onPress={() => setShowAcceptModal(null)}/>
+                    <ThemedView style={{margin: 'auto', width: "75%", alignItems: 'center', borderRadius: 15, overflow: 'hidden'}}>
+                        <Text style={{marginVertical: 16, color: primaryColor, fontSize: 18, fontWeight: 'bold'}}>Rit kalender</Text>
+                        <ThemedText style={{textAlign: 'center', marginBottom: 16, marginHorizontal: 16}}>Wil je deze rit toevoegen aan je kalender?</ThemedText>
+                        <View style= {{flexDirection: "row", alignItems: 'center'}}>
+                            <Pressable style={{flex: 1, alignItems: 'center', paddingVertical: 16, borderColor: "#CCCCCC", borderRightWidth: .5, borderTopWidth: .5}} onPress={() => setShowAcceptModal(null)}>
+                                <ThemedText>Terug</ThemedText>
+                            </Pressable>
+                            <Pressable style={{flex: 1, alignItems: 'center', paddingVertical: 16, borderColor: "#CCCCCC", borderTopWidth: .5, backgroundColor: primaryColor}} onPress={createCalAndEvent}>
+                                <Text style={{lineHeight: 24, fontSize: 16, color: 'white', fontWeight: 'bold'}}>Voeg toe</Text>
                             </Pressable>
                         </View>
                     </ThemedView>

@@ -129,7 +129,7 @@ const SettingsScreen = () => {
       </ThemedView>
 
       {/* Modal for sign out confirmation */}
-      <Modal
+      {/* <Modal
         animationIn="fadeIn"
         animationOut="fadeOut"
         isVisible={modalVisible==="logout"}
@@ -168,7 +168,7 @@ const SettingsScreen = () => {
             </ThemedView>
           </ThemedView>
         </ThemedView>
-      </Modal>
+      </Modal> */}
 
       <Button
         style={styles.button}
@@ -181,8 +181,23 @@ const SettingsScreen = () => {
         </View>
       </Button>
       
-      <Modal isVisible={modalVisible !== null} animationIn="slideInRight" animationOut="slideOutRight" style={{margin: 0}}>
+      <Modal isVisible={modalVisible !== null} animationIn={modalVisible !== "logout"? "slideInRight" : "fadeIn"} animationOut="slideOutRight" style={{margin: 0}}>
         {modalVisible==="theme" && <ThemeSelector onClose={() => setModalVisible(null)}/>}
+        {modalVisible==="logout" && <>
+                                  <Pressable style={{height: "100%", width: "100%", backgroundColor: "black", opacity: .75, position: 'absolute' }} onPress={() => setModalVisible(null)}/>
+                                  <ThemedView style={{margin: 'auto', width: "75%", alignItems: 'center', borderRadius: 15, overflow: 'hidden'}}>
+                                      <Text style={{marginVertical: 16, color: primaryColor, fontSize: 18, fontWeight: 'bold'}}>Afmelden</Text>
+                                      <ThemedText style={{textAlign: 'center', marginBottom: 16, marginHorizontal: 16}}>Ben je zeker dat je wilt afmelden?</ThemedText>
+                                      <View style= {{flexDirection: "row", alignItems: 'center'}}>
+                                          <Pressable style={{flex: 1, alignItems: 'center', paddingVertical: 16, borderColor: "#CCCCCC", borderRightWidth: .5, borderTopWidth: .5}} onPress={() => setModalVisible(null)}>
+                                              <ThemedText>Terug</ThemedText>
+                                          </Pressable>
+                                          <Pressable style={{flex: 1, alignItems: 'center', paddingVertical: 16, borderColor: "#CCCCCC", borderTopWidth: .5, backgroundColor: "red"}} onPress={signOut}>
+                                              <Text style={{lineHeight: 24, fontSize: 16, color: 'white', fontWeight: 'bold'}}>Afmelden</Text>
+                                          </Pressable>
+                                      </View>
+                                  </ThemedView>
+        </>}
       </Modal>
 
     </ThemedView>
@@ -194,8 +209,8 @@ export default SettingsScreen;
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 24,
-    marginTop: 50,
-    paddingVertical: 24,
+    paddingTop: 74,
+    paddingBottom: 24,
     height: "100%",
     flex: 1,
     position: "relative",
