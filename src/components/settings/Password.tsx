@@ -115,32 +115,34 @@ const Password = ({ onClose }: PasswordProps) => {
           Wachtwoord moet minstens 8 karakters lang zijn.
         </ThemedText>
       )}
-      <Button
-        onPress={() => {
-          if (!validatePassword(formState.password)) {
-            setFormErrors({ ...formErrors, password: true });
-          }
-          if (
-            !validateConfirmPassword(
-              formState.password,
-              formState.confirmPassword
-            )
-          ) {
-            setFormErrors({ ...formErrors, confirmPassword: true });
-          }
-          if (
-            validatePassword(formState.password) &&
-            validateConfirmPassword(
-              formState.password,
-              formState.confirmPassword
-            )
-          ) {
-            handleSubmit();
-          }
-        }}
-      >
-        <Text style={styles.textButton}>Opslaan</Text>
-      </Button>
+      <ThemedView style={styles.absolute}>
+        <Button
+          onPress={() => {
+            if (!validatePassword(formState.password)) {
+              setFormErrors({ ...formErrors, password: true });
+            }
+            if (
+              !validateConfirmPassword(
+                formState.password,
+                formState.confirmPassword
+              )
+            ) {
+              setFormErrors({ ...formErrors, confirmPassword: true });
+            }
+            if (
+              validatePassword(formState.password) &&
+              validateConfirmPassword(
+                formState.password,
+                formState.confirmPassword
+              )
+            ) {
+              handleSubmit();
+            }
+          }}
+        >
+          <Text style={styles.textButton}>Opslaan</Text>
+        </Button>
+      </ThemedView>
       <Modal visible={isSuccessModalVisible} transparent={true}>
         <Pressable
           style={{
@@ -225,6 +227,15 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     backgroundColor: "transparent",
     borderRadius: 5,
+  },
+
+  absolute: {
+    position: "absolute",
+    bottom: 64,
+    left: "auto",
+    right: "auto",
+    alignSelf: "center",
+    width: "100%",
   },
 
   textButton: {
