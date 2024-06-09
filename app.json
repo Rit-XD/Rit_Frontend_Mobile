@@ -28,8 +28,8 @@
         "NSCalendarsUsageDescription": "This app uses the calendar to add events to your calendar",
         "NSRemindersUsageDescription": "This app uses the reminders to add reminders to your reminders",
         "NSPhotoLibraryUsageDescription": "This app uses the photo library to add  a profilepicture",
-        "cameraPermission": "This app uses the camera to add  a profilepicture",
-        "microphonePermission": "This app uses the microphone to add a profile"
+        "NSCameraUsageDescription": "This app uses the camera to add  a profilepicture",
+        "NSMicrophoneUsageDescription": "This app uses the microphone to add a profile"
       }
     },
     "android": {
@@ -80,6 +80,14 @@
         "expo-image-picker",
         {
           "photosPermission": "The app accesses your photos to let you share them with your friends."
+        }
+      ],
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera",
+          "microphonePermission": "Allow $(PRODUCT_NAME) to access your microphone",
+          "recordAudioAndroid": true
         }
       ],
       "expo-localization"
