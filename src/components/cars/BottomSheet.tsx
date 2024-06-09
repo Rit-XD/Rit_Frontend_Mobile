@@ -1,4 +1,11 @@
-import { View, Text, StyleSheet, Image } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  Pressable,
+  Linking,
+} from "react-native";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
 import Button from "../ui/Button";
@@ -16,9 +23,13 @@ import { primaryColor } from "@/constants/Colors";
 import { supabaseAdmin } from "@/lib/supabaseAdmin";
 import { Car } from "@/types/Car.type";
 import { useAuth } from "@/providers/AuthProvider";
+import { Carecenter } from "@/types/Carecenter.type";
 
 const CarBottomSheetComponent = () => {
   const [car, setCar] = useState<Car | null>(null);
+  const [carecenter, setCarecenter] = useState<Carecenter | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [carecenterId, setCarecenterId] = useState<string>("");
   const snapPoints = useMemo(() => ["22%", "87%"], []);
 
   const { acceptedRides } = useAuth();
@@ -53,21 +64,53 @@ const CarBottomSheetComponent = () => {
 
   const arrow = useThemeColor({ light: "black", dark: "#fefefe" }, "icon");
 
+  const fetchCareCenter = async (carecenterId: string) => {
+    const { data, error } = await supabaseAdmin
+      .from("Carecenter")
+      .select("*")
+      .eq("id", carecenterId)
+      .limit(1)
+      .single();
+
+    if (error) {
+      console.error(error);
+      return null;
+    }
+    return data;
+  };
+
   useEffect(() => {
     const fetchCar = async () => {
       const { data, error } = await supabaseAdmin
         .from("Car")
         .select("*")
-        // .eq("id", acceptedRides[0].car)
-        .eq("id", "4daa75d4-39a4-499b-a0a0-8fa843ca2ecc")
+        .eq("id", acceptedRides[0].car)
         .limit(1)
         .single();
-
       if (error) console.log(error);
       setCar(data || null);
     };
-    fetchCar();
-  }, []);
+    if (acceptedRides.length > 0) {
+      fetchCar();
+      setCarecenterId(acceptedRides[0].carecenter_id);
+    }
+  }, [acceptedRides]);
+
+  useEffect(() => {
+    const fetchCarecenter = async () => {
+      if (carecenterId) {
+        setLoading(true);
+        const carecenter = await fetchCareCenter(carecenterId);
+        if (carecenter) {
+          setCarecenter(carecenter);
+        } else {
+          console.error("No carecenter found with id:", carecenterId);
+        }
+        setLoading(false);
+      }
+    };
+    fetchCarecenter();
+  }, [carecenterId]);
 
   return (
     <BottomSheet
@@ -155,6 +198,7 @@ const CarBottomSheetComponent = () => {
         <ThemedView
           style={[styles.infoContainer, { backgroundColor: infoBackground }]}
         >
+          {/* <Pressable onPress={() => Linking.openURL(car?.)}> */}
           <ThemedView
             style={[styles.otherRow, { backgroundColor: infoBackground }]}
           >
@@ -163,26 +207,49 @@ const CarBottomSheetComponent = () => {
             </ThemedText>
             <Icon iconStyle={{ color: arrow }} name="chevron-right" size={28} />
           </ThemedView>
-          <ThemedView
-            style={[styles.otherRow, { backgroundColor: infoBackground }]}
+          {/* </Pressable> */}
+          <Pressable onPress={() => Linking.openURL(car!.insurance || "")}>
+            <ThemedView
+              style={[styles.otherRow, { backgroundColor: infoBackground }]}
+            >
+              <ThemedText style={styles.text}>Verzekering</ThemedText>
+              <Icon
+                iconStyle={{ color: arrow }}
+                name="chevron-right"
+                size={28}
+              />
+            </ThemedView>
+          </Pressable>
+          <Pressable onPress={() => Linking.openURL(car!.registration || "")}>
+            <ThemedView
+              style={[styles.otherRow, { backgroundColor: infoBackground }]}
+            >
+              <ThemedText style={styles.text}>
+                Inschrijvingsformulier
+              </ThemedText>
+              <Icon
+                iconStyle={{ color: arrow }}
+                name="chevron-right"
+                size={28}
+              />
+            </ThemedView>
+          </Pressable>
+          <Pressable
+            onPress={() => Linking.openURL(`tel:${carecenter?.phone}`)}
           >
-            <ThemedText style={styles.text}>Verzekering</ThemedText>
-            <Icon iconStyle={{ color: arrow }} name="chevron-right" size={28} />
-          </ThemedView>
-          <ThemedView
-            style={[styles.otherRow, { backgroundColor: infoBackground }]}
-          >
-            <ThemedText style={styles.text}>Inschrijvingsformulier</ThemedText>
-            <Icon iconStyle={{ color: arrow }} name="chevron-right" size={28} />
-          </ThemedView>
-          <ThemedView
-            style={[styles.otherRow, { backgroundColor: infoBackground }]}
-          >
-            <ThemedText style={styles.text}>
-              Contacteer zorginstelling
-            </ThemedText>
-            <Icon iconStyle={{ color: arrow }} name="chevron-right" size={28} />
-          </ThemedView>
+            <ThemedView
+              style={[styles.otherRow, { backgroundColor: infoBackground }]}
+            >
+              <ThemedText style={styles.text}>
+                Contacteer zorginstelling
+              </ThemedText>
+              <Icon
+                iconStyle={{ color: arrow }}
+                name="chevron-right"
+                size={28}
+              />
+            </ThemedView>
+          </Pressable>
         </ThemedView>
         <ThemedView style={styles.buttonContainer}>
           <Button>
