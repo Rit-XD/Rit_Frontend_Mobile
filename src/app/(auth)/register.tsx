@@ -77,7 +77,6 @@ const SignUpScreen = () => {
             email: formState.email,
           },
         ]);
-      console.log(insertData, insertError);
 
       if (insertError) {
         Alert.alert(insertError.message);
