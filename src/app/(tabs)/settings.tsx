@@ -13,14 +13,16 @@ import { useState } from "react";
 import { Ionicons, AntDesign } from "@expo/vector-icons";
 import ThemeSelector from "@/components/settings/ThemeSelector";
 import Modal from "react-native-modal";
+import Account from "@/components/settings/Account";
+import Password from "@/components/settings/Password";
+import License from "@/components/settings/License";
+import Bestuurderspas from "@/components/settings/Bestuurderspas";
+import Faq from "@/components/settings/Faq";
+import Logout from "@/components/settings/Logout";
 
 const SettingsScreen = () => {
   const [notification, setNotification] = useState(true);
-  const [modalVisible, setModalVisible] = useState<"logout" | "theme" | null>(null);
-
-  async function signOut() {
-    await supabase.auth.signOut();
-  }
+  const [modalVisible, setModalVisible] = useState<"logout" | "theme" | "account" | "password" | "license" | "bestuurderspas" | "faq" | null>(null);
 
   const colorTrack = useThemeColor(
     { light: "#fefefe", dark: "#fff" },
@@ -44,7 +46,7 @@ const SettingsScreen = () => {
       <ThemedView
         style={[styles.infoContainer, { backgroundColor: infoBackground }]}
       >
-        <ThemedView style={[styles.row, { backgroundColor: infoBackground }]}>
+        <Pressable style={[styles.row, { backgroundColor: infoBackground }]} onPress={() => setModalVisible("account")}>
           <ThemedView style={styles.iconWord}>
             <Ionicons
               style={{ color: icons }}
@@ -54,14 +56,14 @@ const SettingsScreen = () => {
             <ThemedText style={styles.text}>Account</ThemedText>
           </ThemedView>
           <Icon iconStyle={{ color: icons }} name="chevron-right" size={28} />
-        </ThemedView>
-        <ThemedView style={[styles.row, { backgroundColor: infoBackground }]}>
+        </Pressable>
+        <Pressable style={[styles.row, { backgroundColor: infoBackground }]} onPress={() => setModalVisible("password")}>
           <ThemedView style={styles.iconWord}>
             <Ionicons style={{ color: icons }} name="key-outline" size={20} />
             <ThemedText style={styles.text}>Wijzig wachtwoord</ThemedText>
           </ThemedView>
           <Icon iconStyle={{ color: icons }} name="chevron-right" size={28} />
-        </ThemedView>
+        </Pressable>
         <ThemedView style={[styles.row, { backgroundColor: infoBackground }]}>
           <ThemedView style={styles.iconWord}>
             <Ionicons
@@ -82,20 +84,20 @@ const SettingsScreen = () => {
             />
           </GestureHandlerRootView>
         </ThemedView>
-        <ThemedView style={[styles.row, { backgroundColor: infoBackground }]}>
+        <Pressable style={[styles.row, { backgroundColor: infoBackground }]} onPress={() => setModalVisible("license")}>
           <ThemedView style={styles.iconWord}>
             <AntDesign style={{ color: icons }} name="idcard" size={20} />
             <ThemedText style={styles.text}>Rijbewijs</ThemedText>
           </ThemedView>
           <Icon iconStyle={{ color: icons }} name="chevron-right" size={28} />
-        </ThemedView>
-        <ThemedView style={[styles.row, { backgroundColor: infoBackground }]}>
+        </Pressable>
+        <Pressable style={[styles.row, { backgroundColor: infoBackground }]} onPress={() => setModalVisible("bestuurderspas")}>
           <ThemedView style={styles.iconWord}>
             <Ionicons style={{ color: icons }} name="card-outline" size={20} />
             <ThemedText style={styles.text}>Bestuurderspas</ThemedText>
           </ThemedView>
           <Icon iconStyle={{ color: icons }} name="chevron-right" size={28} />
-        </ThemedView>
+        </Pressable>
       </ThemedView>
       <ThemedText style={styles.title}>Thema</ThemedText>
       <ThemedView
@@ -113,9 +115,7 @@ const SettingsScreen = () => {
       <ThemedView
         style={[styles.infoContainer, { backgroundColor: infoBackground }]}
       >
-        <ThemedView
-          style={[styles.oneRow, { backgroundColor: infoBackground }]}
-        >
+        <Pressable style={[styles.oneRow, { backgroundColor: infoBackground }]} onPress={() => setModalVisible("faq")}>
           <ThemedView style={styles.iconWord}>
             <Ionicons
               style={{ color: icons }}
@@ -125,50 +125,10 @@ const SettingsScreen = () => {
             <ThemedText style={styles.text}>FAQ</ThemedText>
           </ThemedView>
           <Icon iconStyle={{ color: icons }} name="chevron-right" size={28} />
-        </ThemedView>
+        </Pressable>
       </ThemedView>
 
-      {/* Modal for sign out confirmation */}
-      {/* <Modal
-        animationIn="fadeIn"
-        animationOut="fadeOut"
-        isVisible={modalVisible==="logout"}
-        style={{ margin: 0 }}
-      >
-        <ThemedView style={styles.overlay}>
-          <ThemedView style={styles.modalView}>
-            <ThemedText style={styles.modalTitle}>Afmelden?</ThemedText>
-            <ThemedText style={styles.modalText}>
-              U staat op het punt om af te melden.
-            </ThemedText>
-            <ThemedView style={styles.buttonContainer}>
-              <TouchableOpacity
-                style={[styles.modalButton, styles.cancelButton]}
-                onPress={() => setModalVisible(null)}
-              >
-                <ThemedText
-                  style={[styles.buttonText, styles.cancelButtonText]}
-                >
-                  Terug
-                </ThemedText>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={[styles.modalButton, styles.confirmButton]}
-                onPress={() => {
-                  setModalVisible(null);
-                  signOut();
-                }}
-              >
-                <ThemedText
-                  style={[styles.buttonText, styles.confirmButtonText]}
-                >
-                  Afmelden
-                </ThemedText>
-              </TouchableOpacity>
-            </ThemedView>
-          </ThemedView>
-        </ThemedView>
-      </Modal> */}
+
 
       <Button
         style={styles.button}
@@ -182,22 +142,14 @@ const SettingsScreen = () => {
       </Button>
       
       <Modal isVisible={modalVisible !== null} animationIn={modalVisible !== "logout"? "slideInRight" : "fadeIn"} animationOut="slideOutRight" style={{margin: 0}}>
+        {modalVisible==="account" && <Account onClose={() => setModalVisible(null)}/>}
+        {modalVisible==="password" && <Password onClose={() => setModalVisible(null)}/>}
+        {modalVisible==="license" && <License onClose={() => setModalVisible(null)}/>}
+        {modalVisible==="bestuurderspas" && <Bestuurderspas onClose={() => setModalVisible(null)}/>}
         {modalVisible==="theme" && <ThemeSelector onClose={() => setModalVisible(null)}/>}
-        {modalVisible==="logout" && <>
-                                  <Pressable style={{height: "100%", width: "100%", backgroundColor: "black", opacity: .75, position: 'absolute' }} onPress={() => setModalVisible(null)}/>
-                                  <ThemedView style={{margin: 'auto', width: "75%", alignItems: 'center', borderRadius: 15, overflow: 'hidden'}}>
-                                      <Text style={{marginVertical: 16, color: primaryColor, fontSize: 18, fontWeight: 'bold'}}>Afmelden</Text>
-                                      <ThemedText style={{textAlign: 'center', marginBottom: 16, marginHorizontal: 16}}>Ben je zeker dat je wilt afmelden?</ThemedText>
-                                      <View style= {{flexDirection: "row", alignItems: 'center'}}>
-                                          <Pressable style={{flex: 1, alignItems: 'center', paddingVertical: 16, borderColor: "#CCCCCC", borderRightWidth: .5, borderTopWidth: .5}} onPress={() => setModalVisible(null)}>
-                                              <ThemedText>Terug</ThemedText>
-                                          </Pressable>
-                                          <Pressable style={{flex: 1, alignItems: 'center', paddingVertical: 16, borderColor: "#CCCCCC", borderTopWidth: .5, backgroundColor: "red"}} onPress={signOut}>
-                                              <Text style={{lineHeight: 24, fontSize: 16, color: 'white', fontWeight: 'bold'}}>Afmelden</Text>
-                                          </Pressable>
-                                      </View>
-                                  </ThemedView>
-        </>}
+        {modalVisible==="faq" && <Faq onClose={() => setModalVisible(null)}/>}
+        {modalVisible==="logout" && <Logout onClose={() => setModalVisible(null)}/>}
+
       </Modal>
 
     </ThemedView>

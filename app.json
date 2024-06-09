@@ -26,7 +26,10 @@
       "buildNumber": "6",
       "infoPlist": {
         "NSCalendarsUsageDescription": "This app uses the calendar to add events to your calendar",
-        "NSRemindersUsageDescription": "This app uses the reminders to add reminders to your reminders"
+        "NSRemindersUsageDescription": "This app uses the reminders to add reminders to your reminders",
+        "NSPhotoLibraryUsageDescription": "This app uses the photo library to add  a profilepicture",
+        "cameraPermission": "This app uses the camera to add  a profilepicture",
+        "microphonePermission": "This app uses the microphone to add a profile"
       }
     },
     "android": {
@@ -71,6 +74,12 @@
         "expo-calendar",
         {
           "calendarPermission": "The app needs to access your calendar."
+        }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "The app accesses your photos to let you share them with your friends."
         }
       ],
       "expo-localization"
