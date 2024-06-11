@@ -222,16 +222,6 @@ const CarBottomSheetComponent = () => {
         <ThemedView
           style={[styles.infoContainer, { backgroundColor: infoBackground }]}
         >
-          {/* <Pressable onPress={() => Linking.openURL(car?.)}> */}
-          <ThemedView
-            style={[styles.otherRow, { backgroundColor: infoBackground }]}
-          >
-            <ThemedText style={styles.text}>
-              Informatie van het voertuig
-            </ThemedText>
-            <Icon iconStyle={{ color: arrow }} name="chevron-right" size={28} />
-          </ThemedView>
-          {/* </Pressable> */}
           <Pressable onPress={() => Linking.openURL(car!.insurance || "")}>
             <ThemedView
               style={[styles.otherRow, { backgroundColor: infoBackground }]}
@@ -314,7 +304,8 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     paddingHorizontal: 24,
-    paddingVertical: 10,
+    paddingVertical: 50,
+    paddingBottom: 30,
   },
 
   specsContainer: {
