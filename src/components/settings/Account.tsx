@@ -86,7 +86,8 @@ const Account = ({ onClose }: AccountProps) => {
           <View>
             <ThemedText style={styles.label}>Postcode</ThemedText>
             <Input
-              value={user.postal}
+              keyboardType="numeric"
+              value={user.postal || ""}
               onChangeText={() => {}}
               style={{ width: 95 }}
             />
