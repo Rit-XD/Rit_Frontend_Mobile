@@ -64,7 +64,7 @@ const Password = ({ onClose }: PasswordProps) => {
       >
         <AntDesign name="arrowleft" size={24} color={themeColor} />
       </Button>
-      <ThemedText>Wijzig wachtwoord</ThemedText>
+      <ThemedText style={styles.title}>Wijzig wachtwoord</ThemedText>
       <ThemedText style={styles.label}>Wachtwoord</ThemedText>
       <Input
         value={formState.password}
@@ -214,6 +214,14 @@ const styles = StyleSheet.create({
     paddingTop: 74,
     paddingBottom: 24,
     paddingHorizontal: 24,
+  },
+
+  title: {
+    fontSize: 24,
+    fontWeight: "bold",
+    marginVertical: 16,
+    marginHorizontal: "auto",
+    fontFamily: "Cocon",
   },
 
   label: {

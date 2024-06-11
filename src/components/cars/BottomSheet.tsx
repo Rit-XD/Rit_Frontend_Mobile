@@ -24,15 +24,39 @@ import { supabaseAdmin } from "@/lib/supabaseAdmin";
 import { Car } from "@/types/Car.type";
 import { useAuth } from "@/providers/AuthProvider";
 import { Carecenter } from "@/types/Carecenter.type";
+import axios from "axios";
+
+const ESP32_IP_ADDRESS = "http://172.20.10.10 ";
 
 const CarBottomSheetComponent = () => {
   const [car, setCar] = useState<Car | null>(null);
   const [carecenter, setCarecenter] = useState<Carecenter | null>(null);
   const [loading, setLoading] = useState(true);
   const [carecenterId, setCarecenterId] = useState<string>("");
+  const [isLocked, setIsLocked] = useState(true);
   const snapPoints = useMemo(() => ["22%", "87%"], []);
 
   const { acceptedRides } = useAuth();
+
+  const sendUnlockCommand = async () => {
+    try {
+      const response = await axios.get(`${ESP32_IP_ADDRESS}/unlock`);
+      console.log(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+    setIsLocked(false);
+  };
+
+  const sendLockCommand = async () => {
+    try {
+      const response = await axios.get(`${ESP32_IP_ADDRESS}/lock`);
+      console.log(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+    setIsLocked(true);
+  };
 
   const renderBackdrop = useCallback(
     (props: any) => (
@@ -252,9 +276,15 @@ const CarBottomSheetComponent = () => {
           </Pressable>
         </ThemedView>
         <ThemedView style={styles.buttonContainer}>
-          <Button>
-            <Text style={styles.buttonText}>Ontgrendel wagen</Text>
-          </Button>
+          {isLocked ? (
+            <Button onPress={sendUnlockCommand}>
+              <Text style={styles.buttonText}>Ontgrendel wagen</Text>
+            </Button>
+          ) : (
+            <Button onPress={sendLockCommand}>
+              <Text style={styles.buttonText}>Vergrendel wagen</Text>
+            </Button>
+          )}
         </ThemedView>
       </ThemedView>
     </BottomSheet>
