@@ -95,6 +95,16 @@ export default function AuthProvider({ children }: PropsWithChildren) {
     setAcceptedRides(acceptedRides || []);
 
     fetchCarecenters(availableRides || [], acceptedRides || []);
+    
+    const channels = supabase.channel('custom-update-channel')
+    .on(
+      'postgres_changes',
+      { event: '*', schema: 'public', table: 'Rides' },
+      (payload) => {
+        console.log('Change received!', payload)
+      }
+    )
+    .subscribe()
   }
 
   useEffect(() => {
@@ -128,6 +138,15 @@ export default function AuthProvider({ children }: PropsWithChildren) {
 
         fetchCarecenters(availableRides || [], acceptedRides || []);
       }
+      const channels = supabase.channel('custom-update-channel')
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'Rides' },
+        (payload) => {
+          console.log('Change received!', payload)
+        }
+      )
+      .subscribe()
       setIsLoading(false);
     };
 
@@ -158,6 +177,15 @@ export default function AuthProvider({ children }: PropsWithChildren) {
 
         fetchCarecenters(availableRides || [], acceptedRides || []);
 
+        const channels = supabase.channel('custom-update-channel')
+        .on(
+          'postgres_changes',
+          { event: '*', schema: 'public', table: 'Rides' },
+          (payload) => {
+            console.log('Change received!', payload)
+          }
+        )
+        .subscribe()
       }
     });
   }, []);

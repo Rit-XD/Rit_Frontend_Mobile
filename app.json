@@ -16,7 +16,7 @@
     "assetBundlePatterns": ["assets/fonts/*", "assets/images/*"],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "care.rit.mobile",
+      "bundleIdentifier": "EGP52YRNH4.care.rit.mobile",
       "config": {
         "googleMapsApiKey": "AIzaSyBKhixrksRyCcnWxY2koJMH2GfDx6ywZgA"
       },

@@ -44,7 +44,8 @@ export default function RidesList() {
   const determineColor = (timestamp: string) => {
     const d1 = new Date(timestamp);
     const d2 = new Date();
-    if (addDays(d2, 1) > d1) return styles.red;
+    if(d1 < d2) return styles.grey;
+    else if (addDays(d2, 1) > d1) return styles.red;
     else if (addDays(d2, 3) > d1) return styles.orange;
     else if (addDays(d2, 7) > d1) return styles.yellow;
     else return styles.green;
@@ -126,40 +127,80 @@ export default function RidesList() {
             <>
               {(filter === "all" ? availableRides : acceptedRides).map(
                 (ride) => (
-                  <Pressable
-                    onPress={() => setSelectedRide(ride)}
-                    key={ride.id}
-                  >
-                    <ThemedView
-                      style={styles.rideContainer}
-                      darkColor="#303030"
-                    >
-                      <View style={styles.rideContainerInner}>
-                        <View
-                          style={[
-                            styles.colorCode,
-                            determineColor(ride.timestamp),
-                          ]}
-                        ></View>
-                        <View style={styles.content}>
-                          <ThemedText style={styles.origin}>
-                            <RouteTitle ride={ride}/>
-                          </ThemedText>
-                          <ThemedText style={styles.destination}>
-                            {parseDateTime(ride.timestamp)}
-                          </ThemedText>
-                        </View>
-                      </View>
-                      <View>
-                        <Ionicons
-                          name="chevron-forward"
-                          size={24}
-                          style={{ marginRight: 16 }}
-                          color={chevronColor}
-                        />
-                      </View>
-                    </ThemedView>
-                  </Pressable>
+                    <View key={ride.id}>
+                      {new Date(ride.timestamp) > new Date() && 
+                      <Pressable onPress={() => setSelectedRide(ride)}>
+                        <ThemedView
+                          style={styles.rideContainer}
+                          darkColor="#303030"
+                        >
+                          <View style={styles.rideContainerInner}>
+                            <View
+                              style={[
+                                styles.colorCode,
+                                determineColor(ride.timestamp),
+                              ]}
+                            ></View>
+                            <View style={styles.content}>
+                              <ThemedText style={styles.origin}>
+                                <RouteTitle ride={ride}/>
+                              </ThemedText>
+                              <ThemedText style={styles.destination}>
+                                {parseDateTime(ride.timestamp)}
+                              </ThemedText>
+                            </View>
+                          </View>
+                          <View>
+                            <Ionicons
+                              name="chevron-forward"
+                              size={24}
+                              style={{ marginRight: 16 }}
+                              color={chevronColor}
+                            />
+                          </View>
+                        </ThemedView>
+                      </Pressable>
+                      }
+                    </View>
+                )
+              )}
+              {(filter === "all" ? availableRides : acceptedRides).map(
+                (ride) => (
+                    <View key={ride.id}>
+                      {new Date(ride.timestamp) < new Date() && ride.driver !== null &&
+                      <Pressable onPress={() => setSelectedRide(ride)}>
+                        <ThemedView
+                          style={styles.rideContainer}
+                          darkColor="#303030"
+                        >
+                          <View style={styles.rideContainerInner}>
+                            <View
+                              style={[
+                                styles.colorCode,
+                                determineColor(ride.timestamp),
+                              ]}
+                            ></View>
+                            <View style={styles.content}>
+                              <ThemedText style={styles.origin}>
+                                <RouteTitle ride={ride}/>
+                              </ThemedText>
+                              <ThemedText style={styles.destination}>
+                                {parseDateTime(ride.timestamp)}
+                              </ThemedText>
+                            </View>
+                          </View>
+                          <View>
+                            <Ionicons
+                              name="chevron-forward"
+                              size={24}
+                              style={{ marginRight: 16 }}
+                              color={chevronColor}
+                            />
+                          </View>
+                        </ThemedView>
+                      </Pressable>
+                      }
+                    </View>
                 )
               )}
             </>
@@ -257,6 +298,9 @@ const styles = StyleSheet.create({
   },
   green: {
     backgroundColor: "#29CC6A",
+  },
+  grey: {
+    backgroundColor: "#aaaaaa",
   },
   origin: {
     fontSize: 18,
