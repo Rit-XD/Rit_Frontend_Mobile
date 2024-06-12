@@ -146,7 +146,7 @@ const RideDetails = ({ ride, closeDetails }: detailsProps) => {
     if (timeDifferenceInHours > 24) {
       let query = supabaseAdmin
         .from("Rides")
-        .update({ status: "cancelled" })
+        .update({ driver: null })
         .eq("id", ride.id)
         .single();
       const res = query.then((res) => {
