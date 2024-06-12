@@ -1,10 +1,9 @@
 import {
-  View,
   Text,
   StyleSheet,
   Image,
   Pressable,
-  Linking,
+  Linking
 } from "react-native";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
@@ -22,9 +21,9 @@ import { useThemeColor } from "@/hooks/useThemeColor";
 import { primaryColor } from "@/constants/Colors";
 import { supabaseAdmin } from "@/lib/supabaseAdmin";
 import { Car } from "@/types/Car.type";
-import { useAuth } from "@/providers/AuthProvider";
 import { Carecenter } from "@/types/Carecenter.type";
 import axios from "axios";
+import { useRide } from "@/providers/RideProvider";
 
 const ESP32_IP_ADDRESS = "http://172.20.10.10 ";
 
@@ -36,12 +35,11 @@ const CarBottomSheetComponent = () => {
   const [isLocked, setIsLocked] = useState(true);
   const snapPoints = useMemo(() => ["22%", "87%"], []);
 
-  const { acceptedRides } = useAuth();
+  const { acceptedRides } = useRide();
 
   const sendUnlockCommand = async () => {
     try {
       const response = await axios.get(`${ESP32_IP_ADDRESS}/unlock`);
-      console.log(response.data);
     } catch (error) {
       console.error(error);
     }
@@ -51,7 +49,6 @@ const CarBottomSheetComponent = () => {
   const sendLockCommand = async () => {
     try {
       const response = await axios.get(`${ESP32_IP_ADDRESS}/lock`);
-      console.log(response.data);
     } catch (error) {
       console.error(error);
     }

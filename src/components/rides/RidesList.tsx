@@ -11,9 +11,11 @@ import { Ride } from "@/types/Ride.type";
 import { GestureHandlerRootView, RefreshControl } from "react-native-gesture-handler";
 import Modal from 'react-native-modal';
 import { SlideInRight } from "react-native-reanimated";
+import { useRide } from "@/providers/RideProvider";
+import { useCarecenter } from "@/providers/CareProvider";
 
 export default function RidesList() {
-  const { availableRides, acceptedRides, fetchRides, carecenters, getCarecenter } = useAuth();
+  const {availableRides, acceptedRides, fetchRides, } = useRide();
   const color = useThemeColor({ light: "#fefefe", dark: "#fff" }, "background");
   const chevronColor = useThemeColor(
     { light: "#151515", dark: "#fefefe" },
@@ -232,7 +234,7 @@ export default function RidesList() {
 }
 
 function RouteTitle({ ride }: { ride: Ride }) {
-  const { getCarecenter } = useAuth();
+  const { getCarecenter } = useCarecenter();
   const parseAddress = (address: string) => {
     return address.split(",")[0];
   };

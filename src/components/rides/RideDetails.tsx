@@ -171,7 +171,6 @@ const RideDetails = ({ ride, closeDetails }: detailsProps) => {
     const granted = await getPermission();
     if (granted) {
       await createCalendar();
-      // console.log(new Date(ride.duration!).getTime() + (ride.duration!*1000));
       try {
         addEventsToCalendar(
           `Rit met ${passenger?.firstname}`,
