@@ -68,7 +68,7 @@ const RideDetails = ({ ride, closeDetails }: detailsProps) => {
     longitudeDelta: 0.125,
   });
   const [showAcceptModal, setShowAcceptModal] = React.useState<
-    "accept" | "calendar" | null
+    "accept" | "calendar" | "cancel" | null
   >(null);
 
   const geocode = async (location: string) => {
@@ -135,6 +135,19 @@ const RideDetails = ({ ride, closeDetails }: detailsProps) => {
       closeDetails(true);
     });
   };
+
+  const cancelRide = async () => {
+    let query = supabaseAdmin
+      .from("Rides")
+      .update({ driver: null })
+      .eq("id", ride.id)
+      .single();
+    const res = query.then((res) => {
+      fetchRides();
+      closeDetails(true);
+    });
+  };
+
   const redirectToChat = (passengerId: string) => {
     return () => {
       closeDetails();
@@ -203,7 +216,14 @@ const RideDetails = ({ ride, closeDetails }: detailsProps) => {
           }}
         >
           <ThemedText style={styles.name}>{passenger?.firstname}</ThemedText>
-          <ThemedText style={styles.edit}>...</ThemedText>
+          {ride.driver === user.id && (
+            <ThemedText
+              style={styles.edit}
+              onPress={() => setShowAcceptModal("cancel")}
+            >
+              ...
+            </ThemedText>
+          )}
           <ThemedText style={styles.distance}>
             {ride.distance ? Math.round(ride.distance / 1000) : ""} km
           </ThemedText>
@@ -371,6 +391,86 @@ const RideDetails = ({ ride, closeDetails }: detailsProps) => {
                   }}
                 >
                   Accepteer
+                </Text>
+              </Pressable>
+            </View>
+          </ThemedView>
+        </Modal>
+      )}
+      {showAcceptModal === "cancel" && (
+        <Modal transparent>
+          <Pressable
+            style={{
+              height: "100%",
+              width: "100%",
+              backgroundColor: "black",
+              opacity: 0.75,
+              position: "absolute",
+            }}
+            onPress={() => setShowAcceptModal(null)}
+          />
+          <ThemedView
+            style={{
+              margin: "auto",
+              width: "75%",
+              alignItems: "center",
+              borderRadius: 15,
+              overflow: "hidden",
+            }}
+          >
+            <Text
+              style={{
+                marginVertical: 16,
+                color: primaryColor,
+                fontSize: 18,
+                fontWeight: "bold",
+              }}
+            >
+              Rit annuleren
+            </Text>
+            <ThemedText
+              style={{
+                textAlign: "center",
+                marginBottom: 16,
+                marginHorizontal: 16,
+              }}
+            >
+              Ben je zeker dat je deze rit wilt annuleren?
+            </ThemedText>
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <Pressable
+                style={{
+                  flex: 1,
+                  alignItems: "center",
+                  paddingVertical: 16,
+                  borderColor: "#CCCCCC",
+                  borderRightWidth: 0.5,
+                  borderTopWidth: 0.5,
+                }}
+                onPress={() => setShowAcceptModal(null)}
+              >
+                <ThemedText>Terug</ThemedText>
+              </Pressable>
+              <Pressable
+                style={{
+                  flex: 1,
+                  alignItems: "center",
+                  paddingVertical: 16,
+                  borderColor: "#CCCCCC",
+                  borderTopWidth: 0.5,
+                  backgroundColor: "red",
+                }}
+                onPress={cancelRide}
+              >
+                <Text
+                  style={{
+                    lineHeight: 24,
+                    fontSize: 16,
+                    color: "white",
+                    fontWeight: "bold",
+                  }}
+                >
+                  Rit annuleren
                 </Text>
               </Pressable>
             </View>
