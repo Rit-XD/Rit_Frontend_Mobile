@@ -13,7 +13,7 @@ import Modal from 'react-native-modal';
 import { SlideInRight } from "react-native-reanimated";
 
 export default function RidesList() {
-  const { availableRides, acceptedRides, fetchRides } = useAuth();
+  const { availableRides, acceptedRides, fetchRides, carecenters, getCarecenter } = useAuth();
   const color = useThemeColor({ light: "#fefefe", dark: "#fff" }, "background");
   const chevronColor = useThemeColor(
     { light: "#151515", dark: "#fefefe" },
@@ -23,9 +23,6 @@ export default function RidesList() {
   const [selectedRide, setSelectedRide] = React.useState<Ride | null>(null);
   const [refreshing, setRefreshing] = React.useState<boolean>(false);
 
-  const parseAddress = (address: string) => {
-    return address.split(",")[0];
-  };
   const parseDateTime = (timestamp: string) => {
     const date = new Date(timestamp);
     return (
@@ -146,7 +143,7 @@ export default function RidesList() {
                         ></View>
                         <View style={styles.content}>
                           <ThemedText style={styles.origin}>
-                            {parseAddress(ride.destination)}
+                            <RouteTitle ride={ride}/>
                           </ThemedText>
                           <ThemedText style={styles.destination}>
                             {parseDateTime(ride.timestamp)}
@@ -192,6 +189,19 @@ export default function RidesList() {
     </View>
   );
 }
+
+function RouteTitle({ ride }: { ride: Ride }) {
+  const { getCarecenter } = useAuth();
+  const parseAddress = (address: string) => {
+    return address.split(",")[0];
+  };
+  const title = `${getCarecenter(ride.carecenter_id)?.name} - ${parseAddress(ride.destination)}`;
+  if (title.length > 30) {
+    return title.slice(0, 27) + "...";
+  } else {
+    return title;
+  }
+} 
 
 const styles = StyleSheet.create({
   container: {
