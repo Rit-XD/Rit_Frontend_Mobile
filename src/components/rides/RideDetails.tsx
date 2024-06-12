@@ -1,4 +1,4 @@
-import { Modal, Pressable, StyleSheet, Text, View } from "react-native";
+import { Alert, Modal, Pressable, StyleSheet, Text, View } from "react-native";
 import React, { useEffect } from "react";
 import { Ride } from "@/types/Ride.type";
 import MapView from "react-native-maps";
@@ -137,17 +137,29 @@ const RideDetails = ({ ride, closeDetails }: detailsProps) => {
   };
 
   const cancelRide = async () => {
-    let query = supabaseAdmin
-      .from("Rides")
-      .update({ driver: null })
-      .eq("id", ride.id)
-      .single();
-    const res = query.then((res) => {
-      fetchRides();
-      closeDetails(true);
-    });
-  };
+    const currentTime = new Date();
+    const rideStartTime = new Date(ride.timestamp);
 
+    const timeDifference = rideStartTime.getTime() - currentTime.getTime();
+    const timeDifferenceInHours = timeDifference / (1000 * 3600);
+
+    if (timeDifferenceInHours > 24) {
+      let query = supabaseAdmin
+        .from("Rides")
+        .update({ status: "cancelled" })
+        .eq("id", ride.id)
+        .single();
+      const res = query.then((res) => {
+        fetchRides();
+        closeDetails(true);
+      });
+    } else {
+      Alert.alert(
+        "Rit kan niet geannuleerd worden",
+        "Je kan een rit niet annuleren minder dan 24 uur voor de starttijd."
+      );
+    }
+  };
   const redirectToChat = (passengerId: string) => {
     return () => {
       closeDetails();
