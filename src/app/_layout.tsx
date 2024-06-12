@@ -9,6 +9,7 @@ import {
   ThemeProvider,
 } from "@react-navigation/native";
 import AuthProvider, { useAuth } from "@/providers/AuthProvider";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -65,17 +66,19 @@ function RootLayoutNav() {
   return (
     <AuthProvider>
       <ThemeProvider value={colorScheme === "dark" ? RitThemeDark : RitTheme}>
-        <Stack
-          screenOptions={{
-            headerShown: false,
-            contentStyle: {
-              backgroundColor: colorScheme === "dark" ? "#151515" : "#ffffff",
-            },
-          }}
-        >
-          <Stack.Screen name="(auth)" />
-          <Stack.Screen name="(tabs)" />
-        </Stack>
+        <GestureHandlerRootView style={{flex: 1}}>
+          <Stack
+            screenOptions={{
+              headerShown: false,
+              contentStyle: {
+                backgroundColor: colorScheme === "dark" ? "#151515" : "#ffffff",
+              },
+            }}
+          >
+            <Stack.Screen name="(auth)" />
+            <Stack.Screen name="(tabs)" />
+          </Stack>
+        </GestureHandlerRootView>
       </ThemeProvider>
     </AuthProvider>
   );
