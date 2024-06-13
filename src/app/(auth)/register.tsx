@@ -91,8 +91,13 @@ const SignUpScreen = () => {
   }
 
   function isValidPhoneNumber(phone: string) {
-    const re = /^(0|\+32)\s?4\s?\d{2}\s?\d{2}\s?\d{2}\s?\d{2}$/;
+    const re = /^(0\d{9}|\+32\d{9})$/;
     return re.test(phone);
+  }
+
+  function isValidPostalCode(postal: string) {
+    const re = /^\d{4}$/;
+    return re.test(postal);
   }
 
   const validatePassword = (password: string) => password.length >= 8;
@@ -260,7 +265,7 @@ const SignUpScreen = () => {
                   if (!formState.city) {
                     newErrors = { ...newErrors, city: true };
                   }
-                  if (!formState.postal) {
+                  if (!isValidPostalCode(formState.postal)) {
                     newErrors = { ...newErrors, postal: true };
                   }
 
@@ -282,7 +287,7 @@ const SignUpScreen = () => {
                   }
                 }}
               >
-                <Text style={styles.textButton}>Volgende</Text>
+                <ThemedText style={styles.textButton}>Volgende</ThemedText>
               </Button>
               {/* <Link href="/login" style={styles.textButton}>
                 Log in
@@ -326,10 +331,10 @@ const SignUpScreen = () => {
                     ...formState,
                     phone: text,
                   });
-                  // setFormErrors({
-                  //   ...formErrors,
-                  //   phone: !text,
-                  // });
+                  setFormErrors({
+                    ...formErrors,
+                    phone: !text,
+                  });
                 }}
                 style={[
                   isNextPressed && formErrors.phone && { borderColor: "red" },
@@ -372,11 +377,11 @@ const SignUpScreen = () => {
                   }
                 }}
               >
-                <ThemedText>Volgende</ThemedText>
+                <ThemedText style={styles.textButton}>Volgende</ThemedText>
               </Button>
-              <Text style={styles.textButton} onPress={() => setStep(1)}>
+              <ThemedText style={styles.backButton} onPress={() => setStep(1)}>
                 Terug
-              </Text>
+              </ThemedText>
             </>
           )}
           {step === 3 && (
@@ -476,11 +481,11 @@ const SignUpScreen = () => {
                   }
                 }}
               >
-                <Text style={styles.textButton}>Registreren</Text>
+                <ThemedText style={styles.textButton}>Registreren</ThemedText>
               </Button>
-              <Text style={styles.textButton} onPress={() => setStep(2)}>
+              <ThemedText style={styles.backButton} onPress={() => setStep(2)}>
                 Terug
-              </Text>
+              </ThemedText>
             </>
           )}
         </ThemedView>
@@ -526,6 +531,11 @@ const styles = StyleSheet.create({
     fontSize: 18,
     alignSelf: "center",
     fontWeight: "bold",
+  },
+
+  backButton: {
+    textAlign: "center",
+    marginTop: 10,
   },
   error: {
     textAlign: "center",

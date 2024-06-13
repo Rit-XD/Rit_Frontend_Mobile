@@ -2,7 +2,6 @@ import { SplashScreen, Stack } from "expo-router";
 import { useFonts } from "expo-font";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { useEffect } from "react";
-import { ScrollView, View, useColorScheme } from "react-native";
 import {
   DarkTheme,
   DefaultTheme,
@@ -45,7 +44,7 @@ export default function RootLayout() {
 }
 
 function RootLayoutNav() {
-  const { colorScheme } = useAuth(); 
+  const { colorScheme } = useAuth();
 
   const RitTheme = {
     ...DefaultTheme,
@@ -66,7 +65,7 @@ function RootLayoutNav() {
   return (
     <AuthProvider>
       <ThemeProvider value={colorScheme === "dark" ? RitThemeDark : RitTheme}>
-        <GestureHandlerRootView style={{flex: 1}}>
+        <GestureHandlerRootView style={{ flex: 1 }}>
           <Stack
             screenOptions={{
               headerShown: false,
