@@ -2,10 +2,12 @@ import { primaryColor } from "@/constants/Colors";
 import { PropsWithChildren, useEffect, useState } from "react";
 import { ActivityIndicator } from "react-native";
 import { StreamChat } from "stream-chat";
-import { Chat, OverlayProvider } from "stream-chat-expo";
+import { Chat, OverlayProvider, Streami18n } from "stream-chat-expo";
 import { useAuth } from "./AuthProvider";
 
+
 const client = StreamChat.getInstance(process.env.EXPO_PUBLIC_STREAM_API_KEY!);
+const streami18n = new Streami18n({language: "nl"});
 
 export default function ChatProvider({children}: PropsWithChildren) {
     const [isReady, setIsReady] = useState(false);
@@ -40,8 +42,8 @@ export default function ChatProvider({children}: PropsWithChildren) {
 
     return (
         <>
-            <OverlayProvider>
-                <Chat client={client}>
+            <OverlayProvider i18nInstance={streami18n}>
+                <Chat client={client} i18nInstance={streami18n}>
                     {children}
                 </Chat>
             </OverlayProvider>

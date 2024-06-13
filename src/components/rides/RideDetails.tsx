@@ -1,14 +1,12 @@
 import { Alert, Pressable, StyleSheet, Text, View } from "react-native";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Ride } from "@/types/Ride.type";
 import MapView from "react-native-maps";
 import {
   Ionicons,
   AntDesign,
   FontAwesome6,
-  FontAwesome5,
-  MaterialCommunityIcons,
-  Feather,
+  FontAwesome5, Feather
 } from "@expo/vector-icons";
 import { useThemeColor } from "@/hooks/useThemeColor";
 import Button from "../ui/Button";
@@ -20,15 +18,12 @@ import { primaryColor } from "@/constants/Colors";
 import MapViewDirections from "react-native-maps-directions";
 import Geocoder from "react-native-geocoding";
 import { useAuth } from "@/providers/AuthProvider";
-import { Redirect, router } from "expo-router";
-import { Platform } from "react-native";
-import { StatusBar } from "expo-status-bar";
 import useCalendar from "@atiladev/usecalendar";
 import { useRide } from "@/providers/RideProvider";
 import { Channel, ChannelList, MessageInput, MessageList, useChatContext } from "stream-chat-expo";
 import Modal from "react-native-modal";
 import { Channel as ChannelType } from "stream-chat";
-import { FadeIn } from "react-native-reanimated";
+import { Image } from "expo-image";
 
 
 Geocoder.init(process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY!, { language: "nl" });
@@ -51,8 +46,10 @@ const RideDetails = ({ ride, closeDetails }: detailsProps) => {
   const { client } = useChatContext();
   const { fetchRides} = useRide();
   const themeColor = useThemeColor({ light: "#151515", dark: "#fefefe" }, "background");
-  const [passenger, setPassenger] = React.useState<Passenger | null>(null);
-  const [channel, setChannel] = React.useState<ChannelType | null>(null);
+  const [passenger, setPassenger] = useState<Passenger | null>(null);
+  const [channel, setChannel] = useState<ChannelType | null>(null);
+  const [channelUser, setChannelUser] = useState<{ name?: string; online?: boolean, image?: any, last_active?: Date }>({});
+
 
   const origin = {
     address: ride.origin.split(", ")[0],
@@ -147,6 +144,41 @@ const RideDetails = ({ ride, closeDetails }: detailsProps) => {
       console.log(e);
     }
   }
+  useEffect(() => {
+    const updateChannelUsers = () => {
+      if (!channel) return;
+      setChannelUser(
+        Object.values(channel.state.members).map((user) => ({
+          name: user.user!.name,
+          online: !!user.user!.online,
+          image: user.user!.image,
+          last_active: new Date(user.user!.last_active!),
+        }))[1],
+      );
+      channel.watch({ presence: true })
+    };
+
+    updateChannelUsers();
+  }, [channel]);
+  const timeAgo = (date?: Date) => {
+    if (!date) return 'Onbekend';
+    const now = new Date();
+    const diff = now.getTime() - date.getTime(); // Tijdsverschil in milliseconden
+    const minutes = Math.floor(diff / 60000);
+    const hours = Math.floor(diff / 3600000);
+    const days = Math.floor(diff / 86400000);
+  
+    if (days > 0) {
+      return `${days}d geleden`;
+    } else if (hours > 0) {
+      return `${hours}u geleden`;
+    } else if (minutes > 0) {
+      return `${minutes}m geleden`;
+    } else {
+      return 'Zojuist';
+    }
+  };
+
   const acceptRide = async () => {
 
     let query = supabaseAdmin
@@ -184,12 +216,7 @@ const RideDetails = ({ ride, closeDetails }: detailsProps) => {
       );
     }
   };
-  const redirectToChat = (passengerId: string) => {
-    return () => {
-      closeDetails();
-      return <Redirect href={`/chat`} />;
-    };
-  };
+
 
   const createCalAndEvent = async () => {
     const granted = await getPermission();
@@ -587,17 +614,27 @@ const RideDetails = ({ ride, closeDetails }: detailsProps) => {
             </View>
           </ThemedView>
         </Modal>
-      {channel && (
-        <Modal isVisible={channel !== null} style={{margin: 0, paddingBottom: 48, backgroundColor: "white"}} animationIn="slideInRight" animationOut="slideOutRight">
-            <Button mod={["white", "square"]} onPress={() => setChannel(null)} style={{position: 'absolute', top: 64, left: 32, zIndex: 999}}>
-              <AntDesign name='arrowleft' size={24} color={themeColor}/>
-            </Button>
-            <Channel channel={channel}>
-              <MessageList/>
-              <MessageInput/>
-            </Channel>
-        </Modal>
-        )}
+        {channel && (
+      <Modal isVisible style={{margin: 0, paddingBottom: 48, backgroundColor: "white"}} animationIn="slideInRight" animationOut="slideOutRight">
+          <View style={{marginTop: 50}}>
+          <Channel channel={channel}>
+            <View style={{flexDirection: "row", alignItems: "center", justifyContent: "flex-start", gap: 16, marginHorizontal: 24}}>
+          <Button mod={["white", "square"]} onPress={() => setChannel(null)}>
+            <AntDesign name='arrowleft' size={24} color={themeColor}/>
+          </Button>
+              {channelUser?.image? <Image source={channelUser.image} style={{height: 48, width: 48, borderRadius: 50}}></Image> : null}
+              <View style={{alignItems: "flex-start"}}>
+              <ThemedText style={styles.chatTitle}>{channelUser?.name? channelUser.name : "User"}</ThemedText>
+              <ThemedText style={styles.activeTitle}>{channelUser?.online? "Nu actief" : `${timeAgo(channelUser?.last_active)} actief`}</ThemedText>
+
+              </View>
+            </View>
+            <MessageList/>
+            <MessageInput/>
+          </Channel>
+          </View>
+      </Modal>
+      )}
     </View>
   );
 };
@@ -605,12 +642,17 @@ const RideDetails = ({ ride, closeDetails }: detailsProps) => {
 export default RideDetails;
 
 const styles = StyleSheet.create({
-  chatContainer: {
-
-  },
   chatTitle: {
-
-  },
+    fontSize: 18,
+    fontWeight: "bold",
+    textAlign: "center",
+    fontFamily: "Cocon"
+  }, 
+  activeTitle: {
+    fontSize: 16,
+    textAlign: "center",
+    fontFamily: "inter"
+  }, 
   modalContainer: {
     flex: 1,
     justifyContent: "center",

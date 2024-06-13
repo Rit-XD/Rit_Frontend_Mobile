@@ -4,8 +4,7 @@
   },
   "build": {
     "development": {
-      "developmentClient": true,
-      "distribution": "internal"
+      "developmentClient": true
     },
     "development-simulator": {
       "developmentClient": true,
