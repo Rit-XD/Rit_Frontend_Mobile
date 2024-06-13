@@ -10,6 +10,7 @@ import {
   Dimensions,
 } from "react-native";
 import { Easing } from "react-native-reanimated";
+import { ThemedView } from "../ThemedView";
 
 const LoginRegisterSlider = ({ initialActive }: { initialActive: string }) => {
   const router = useRouter();
@@ -34,38 +35,48 @@ const LoginRegisterSlider = ({ initialActive }: { initialActive: string }) => {
   });
 
   return (
-    <View style={styles.container}>
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => handlePress("login")}
-        >
-          <Text
-            style={[styles.buttonText, active === "login" && styles.activeText]}
+    <ThemedView style={styles.background}>
+      <ThemedView style={styles.container}>
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => handlePress("login")}
           >
-            Inloggen
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => handlePress("register")}
-        >
-          <Text
-            style={[
-              styles.buttonText,
-              active === "register" && styles.activeText,
-            ]}
+            <Text
+              style={[
+                styles.buttonText,
+                active === "login" && styles.activeText,
+              ]}
+            >
+              Inloggen
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => handlePress("register")}
           >
-            Registreren
-          </Text>
-        </TouchableOpacity>
-      </View>
-      <Animated.View style={[styles.slider, { transform: [{ translateX }] }]} />
-    </View>
+            <Text
+              style={[
+                styles.buttonText,
+                active === "register" && styles.activeText,
+              ]}
+            >
+              Registreren
+            </Text>
+          </TouchableOpacity>
+        </View>
+        <Animated.View
+          style={[styles.slider, { transform: [{ translateX }] }]}
+        />
+      </ThemedView>
+    </ThemedView>
   );
 };
 
 const styles = StyleSheet.create({
+  background: {
+    paddingBottom: 16,
+  },
   container: {
     marginTop: 16,
     marginBottom: 64,
@@ -74,7 +85,6 @@ const styles = StyleSheet.create({
     height: 50,
     backgroundColor: "#fad2b3",
     borderRadius: 25,
-    padding: 2,
     justifyContent: "center",
     position: "relative",
   },
