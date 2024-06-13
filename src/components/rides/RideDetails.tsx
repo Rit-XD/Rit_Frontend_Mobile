@@ -619,7 +619,7 @@ const styles = StyleSheet.create({
   },
   map: {
     width: "100%",
-    height: "110%",
+    height: "115%",
   },
   edit: {
     fontSize: 36,

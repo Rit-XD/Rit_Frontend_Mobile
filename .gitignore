@@ -30,3 +30,5 @@ eas.*
 eas
 android
 ios
+
+*.ipa

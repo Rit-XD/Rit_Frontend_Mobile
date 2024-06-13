@@ -20,7 +20,7 @@
       "config": {
         "googleMapsApiKey": "AIzaSyBKhixrksRyCcnWxY2koJMH2GfDx6ywZgA"
       },
-      "buildNumber": "11",
+      "buildNumber": "12",
       "infoPlist": {
         "NSCalendarsUsageDescription": "This app uses the calendar to add events to your calendar",
         "NSRemindersUsageDescription": "This app uses the reminders to add reminders to your reminders",
