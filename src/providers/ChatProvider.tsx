@@ -13,14 +13,13 @@ export default function ChatProvider({children}: PropsWithChildren) {
 
     useEffect(() => {
         const connect = async() => {
-          console.log(user)
           await client.connectUser(
             {
-              id: user.id,
-              name: `${user.firstname} ${user.lastname}`,
-              image: 'https://i.imgur.com/fR9Jz14.png',
+              id: user!.id,
+              name: `${user!.firstname} ${user!.lastname}`,
+              image: user!.picture || 'https://i.imgur.com/fR9Jz14.png',
             },
-            client.devToken(user.id),
+            client.devToken(user!.id),
           );
           setIsReady(true);
     
@@ -35,7 +34,7 @@ export default function ChatProvider({children}: PropsWithChildren) {
           if (isReady) client.disconnectUser();
           setIsReady(false);
         }
-      }, [user.id]);
+      }, [user!.id]);
 
     if(!isReady) return <ActivityIndicator style={{marginTop: 75}} color={primaryColor} size={"large"}/>;
 

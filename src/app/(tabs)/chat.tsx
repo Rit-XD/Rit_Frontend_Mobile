@@ -9,9 +9,11 @@ import { AntDesign } from "@expo/vector-icons";
 import { useThemeColor } from "@/hooks/useThemeColor";
 import ChatProvider from "@/providers/ChatProvider";
 import { ThemedText } from "@/components/ThemedText";
+import { useAuth } from "@/providers/AuthProvider";
 
 const ChatScreen = () => {
   const themeColor = useThemeColor({ light: "#151515", dark: "#fefefe" }, 'background');
+  const { user } = useAuth();
   const [channel, setChannel] = useState<ChannelType | null>();
 
   return (
@@ -29,7 +31,7 @@ const ChatScreen = () => {
       ) : (
       <ThemedView style={styles.container}>
         <ThemedText style={styles.title}>Chat</ThemedText>
-        <ChannelList onSelect={setChannel}/>
+        <ChannelList onSelect={setChannel} filters={{ members: {$in: [user!.id] }}}/>
       </ThemedView>
       )}
     </ChatProvider>

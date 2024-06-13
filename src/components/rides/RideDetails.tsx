@@ -22,6 +22,7 @@ import { Redirect } from "expo-router";
 import { Platform } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import useCalendar from "@atiladev/usecalendar";
+import { useRide } from "@/providers/RideProvider";
 
 Geocoder.init(process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY!, { language: "nl" });
 
@@ -39,7 +40,8 @@ type detailsProps = {
   closeDetails: (returnToRides?: boolean) => void;
 };
 const RideDetails = ({ ride, closeDetails }: detailsProps) => {
-  const { user, fetchRides } = useAuth();
+  const { user } = useAuth();
+  const { fetchRides} = useRide();
   const themeColor = useThemeColor(
     { light: "#151515", dark: "#fefefe" },
     "background"
@@ -127,7 +129,7 @@ const RideDetails = ({ ride, closeDetails }: detailsProps) => {
   const acceptRide = async () => {
     let query = supabaseAdmin
       .from("Rides")
-      .update({ driver: user.id })
+      .update({ driver: user!.id })
       .eq("id", ride.id)
       .single();
     const res = query.then((res) => {
@@ -227,7 +229,7 @@ const RideDetails = ({ ride, closeDetails }: detailsProps) => {
           }}
         >
           <ThemedText style={styles.name}>{passenger?.firstname}</ThemedText>
-          {ride.driver === user.id && (
+          {ride.driver === user!.id && (
             <ThemedText
               style={styles.edit}
               onPress={() => setShowAcceptModal("cancel")}
@@ -263,7 +265,7 @@ const RideDetails = ({ ride, closeDetails }: detailsProps) => {
                   })
                 : "00.00"}
             </ThemedText>
-            {ride.driver === user.id && (
+            {ride.driver === user!.id && (
               <View style={{ position: "absolute", right: 0 }}>
                 <FontAwesome5
                   name="calendar-plus"
@@ -323,13 +325,13 @@ const RideDetails = ({ ride, closeDetails }: detailsProps) => {
               justifyContent: "center",
             }}
             onPress={
-              ride.driver !== user.id
+              ride.driver !== user!.id
                 ? () => setShowAcceptModal("accept")
                 : redirectToChat(ride.passenger_1)
             }
           >
             <Text style={{ color: "white", fontSize: 18, fontWeight: "bold" }}>
-              {ride.driver !== user.id ? "Accepteer" : "Stuur bericht"}
+              {ride.driver !== user!.id ? "Accepteer" : "Stuur bericht"}
             </Text>
           </Pressable>
         </ThemedView>

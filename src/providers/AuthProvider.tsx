@@ -13,7 +13,7 @@ import { supabaseAdmin } from "@/lib/supabaseAdmin";
 
 type AuthData = {
   session: Session | null;
-  user: any;
+  user: Driver | null;
   isLoading: boolean;
   colorScheme: ColorSchemeName;
   updateUserTheme?: (theme: Theme) => void;

@@ -1,9 +1,8 @@
 import React from "react";
-import {  StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import { ThemedView } from "../ThemedView";
 import { ThemedText } from "../ThemedText";
-import  Button from "../ui/Button";
-import  Modal from "react-native-modal";
+import Button from "../ui/Button";
 import { AntDesign, FontAwesome, Octicons, Ionicons } from "@expo/vector-icons";
 import { useThemeColor } from "@/hooks/useThemeColor";
 import { useAuth } from "@/providers/AuthProvider";

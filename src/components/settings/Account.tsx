@@ -23,10 +23,10 @@ const Account = ({ onClose }: AccountProps) => {
   const [image, setImage] = useState<string | null>(null);
   const [scopeUser, setScopeUser] = useState(user);
   useEffect(() => {
-    if (user.picture) {
-      setImage(user.picture);
+    if (user!.picture) {
+      setImage(user!.picture);
     }
-  }, [user.picture]);
+  }, [user!.picture]);
 
   const [status, requestPermission] = ImagePicker.useCameraPermissions();
   const pickImage = async () => {
@@ -69,16 +69,16 @@ const Account = ({ onClose }: AccountProps) => {
           </ThemedView>
         </Pressable>
         <ThemedText style={styles.label}>Voornaam</ThemedText>
-        <Input value={user.firstname} onChangeText={() => {}} />
+        <Input value={user!.firstname || ""} onChangeText={() => {}} />
         <ThemedText style={styles.label}>Achternaam</ThemedText>
-        <Input value={user.lastname} onChangeText={() => {}} />
+        <Input value={user!.lastname || ""} onChangeText={() => {}} />
         <ThemedText style={styles.label}>Geboortedatum</ThemedText>
-        <Input value={user.date_of_birth} onChangeText={() => {}} />
+        <Input value={user!.date_of_birth || ""} onChangeText={() => {}} />
         <View style={styles.address}>
           <View>
             <ThemedText style={styles.label}>Plaats</ThemedText>
             <Input
-              value={user.city}
+              value={user!.city || ""}
               onChangeText={() => {}}
               style={{ width: 234 }}
             />
@@ -87,7 +87,7 @@ const Account = ({ onClose }: AccountProps) => {
             <ThemedText style={styles.label}>Postcode</ThemedText>
             <Input
               keyboardType="numeric"
-              value={user.postal || ""}
+              value={user!.postal || ""}
               onChangeText={() => {}}
               style={{ width: 95 }}
             />

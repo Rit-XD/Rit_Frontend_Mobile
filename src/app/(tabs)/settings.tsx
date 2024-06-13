@@ -1,12 +1,9 @@
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
-import Availability from "@/components/notifications/AvailabilityToggle";
 import Button from "@/components/ui/Button";
 import { useThemeColor } from "@/hooks/useThemeColor";
-import { supabase } from "@/lib/supabase";
-import { useAuth } from "@/providers/AuthProvider";
 import { Icon } from "@rneui/themed";
-import { View, Text, StyleSheet, TouchableOpacity, Pressable } from "react-native";
+import { View, StyleSheet, Pressable } from "react-native";
 import { GestureHandlerRootView, Switch } from "react-native-gesture-handler";
 import { primaryColor } from "@/constants/Colors";
 import { useState } from "react";

@@ -3,14 +3,12 @@ import { Pressable, ScrollView, StyleSheet, View } from "react-native";
 import { useThemeColor } from "@/hooks/useThemeColor";
 import { ThemedView } from "../ThemedView";
 import { ThemedText } from "../ThemedText";
-import { useAuth } from "@/providers/AuthProvider";
-import { primaryColor, secondaryColor } from "@/constants/Colors";
+import { primaryColor } from "@/constants/Colors";
 import { Ionicons } from "@expo/vector-icons";
 import RideDetails from "./RideDetails";
 import { Ride } from "@/types/Ride.type";
 import { GestureHandlerRootView, RefreshControl } from "react-native-gesture-handler";
 import Modal from 'react-native-modal';
-import { SlideInRight } from "react-native-reanimated";
 import { useRide } from "@/providers/RideProvider";
 import { useCarecenter } from "@/providers/CareProvider";
 
