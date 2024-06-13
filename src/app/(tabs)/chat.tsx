@@ -12,7 +12,10 @@ import { useAuth } from "@/providers/AuthProvider";
 import { Image } from "expo-image";
 
 const ChatScreen = () => {
-  const themeColor = useThemeColor({ light: "#151515", dark: "#fefefe" }, 'background');
+  const themeColor = useThemeColor(
+    { light: "#151515", dark: "#fefefe" },
+    "background"
+  );
   const { user } = useAuth();
   const [channel, setChannel] = useState<ChannelType | null>();
   const [channelUser, setChannelUser] = useState<{ name?: string; online?: boolean, image?: any, last_active?: Date }>({});
@@ -74,12 +77,20 @@ const ChatScreen = () => {
             <MessageInput/>
           </Channel>
           </View>
-      </Modal>
+        </Modal>
       ) : (
-      <ThemedView style={styles.container}>
-        <ThemedText style={styles.title}>Chat</ThemedText>
-        <ChannelList onSelect={setChannel} filters={{ members: {$in: [user!.id] }}}/>
-      </ThemedView>
+        <ThemedView style={styles.container}>
+          <ThemedText style={styles.title}>Chat</ThemedText>
+          <ChannelList
+            onSelect={setChannel}
+            filters={{ members: { $in: [user!.id] } }}
+            EmptyStateIndicator={() => (
+              <ThemedText style={{ marginHorizontal: "auto", paddingTop: 16 }}>
+                Er zijn geen actieve chats.
+              </ThemedText>
+            )}
+          />
+        </ThemedView>
       )}
     </>
   );
