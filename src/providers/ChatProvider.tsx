@@ -13,15 +13,15 @@ export default function ChatProvider({children}: PropsWithChildren) {
 
     useEffect(() => {
         const connect = async() => {
-          await client.connectUser(
-            {
-              id: user!.id,
-              name: `${user!.firstname} ${user!.lastname}`,
-              image: user!.picture || 'https://i.imgur.com/fR9Jz14.png',
-            },
-            client.devToken(user!.id),
-          );
-          setIsReady(true);
+            await client.connectUser(
+              {
+                id: user!.id,
+                name: `${user!.firstname} ${user!.lastname}`,
+                image: user!.picture || 'https://i.imgur.com/fR9Jz14.png',
+              },
+              client.devToken(user!.id),
+            );
+            setIsReady(true);
     
           // const channel = client.channel('messaging', 'the_park', {
           //   name: 'The Park',
@@ -31,10 +31,10 @@ export default function ChatProvider({children}: PropsWithChildren) {
         connect();
 
         return () => {
-          if (isReady) client.disconnectUser();
+          client.disconnectUser();
           setIsReady(false);
         }
-      }, [user!.id]);
+      }, []);
 
     if(!isReady) return <ActivityIndicator style={{marginTop: 75}} color={primaryColor} size={"large"}/>;
 

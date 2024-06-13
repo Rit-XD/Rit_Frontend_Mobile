@@ -1,4 +1,4 @@
-import { Alert, Modal, Pressable, StyleSheet, Text, View } from "react-native";
+import { Alert, Pressable, StyleSheet, Text, View } from "react-native";
 import React, { useEffect } from "react";
 import { Ride } from "@/types/Ride.type";
 import MapView from "react-native-maps";
@@ -7,6 +7,8 @@ import {
   AntDesign,
   FontAwesome6,
   FontAwesome5,
+  MaterialCommunityIcons,
+  Feather,
 } from "@expo/vector-icons";
 import { useThemeColor } from "@/hooks/useThemeColor";
 import Button from "../ui/Button";
@@ -18,11 +20,16 @@ import { primaryColor } from "@/constants/Colors";
 import MapViewDirections from "react-native-maps-directions";
 import Geocoder from "react-native-geocoding";
 import { useAuth } from "@/providers/AuthProvider";
-import { Redirect } from "expo-router";
+import { Redirect, router } from "expo-router";
 import { Platform } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import useCalendar from "@atiladev/usecalendar";
 import { useRide } from "@/providers/RideProvider";
+import { Channel, ChannelList, MessageInput, MessageList, useChatContext } from "stream-chat-expo";
+import Modal from "react-native-modal";
+import { Channel as ChannelType } from "stream-chat";
+import { FadeIn } from "react-native-reanimated";
+
 
 Geocoder.init(process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY!, { language: "nl" });
 
@@ -41,12 +48,12 @@ type detailsProps = {
 };
 const RideDetails = ({ ride, closeDetails }: detailsProps) => {
   const { user } = useAuth();
+  const { client } = useChatContext();
   const { fetchRides} = useRide();
-  const themeColor = useThemeColor(
-    { light: "#151515", dark: "#fefefe" },
-    "background"
-  );
+  const themeColor = useThemeColor({ light: "#151515", dark: "#fefefe" }, "background");
   const [passenger, setPassenger] = React.useState<Passenger | null>(null);
+  const [channel, setChannel] = React.useState<ChannelType | null>(null);
+
   const origin = {
     address: ride.origin.split(", ")[0],
     city: ride.origin.split(", ")[1].split(" ")[1],
@@ -125,14 +132,29 @@ const RideDetails = ({ ride, closeDetails }: detailsProps) => {
     };
     fetchPassenger();
   }, [ride.passenger_1]);
-
+  
+  
+  // !members-jfxS5FILnkMF6_H_JYgI4CkwEcb4T4BWK0robS_11o8
+  const getChannel = async () => {
+    try {
+      const channel = client.channel("messaging", {
+        members: [user!.id, ride.carecenter_id],
+        passenger: ride.passenger_1,
+      });
+      await channel.watch();
+      setChannel(channel);
+    } catch (e) {
+      console.log(e);
+    }
+  }
   const acceptRide = async () => {
+
     let query = supabaseAdmin
-      .from("Rides")
-      .update({ driver: user!.id })
-      .eq("id", ride.id)
-      .single();
-    const res = query.then((res) => {
+    .from("Rides")
+    .update({ driver: user!.id })
+    .eq("id", ride.id)
+    .single();
+    const res = query.then(async (res) => {
       fetchRides();
       closeDetails(true);
     });
@@ -226,6 +248,7 @@ const RideDetails = ({ ride, closeDetails }: detailsProps) => {
             padding: 16,
             position: "relative",
             overflow: "hidden",
+            paddingTop: 32
           }}
         >
           <ThemedText style={styles.name}>{passenger?.firstname}</ThemedText>
@@ -234,7 +257,7 @@ const RideDetails = ({ ride, closeDetails }: detailsProps) => {
               style={styles.edit}
               onPress={() => setShowAcceptModal("cancel")}
             >
-              ...
+              <Feather name="x" size={24} color="black"/>
             </ThemedText>
           )}
           <ThemedText style={styles.distance}>
@@ -327,17 +350,16 @@ const RideDetails = ({ ride, closeDetails }: detailsProps) => {
             onPress={
               ride.driver !== user!.id
                 ? () => setShowAcceptModal("accept")
-                : redirectToChat(ride.passenger_1)
+                : getChannel
             }
           >
             <Text style={{ color: "white", fontSize: 18, fontWeight: "bold" }}>
-              {ride.driver !== user!.id ? "Accepteer" : "Stuur bericht"}
+              {ride.driver !== user!.id ? "Accepteer" : "Stuur bericht"} 
             </Text>
           </Pressable>
         </ThemedView>
       </View>
-      {showAcceptModal === "accept" && (
-        <Modal transparent>
+        <Modal isVisible={showAcceptModal === "accept"} style={{margin: 0}} animationIn="fadeIn" animationOut="fadeOut">
           <Pressable
             style={{
               height: "100%",
@@ -409,9 +431,7 @@ const RideDetails = ({ ride, closeDetails }: detailsProps) => {
             </View>
           </ThemedView>
         </Modal>
-      )}
-      {showAcceptModal === "cancel" && (
-        <Modal transparent>
+        <Modal isVisible={showAcceptModal === "cancel"} style={{margin: 0}} animationIn="fadeIn" animationOut="fadeOut">
           <Pressable
             style={{
               height: "100%",
@@ -489,9 +509,7 @@ const RideDetails = ({ ride, closeDetails }: detailsProps) => {
             </View>
           </ThemedView>
         </Modal>
-      )}
-      {showAcceptModal === "calendar" && (
-        <Modal transparent>
+        <Modal isVisible={showAcceptModal === "calendar"} style={{margin: 0}} animationIn="fadeIn" animationOut="fadeOut">
           <Pressable
             style={{
               height: "100%",
@@ -569,7 +587,17 @@ const RideDetails = ({ ride, closeDetails }: detailsProps) => {
             </View>
           </ThemedView>
         </Modal>
-      )}
+      {channel && (
+        <Modal isVisible={channel !== null} style={{margin: 0, paddingBottom: 48, backgroundColor: "white"}} animationIn="slideInRight" animationOut="slideOutRight">
+            <Button mod={["white", "square"]} onPress={() => setChannel(null)} style={{position: 'absolute', top: 64, left: 32, zIndex: 999}}>
+              <AntDesign name='arrowleft' size={24} color={themeColor}/>
+            </Button>
+            <Channel channel={channel}>
+              <MessageList/>
+              <MessageInput/>
+            </Channel>
+        </Modal>
+        )}
     </View>
   );
 };
@@ -577,6 +605,12 @@ const RideDetails = ({ ride, closeDetails }: detailsProps) => {
 export default RideDetails;
 
 const styles = StyleSheet.create({
+  chatContainer: {
+
+  },
+  chatTitle: {
+
+  },
   modalContainer: {
     flex: 1,
     justifyContent: "center",
@@ -591,7 +625,8 @@ const styles = StyleSheet.create({
     fontSize: 36,
     position: "absolute",
     right: 14,
-    top: 12,
+    top: 28,
+    color: "red"
   },
   name: {
     fontSize: 24,

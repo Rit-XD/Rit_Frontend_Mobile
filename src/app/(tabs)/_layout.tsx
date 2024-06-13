@@ -5,83 +5,88 @@ import { Colors } from "@/constants/Colors";
 import { useAuth } from "@/providers/AuthProvider";
 import  RideProvider from "@/providers/RideProvider";
 import CareProvider from "@/providers/CareProvider";
+import ChatProvider from "@/providers/ChatProvider";
 
 
 export default function TabLayout() {
-  const {colorScheme, session} = useAuth();
+  const {colorScheme, session, user} = useAuth();
 
   if (!session) return <Redirect href="/login" />;
   return (
     <RideProvider>
       <CareProvider>
-        <Tabs
-          screenOptions={{
-            tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
-            headerShown: false,
-            tabBarStyle: { bottom: 0, height: 90, paddingTop: 10, backgroundColor: colorScheme === "dark" ? "#101010" : "#fff", borderTopWidth: 0, shadowColor: "rgba(0, 0, 0, 0.25)", shadowOffset: { width: 0, height: 1 }, shadowRadius: 9, shadowOpacity: 1 }
-          }}
-        >
-          <Tabs.Screen name="index" options={{ href: null }} />
-          <Tabs.Screen
-            name="home"
-            options={{
-              title: "",
-              tabBarIcon: ({ color, focused }) => (
-                <TabBarIcon
-                  name={focused ? "home" : "home-outline"}
-                  color={color}
-                />
-              ),
-            }}
-          />
-          <Tabs.Screen
-            name="chat"
-            options={{
-              title: "",
-              tabBarIcon: ({ color, focused }) => (
-                <TabBarIcon
-                  name={focused ? "chatbox" : "chatbox-outline"}
-                  color={color}
-                />
-              ),
-            }}
-          />
-          <Tabs.Screen
-            name="car"
-            options={{
-              title: "",
-              tabBarIcon: ({ color, focused }) => (
-                <TabBarIcon name={focused ? "car" : "car-outline"} color={color} />
-              ),
-            }}
-          />
+       {user !== null && (
+        <ChatProvider>
+            <Tabs
+              screenOptions={{
+                tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
+                headerShown: false,
+                tabBarStyle: { bottom: 0, height: 90, paddingTop: 10, backgroundColor: colorScheme === "dark" ? "#101010" : "#fff", borderTopWidth: 0, shadowColor: "rgba(0, 0, 0, 0.25)", shadowOffset: { width: 0, height: 1 }, shadowRadius: 9, shadowOpacity: 1 }
+              }}
+            >
+              <Tabs.Screen name="index" options={{ href: null }} />
+              <Tabs.Screen
+                name="home"
+                options={{
+                  title: "",
+                  tabBarIcon: ({ color, focused }) => (
+                    <TabBarIcon
+                      name={focused ? "home" : "home-outline"}
+                      color={color}
+                    />
+                  ),
+                }}
+              />
+              <Tabs.Screen
+                name="chat"
+                options={{
+                  title: "",
+                  tabBarIcon: ({ color, focused }) => (
+                    <TabBarIcon
+                      name={focused ? "chatbox" : "chatbox-outline"}
+                      color={color}
+                    />
+                  ),
+                }}
+              />
+              <Tabs.Screen
+                name="car"
+                options={{
+                  title: "",
+                  tabBarIcon: ({ color, focused }) => (
+                    <TabBarIcon name={focused ? "car" : "car-outline"} color={color} />
+                  ),
+                }}
+              />
 
-          <Tabs.Screen
-            name="settings"
-            options={{
-              title: "",
-              tabBarIcon: ({ color, focused }) => (
-                <TabBarIcon
-                  name={focused ? "settings" : "settings-outline"}
-                  color={color}
-                />
-              ),
-            }}
-          />
-          <Tabs.Screen
-            name="explore"
-            options={{
-              href: null,
-              title: "",
-              tabBarIcon: ({ color, focused }) => (
-                <TabBarIcon
-                  name={focused ? "code-slash" : "code-slash-outline"}
-                  color={color}
-                />
-              ),
-            }}
-          />
-        </Tabs>
+              <Tabs.Screen
+                name="settings"
+                options={{
+                  title: "",
+                  tabBarIcon: ({ color, focused }) => (
+                    <TabBarIcon
+                      name={focused ? "settings" : "settings-outline"}
+                      color={color}
+                    />
+                  ),
+                }}
+              />
+              <Tabs.Screen
+                name="explore"
+                options={{
+                  href: null,
+                  title: "",
+                  tabBarIcon: ({ color, focused }) => (
+                    <TabBarIcon
+                      name={focused ? "code-slash" : "code-slash-outline"}
+                      color={color}
+                    />
+                  ),
+                }}
+              />
+            </Tabs>
+          </ChatProvider>
+       )} 
       </CareProvider>
     </RideProvider>
   );
