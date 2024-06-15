@@ -1,4 +1,4 @@
-import { SplashScreen, Stack } from "expo-router";
+import { Slot, SplashScreen, Stack, router } from "expo-router";
 import { useFonts } from "expo-font";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { useEffect, useRef, useState } from "react";
@@ -12,6 +12,7 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import * as Notifications from "expo-notifications";
 import * as Device from "expo-device";
 import { Platform } from "react-native";
+import Constants from "expo-constants";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -47,6 +48,13 @@ export default function RootLayout() {
   });
 
   useEffect(() => {
+    function redirect(notification: Notifications.Notification) {
+      const url = notification.request.content.data?.url;
+      if (url) {
+        router.push(url);
+      }
+    }
+
     registerForPushNotificationsAsync().then((token) =>
       setExpoPushToken(token)
     );
@@ -56,7 +64,7 @@ export default function RootLayout() {
       });
     responseListener.current =
       Notifications.addNotificationResponseReceivedListener((response) => {
-        console.log(response);
+        redirect(response.notification);
       });
 
     return () => {
@@ -64,6 +72,9 @@ export default function RootLayout() {
         Notifications.removeNotificationSubscription(
           notificationListener.current
         );
+      }
+      if (responseListener.current) {
+        Notifications.removeNotificationSubscription(responseListener.current);
       }
     };
   }, []);
@@ -96,7 +107,7 @@ export default function RootLayout() {
       }
 
       try {
-        const projectId = "YOUR_PROJECT_ID_HERE";
+        const projectId = Constants.expoConfig?.extra?.eas.projectId;
         if (!projectId) {
           throw new Error("Project ID not found");
         }
@@ -110,7 +121,7 @@ export default function RootLayout() {
         token = `${e}`;
       }
     } else {
-      alert("Must use physical device for Push Notifications");
+      console.log("Must use physical device for Push Notifications");
     }
 
     return token;
@@ -129,7 +140,39 @@ export default function RootLayout() {
   return <RootLayoutNav />;
 }
 
+function useNotificationObserver() {
+  useEffect(() => {
+    let isMounted = true;
+
+    function redirect(notification: Notifications.Notification) {
+      const url = notification.request.content.data?.url;
+      if (url) {
+        router.push(url);
+      }
+    }
+
+    Notifications.getLastNotificationResponseAsync().then((response) => {
+      if (!isMounted || !response?.notification) {
+        return;
+      }
+      redirect(response?.notification);
+    });
+
+    const subscription = Notifications.addNotificationResponseReceivedListener(
+      (response) => {
+        redirect(response.notification);
+      }
+    );
+
+    return () => {
+      isMounted = false;
+      subscription.remove();
+    };
+  }, []);
+}
+
 function RootLayoutNav() {
+  useNotificationObserver();
   const { colorScheme } = useAuth();
 
   const RitTheme = {
