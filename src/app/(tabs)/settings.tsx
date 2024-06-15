@@ -16,10 +16,20 @@ import License from "@/components/settings/License";
 import Bestuurderspas from "@/components/settings/Bestuurderspas";
 import Faq from "@/components/settings/Faq";
 import Logout from "@/components/settings/Logout";
+import * as Notifications from "expo-notifications";
 
 const SettingsScreen = () => {
   const [notification, setNotification] = useState(true);
-  const [modalVisible, setModalVisible] = useState<"logout" | "theme" | "account" | "password" | "license" | "bestuurderspas" | "faq" | null>(null);
+  const [modalVisible, setModalVisible] = useState<
+    | "logout"
+    | "theme"
+    | "account"
+    | "password"
+    | "license"
+    | "bestuurderspas"
+    | "faq"
+    | null
+  >(null);
 
   const colorTrack = useThemeColor(
     { light: "#fefefe", dark: "#fff" },
@@ -37,13 +47,27 @@ const SettingsScreen = () => {
 
   const icons = useThemeColor({ light: "black", dark: "#fefefe" }, "icon");
 
+  async function schedulePushNotification() {
+    await Notifications.scheduleNotificationAsync({
+      content: {
+        title: "Kapper afspraak",
+        body: "Bram moet naar de kapper! 🧑‍🦰",
+        data: { data: "goes here", test: { test1: "more data" } },
+      },
+      trigger: { seconds: 2 },
+    });
+  }
+
   return (
     <ThemedView style={styles.container}>
       <ThemedText style={styles.title}>Algemeen</ThemedText>
       <ThemedView
         style={[styles.infoContainer, { backgroundColor: infoBackground }]}
       >
-        <Pressable style={[styles.row, { backgroundColor: infoBackground }]} onPress={() => setModalVisible("account")}>
+        <Pressable
+          style={[styles.row, { backgroundColor: infoBackground }]}
+          onPress={() => setModalVisible("account")}
+        >
           <ThemedView style={styles.iconWord}>
             <Ionicons
               style={{ color: icons }}
@@ -54,7 +78,10 @@ const SettingsScreen = () => {
           </ThemedView>
           <Icon iconStyle={{ color: icons }} name="chevron-right" size={28} />
         </Pressable>
-        <Pressable style={[styles.row, { backgroundColor: infoBackground }]} onPress={() => setModalVisible("password")}>
+        <Pressable
+          style={[styles.row, { backgroundColor: infoBackground }]}
+          onPress={() => setModalVisible("password")}
+        >
           <ThemedView style={styles.iconWord}>
             <Ionicons style={{ color: icons }} name="key-outline" size={20} />
             <ThemedText style={styles.text}>Wijzig wachtwoord</ThemedText>
@@ -81,14 +108,20 @@ const SettingsScreen = () => {
             />
           </GestureHandlerRootView>
         </ThemedView>
-        <Pressable style={[styles.row, { backgroundColor: infoBackground }]} onPress={() => setModalVisible("license")}>
+        <Pressable
+          style={[styles.row, { backgroundColor: infoBackground }]}
+          onPress={() => setModalVisible("license")}
+        >
           <ThemedView style={styles.iconWord}>
             <AntDesign style={{ color: icons }} name="idcard" size={20} />
             <ThemedText style={styles.text}>Rijbewijs</ThemedText>
           </ThemedView>
           <Icon iconStyle={{ color: icons }} name="chevron-right" size={28} />
         </Pressable>
-        <Pressable style={[styles.row, { backgroundColor: infoBackground }]} onPress={() => setModalVisible("bestuurderspas")}>
+        <Pressable
+          style={[styles.row, { backgroundColor: infoBackground }]}
+          onPress={() => setModalVisible("bestuurderspas")}
+        >
           <ThemedView style={styles.iconWord}>
             <Ionicons style={{ color: icons }} name="card-outline" size={20} />
             <ThemedText style={styles.text}>Bestuurderspas</ThemedText>
@@ -100,7 +133,10 @@ const SettingsScreen = () => {
       <ThemedView
         style={[styles.infoContainer, { backgroundColor: infoBackground }]}
       >
-        <Pressable  onPress={() => setModalVisible("theme")} style={[styles.oneRow, { backgroundColor: infoBackground }]}>
+        <Pressable
+          onPress={() => setModalVisible("theme")}
+          style={[styles.oneRow, { backgroundColor: infoBackground }]}
+        >
           <View style={styles.iconWord}>
             <Ionicons style={{ color: icons }} name="moon-outline" size={20} />
             <ThemedText style={styles.text}>Appweergave</ThemedText>
@@ -112,7 +148,10 @@ const SettingsScreen = () => {
       <ThemedView
         style={[styles.infoContainer, { backgroundColor: infoBackground }]}
       >
-        <Pressable style={[styles.oneRow, { backgroundColor: infoBackground }]} onPress={() => setModalVisible("faq")}>
+        <Pressable
+          style={[styles.oneRow, { backgroundColor: infoBackground }]}
+          onPress={() => setModalVisible("faq")}
+        >
           <ThemedView style={styles.iconWord}>
             <Ionicons
               style={{ color: icons }}
@@ -124,10 +163,11 @@ const SettingsScreen = () => {
           <Icon iconStyle={{ color: icons }} name="chevron-right" size={28} />
         </Pressable>
       </ThemedView>
+      <Button onPress={schedulePushNotification}>
+        <ThemedText>Test notification</ThemedText>
+      </Button>
 
-
-
-      <Button
+      {/* <Button
         style={styles.button}
         onPress={() => setModalVisible("logout")}
         mod={["white", "square"]}
@@ -136,19 +176,36 @@ const SettingsScreen = () => {
           <Ionicons name="log-out-outline" size={20} style={{ color: "red" }} />
           <ThemedText style={{ color: "red" }}>Afmelden</ThemedText>
         </View>
-      </Button>
-      
-      <Modal isVisible={modalVisible !== null} animationIn={modalVisible !== "logout"? "slideInRight" : "fadeIn"} animationOut="slideOutRight" style={{margin: 0}}>
-        {modalVisible==="account" && <Account onClose={() => setModalVisible(null)}/>}
-        {modalVisible==="password" && <Password onClose={() => setModalVisible(null)}/>}
-        {modalVisible==="license" && <License onClose={() => setModalVisible(null)}/>}
-        {modalVisible==="bestuurderspas" && <Bestuurderspas onClose={() => setModalVisible(null)}/>}
-        {modalVisible==="theme" && <ThemeSelector onClose={() => setModalVisible(null)}/>}
-        {modalVisible==="faq" && <Faq onClose={() => setModalVisible(null)}/>}
-        {modalVisible==="logout" && <Logout onClose={() => setModalVisible(null)}/>}
+      </Button> */}
 
+      <Modal
+        isVisible={modalVisible !== null}
+        animationIn={modalVisible !== "logout" ? "slideInRight" : "fadeIn"}
+        animationOut="slideOutRight"
+        style={{ margin: 0 }}
+      >
+        {modalVisible === "account" && (
+          <Account onClose={() => setModalVisible(null)} />
+        )}
+        {modalVisible === "password" && (
+          <Password onClose={() => setModalVisible(null)} />
+        )}
+        {modalVisible === "license" && (
+          <License onClose={() => setModalVisible(null)} />
+        )}
+        {modalVisible === "bestuurderspas" && (
+          <Bestuurderspas onClose={() => setModalVisible(null)} />
+        )}
+        {modalVisible === "theme" && (
+          <ThemeSelector onClose={() => setModalVisible(null)} />
+        )}
+        {modalVisible === "faq" && (
+          <Faq onClose={() => setModalVisible(null)} />
+        )}
+        {modalVisible === "logout" && (
+          <Logout onClose={() => setModalVisible(null)} />
+        )}
       </Modal>
-
     </ThemedView>
   );
 };
