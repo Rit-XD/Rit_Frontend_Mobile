@@ -37,10 +37,6 @@ const ChatScreen = () => {
     last_active?: Date;
   }>({});
 
-  useEffect(() => {
-    console.log(channel)
-  },[channel]);
-
   const timeAgo = (date?: Date) => {
     if (!date) return "Onbekend";
     const now = new Date();
@@ -64,13 +60,14 @@ const ChatScreen = () => {
     const updateChannelUsers = () => {
       if (!channel) return;
       const members = Object.values(channel.state.members).map((user) => ({
+        id: user.user!.id,
         name: user.user!.name,
         online: !!user.user!.online,
         image: user.user!.image,
         last_active: new Date(user.user!.last_active!),
       }));
       
-      setChannelUser(members.filter((member) => member.name !== `${user?.firstname} ${user?.lastname}`)[0]);
+      setChannelUser(members.filter((member) => member.id !== user?.id)[0]);
       channel.watch({ presence: true });
     };
 
