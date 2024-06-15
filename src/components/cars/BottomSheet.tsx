@@ -1,10 +1,4 @@
-import {
-  Text,
-  StyleSheet,
-  Image,
-  Pressable,
-  Linking
-} from "react-native";
+import { Text, StyleSheet, Image, Pressable, Linking } from "react-native";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
 import Button from "../ui/Button";
@@ -141,139 +135,147 @@ const CarBottomSheetComponent = () => {
       handleStyle={{ backgroundColor: background }}
       handleIndicatorStyle={{ backgroundColor: handleIndicator }}
     >
-      <ThemedView>
-        <ThemedView style={styles.centeredView}>
-          {car?.picture && (
-            <Image
-              source={{ uri: car?.picture }}
-              style={styles.carImage}
-              resizeMode="contain"
-            />
-          )}
-          <ThemedText style={styles.carTitle}>
-            {car?.brand} {car?.model}
-          </ThemedText>
-          <ThemedText style={styles.carSubtitle}>{car?.plate}</ThemedText>
-        </ThemedView>
-
-        <ThemedView style={styles.specsContainer}>
-          <ThemedView style={styles.specsRow}>
-            <FontAwesome
-              style={{ color: primaryColor }}
-              name="gears"
-              size={16}
-            />
-            <ThemedText style={styles.text}>
-              {car?.automatic === true ? "Automaat" : "Manueel"}
-            </ThemedText>
-          </ThemedView>
-          <ThemedView style={styles.specsRow}>
-            <FontAwesome5
-              style={{ color: primaryColor }}
-              name="gas-pump"
-              size={16}
-            />
-            <ThemedText style={styles.text}>{car?.fuel}</ThemedText>
-          </ThemedView>
-          <ThemedView style={styles.specsRow}>
-            <FontAwesome5
-              name="wheelchair"
-              size={16}
-              style={{ color: primaryColor }}
-            />
-            <ThemedText style={styles.text}>
-              {car?.wheelchaircapacity === 1
-                ? `${car?.wheelchaircapacity} plaats`
-                : `${car?.wheelchaircapacity} plaatsen`}
-            </ThemedText>
-          </ThemedView>
-        </ThemedView>
+      {acceptedRides && acceptedRides.length === 0 ? (
         <ThemedView>
-          <ThemedView style={styles.infoRow}>
-            <ThemedView style={styles.specsRow}>
-              <SimpleLineIcons
-                style={{ color: primaryColor }}
-                name="speedometer"
-                size={16}
+          <ThemedText style={{ textAlign: "center" }}>
+            Je hebt nog geen ritten ingepland.
+          </ThemedText>
+        </ThemedView>
+      ) : (
+        <ThemedView>
+          <ThemedView style={styles.centeredView}>
+            {car?.picture && (
+              <Image
+                source={{ uri: car?.picture }}
+                style={styles.carImage}
+                resizeMode="contain"
               />
-              <ThemedText style={styles.text}>Bereik</ThemedText>
-            </ThemedView>
-            <ThemedText style={styles.infoText}>{car?.range} km</ThemedText>
-          </ThemedView>
-          <ThemedView style={styles.infoRow}>
-            <ThemedView style={styles.specsRow}>
-              <Ionicons
-                style={{ color: primaryColor }}
-                name="person-outline"
-                size={16}
-              />
-              <ThemedText style={styles.text}>Zitplaatsen</ThemedText>
-            </ThemedView>
-            <ThemedText style={styles.infoText}>
-              {car?.seats === 1
-                ? `${car?.seats} passagier`
-                : `${car?.seats} passagiers`}
+            )}
+            <ThemedText style={styles.carTitle}>
+              {car?.brand} {car?.model}
             </ThemedText>
+            <ThemedText style={styles.carSubtitle}>{car?.plate}</ThemedText>
+          </ThemedView>
+
+          <ThemedView style={styles.specsContainer}>
+            <ThemedView style={styles.specsRow}>
+              <FontAwesome
+                style={{ color: primaryColor }}
+                name="gears"
+                size={16}
+              />
+              <ThemedText style={styles.text}>
+                {car?.automatic === true ? "Automaat" : "Manueel"}
+              </ThemedText>
+            </ThemedView>
+            <ThemedView style={styles.specsRow}>
+              <FontAwesome5
+                style={{ color: primaryColor }}
+                name="gas-pump"
+                size={16}
+              />
+              <ThemedText style={styles.text}>{car?.fuel}</ThemedText>
+            </ThemedView>
+            <ThemedView style={styles.specsRow}>
+              <FontAwesome5
+                name="wheelchair"
+                size={16}
+                style={{ color: primaryColor }}
+              />
+              <ThemedText style={styles.text}>
+                {car?.wheelchaircapacity === 1
+                  ? `${car?.wheelchaircapacity} plaats`
+                  : `${car?.wheelchaircapacity} plaatsen`}
+              </ThemedText>
+            </ThemedView>
+          </ThemedView>
+          <ThemedView>
+            <ThemedView style={styles.infoRow}>
+              <ThemedView style={styles.specsRow}>
+                <SimpleLineIcons
+                  style={{ color: primaryColor }}
+                  name="speedometer"
+                  size={16}
+                />
+                <ThemedText style={styles.text}>Bereik</ThemedText>
+              </ThemedView>
+              <ThemedText style={styles.infoText}>{car?.range} km</ThemedText>
+            </ThemedView>
+            <ThemedView style={styles.infoRow}>
+              <ThemedView style={styles.specsRow}>
+                <Ionicons
+                  style={{ color: primaryColor }}
+                  name="person-outline"
+                  size={16}
+                />
+                <ThemedText style={styles.text}>Zitplaatsen</ThemedText>
+              </ThemedView>
+              <ThemedText style={styles.infoText}>
+                {car?.seats === 1
+                  ? `${car?.seats} passagier`
+                  : `${car?.seats} passagiers`}
+              </ThemedText>
+            </ThemedView>
+          </ThemedView>
+          <ThemedView
+            style={[styles.infoContainer, { backgroundColor: infoBackground }]}
+          >
+            <Pressable onPress={() => Linking.openURL(car!.insurance || "")}>
+              <ThemedView
+                style={[styles.otherRow, { backgroundColor: infoBackground }]}
+              >
+                <ThemedText style={styles.text}>Verzekering</ThemedText>
+                <Icon
+                  iconStyle={{ color: arrow }}
+                  name="chevron-right"
+                  size={28}
+                />
+              </ThemedView>
+            </Pressable>
+            <Pressable onPress={() => Linking.openURL(car!.registration || "")}>
+              <ThemedView
+                style={[styles.otherRow, { backgroundColor: infoBackground }]}
+              >
+                <ThemedText style={styles.text}>
+                  Inschrijvingsformulier
+                </ThemedText>
+                <Icon
+                  iconStyle={{ color: arrow }}
+                  name="chevron-right"
+                  size={28}
+                />
+              </ThemedView>
+            </Pressable>
+            <Pressable
+              onPress={() => Linking.openURL(`tel:${carecenter?.phone}`)}
+            >
+              <ThemedView
+                style={[styles.otherRow, { backgroundColor: infoBackground }]}
+              >
+                <ThemedText style={styles.text}>
+                  Contacteer zorginstelling
+                </ThemedText>
+                <Icon
+                  iconStyle={{ color: arrow }}
+                  name="chevron-right"
+                  size={28}
+                />
+              </ThemedView>
+            </Pressable>
+          </ThemedView>
+          <ThemedView style={styles.buttonContainer}>
+            {isLocked ? (
+              <Button onPress={sendUnlockCommand}>
+                <Text style={styles.buttonText}>Ontgrendel wagen</Text>
+              </Button>
+            ) : (
+              <Button onPress={sendLockCommand}>
+                <Text style={styles.buttonText}>Vergrendel wagen</Text>
+              </Button>
+            )}
           </ThemedView>
         </ThemedView>
-        <ThemedView
-          style={[styles.infoContainer, { backgroundColor: infoBackground }]}
-        >
-          <Pressable onPress={() => Linking.openURL(car!.insurance || "")}>
-            <ThemedView
-              style={[styles.otherRow, { backgroundColor: infoBackground }]}
-            >
-              <ThemedText style={styles.text}>Verzekering</ThemedText>
-              <Icon
-                iconStyle={{ color: arrow }}
-                name="chevron-right"
-                size={28}
-              />
-            </ThemedView>
-          </Pressable>
-          <Pressable onPress={() => Linking.openURL(car!.registration || "")}>
-            <ThemedView
-              style={[styles.otherRow, { backgroundColor: infoBackground }]}
-            >
-              <ThemedText style={styles.text}>
-                Inschrijvingsformulier
-              </ThemedText>
-              <Icon
-                iconStyle={{ color: arrow }}
-                name="chevron-right"
-                size={28}
-              />
-            </ThemedView>
-          </Pressable>
-          <Pressable
-            onPress={() => Linking.openURL(`tel:${carecenter?.phone}`)}
-          >
-            <ThemedView
-              style={[styles.otherRow, { backgroundColor: infoBackground }]}
-            >
-              <ThemedText style={styles.text}>
-                Contacteer zorginstelling
-              </ThemedText>
-              <Icon
-                iconStyle={{ color: arrow }}
-                name="chevron-right"
-                size={28}
-              />
-            </ThemedView>
-          </Pressable>
-        </ThemedView>
-        <ThemedView style={styles.buttonContainer}>
-          {isLocked ? (
-            <Button onPress={sendUnlockCommand}>
-              <Text style={styles.buttonText}>Ontgrendel wagen</Text>
-            </Button>
-          ) : (
-            <Button onPress={sendLockCommand}>
-              <Text style={styles.buttonText}>Vergrendel wagen</Text>
-            </Button>
-          )}
-        </ThemedView>
-      </ThemedView>
+      )}
     </BottomSheet>
   );
 };
