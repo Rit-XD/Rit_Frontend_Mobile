@@ -15,6 +15,7 @@ export default function ChatProvider({children}: PropsWithChildren) {
 
     useEffect(() => {
         const connect = async() => {
+          if(client.user) return setIsReady(true);
             await client.connectUser(
               {
                 id: user!.id,
@@ -24,18 +25,8 @@ export default function ChatProvider({children}: PropsWithChildren) {
               client.devToken(user!.id),
             );
             setIsReady(true);
-    
-          // const channel = client.channel('messaging', 'the_park', {
-          //   name: 'The Park',
-          // });
-          // await channel.watch();
         }
         connect();
-
-        return () => {
-          client.disconnectUser();
-          setIsReady(false);
-        }
       }, []);
 
     if(!isReady) return <ActivityIndicator style={{marginTop: 75}} color={primaryColor} size={"large"}/>;
