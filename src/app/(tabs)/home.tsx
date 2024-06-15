@@ -8,11 +8,12 @@ import { primaryColor, secondaryColor } from "@/constants/Colors";
 import { LinearGradient } from "expo-linear-gradient";
 import Availability from "@/components/notifications/AvailabilityToggle";
 import RidesList from "@/components/rides/RidesList";
+import { Driver } from "@/types/Driver.type";
 
 export default function HomeScreen() {
   const { user, session } = useAuth();
-  const [data, setData] = useState(null);
-  
+  const [data, setData] = useState<Driver | null>(null);
+
   useEffect(() => {
     setData(user);
   }, [user]);
@@ -43,7 +44,7 @@ export default function HomeScreen() {
         </View>
       </View>
       <Availability value={true} />
-      <RidesList/>
+      <RidesList />
     </ThemedView>
   );
 }

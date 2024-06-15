@@ -9,6 +9,7 @@ import {
 } from "@react-navigation/native";
 import AuthProvider, { useAuth } from "@/providers/AuthProvider";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export {
   // Catch any errors thrown by the Layout component.
