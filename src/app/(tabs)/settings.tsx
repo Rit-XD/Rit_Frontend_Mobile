@@ -47,17 +47,6 @@ const SettingsScreen = () => {
 
   const icons = useThemeColor({ light: "black", dark: "#fefefe" }, "icon");
 
-  async function schedulePushNotification() {
-    await Notifications.scheduleNotificationAsync({
-      content: {
-        title: "Kapper afspraak",
-        body: "Bram moet naar de kapper! 🧑‍🦰",
-        data: { data: "goes here", test: { test1: "more data" } },
-      },
-      trigger: { seconds: 2 },
-    });
-  }
-
   return (
     <ThemedView style={styles.container}>
       <ThemedText style={styles.title}>Algemeen</ThemedText>
@@ -163,11 +152,8 @@ const SettingsScreen = () => {
           <Icon iconStyle={{ color: icons }} name="chevron-right" size={28} />
         </Pressable>
       </ThemedView>
-      <Button onPress={schedulePushNotification}>
-        <ThemedText>Test notification</ThemedText>
-      </Button>
 
-      {/* <Button
+      <Button
         style={styles.button}
         onPress={() => setModalVisible("logout")}
         mod={["white", "square"]}
@@ -176,7 +162,7 @@ const SettingsScreen = () => {
           <Ionicons name="log-out-outline" size={20} style={{ color: "red" }} />
           <ThemedText style={{ color: "red" }}>Afmelden</ThemedText>
         </View>
-      </Button> */}
+      </Button>
 
       <Modal
         isVisible={modalVisible !== null}
