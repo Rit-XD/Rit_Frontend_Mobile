@@ -17,6 +17,7 @@ type AuthData = {
   isLoading: boolean;
   colorScheme: ColorSchemeName;
   updateUserTheme?: (theme: Theme) => void;
+  fetchDriver: (id: string) => void;
 };
 type Theme = "dark" | "light" | "auto";
 
@@ -25,6 +26,7 @@ const AuthContext = createContext<AuthData>({
   user: null,
   isLoading: true,
   colorScheme: null,
+  fetchDriver: () => {},
 });
 
 export default function AuthProvider({ children }: PropsWithChildren) {
@@ -75,7 +77,7 @@ export default function AuthProvider({ children }: PropsWithChildren) {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ session, user, isLoading, colorScheme, updateUserTheme }}>
+    <AuthContext.Provider value={{ session, user, isLoading, colorScheme, updateUserTheme, fetchDriver }}>
       {children}
     </AuthContext.Provider>
   );
