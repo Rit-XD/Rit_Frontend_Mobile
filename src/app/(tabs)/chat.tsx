@@ -37,10 +37,6 @@ const ChatScreen = () => {
     last_active?: Date;
   }>({});
 
-  useEffect(() => {
-    console.log(channel)
-  },[channel]);
-
   const timeAgo = (date?: Date) => {
     if (!date) return "Onbekend";
     const now = new Date();
