@@ -77,16 +77,6 @@ const ChatScreen = () => {
   return (
     <>
       {channel ? (
-        <Modal
-          isVisible
-          style={{
-            margin: 0,
-            paddingBottom: 48,
-            backgroundColor: backgroundColor,
-          }}
-          animationIn="slideInRight"
-          animationOut="slideOutRight"
-        >
           <View style={{ marginTop: 50 }}>
             <Channel channel={channel}>
               <View
@@ -125,7 +115,6 @@ const ChatScreen = () => {
               <MessageInput />
             </Channel>
           </View>
-        </Modal>
       ) : (
         <ThemedView style={styles.container}>
           <ThemedText style={styles.title}>Chat</ThemedText>
