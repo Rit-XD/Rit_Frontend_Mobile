@@ -130,9 +130,7 @@ const RideDetails = ({ ride, closeDetails }: detailsProps) => {
     fetchPassenger();
   }, [ride.passenger_1]);
   
-  
-  // !members-jfxS5FILnkMF6_H_JYgI4CkwEcb4T4BWK0robS_11o8
-  const getChannel = async () => {
+    const getChannel = async () => {
     try {
       const channel = client.channel("messaging", {
         members: [user!.id, ride.carecenter_id],
@@ -180,7 +178,6 @@ const RideDetails = ({ ride, closeDetails }: detailsProps) => {
   };
 
   const acceptRide = async () => {
-
     let query = supabaseAdmin
     .from("Rides")
     .update({ driver: user!.id })
