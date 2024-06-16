@@ -275,7 +275,11 @@ const CarBottomSheetComponent = () => {
                     Vergrendel wagen
                   </Text>
                 </Button>
-                <Button mod={["square"]} style={{ backgroundColor: "red" }}>
+                <Button
+                  mod={["square"]}
+                  style={{ backgroundColor: "red" }}
+                  onPress={sendLockCommand}
+                >
                   <Text style={styles.buttonText}>Rit beëindigen</Text>
                 </Button>
               </>
