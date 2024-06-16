@@ -1,4 +1,11 @@
-import { Pressable, PressableProps, StyleProp, StyleSheet, Text, View } from "react-native";
+import {
+  Pressable,
+  PressableProps,
+  StyleProp,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import { forwardRef } from "react";
 import { Colors, primaryColor } from "@/constants/Colors";
 import { AntDesign } from "@expo/vector-icons";
@@ -6,7 +13,7 @@ import { useThemeColor } from "@/hooks/useThemeColor";
 
 type ButtonProps = {
   children?: React.ReactNode;
-  mod?: ["white"?, "square"?];
+  mod?: string[];
   style?: StyleProp<PressableProps>;
 } & React.ComponentPropsWithoutRef<typeof Pressable>;
 

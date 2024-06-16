@@ -265,13 +265,20 @@ const CarBottomSheetComponent = () => {
           </ThemedView>
           <ThemedView style={styles.buttonContainer}>
             {isLocked ? (
-              <Button onPress={sendUnlockCommand}>
+              <Button mod={["square"]} onPress={sendUnlockCommand}>
                 <Text style={styles.buttonText}>Ontgrendel wagen</Text>
               </Button>
             ) : (
-              <Button onPress={sendLockCommand}>
-                <Text style={styles.buttonText}>Vergrendel wagen</Text>
-              </Button>
+              <>
+                <Button mod={["white", "square"]} onPress={sendLockCommand}>
+                  <Text style={[styles.buttonText, { color: "red" }]}>
+                    Vergrendel wagen
+                  </Text>
+                </Button>
+                <Button mod={["square"]} style={{ backgroundColor: "red" }}>
+                  <Text style={styles.buttonText}>Rit beëindigen</Text>
+                </Button>
+              </>
             )}
           </ThemedView>
         </ThemedView>
@@ -303,7 +310,6 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     paddingHorizontal: 24,
-    paddingVertical: 50,
     paddingBottom: 30,
   },
 
@@ -324,7 +330,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     marginTop: 20,
     paddingHorizontal: 24,
-    paddingVertical: 10,
+    paddingVertical: 5,
   },
 
   infoText: {
