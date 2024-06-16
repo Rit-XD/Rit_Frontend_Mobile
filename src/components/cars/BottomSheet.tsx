@@ -314,7 +314,7 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     paddingHorizontal: 24,
-    paddingBottom: 30,
+    paddingBottom: 90,
   },
 
   specsContainer: {
