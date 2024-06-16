@@ -19,7 +19,7 @@ import { Carecenter } from "@/types/Carecenter.type";
 import axios from "axios";
 import { useRide } from "@/providers/RideProvider";
 
-const ESP32_IP_ADDRESS = "http://172.20.10.10 ";
+const ESP32_IP_ADDRESS = "http://172.20.10.10";
 
 const CarBottomSheetComponent = () => {
   const [car, setCar] = useState<Car | null>(null);
