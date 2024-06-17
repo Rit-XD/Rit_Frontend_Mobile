@@ -11,6 +11,7 @@ import {
 } from "@expo/vector-icons";
 import { ThemedView } from "../ThemedView";
 import { ThemedText } from "../ThemedText";
+
 import { useThemeColor } from "@/hooks/useThemeColor";
 import { primaryColor } from "@/constants/Colors";
 import { supabaseAdmin } from "@/lib/supabaseAdmin";
@@ -18,6 +19,7 @@ import { Car } from "@/types/Car.type";
 import { Carecenter } from "@/types/Carecenter.type";
 import axios from "axios";
 import { useRide } from "@/providers/RideProvider";
+import { Ride } from "@/types/Ride.type";
 
 const ESP32_IP_ADDRESS = "http://172.20.10.10";
 
@@ -96,10 +98,13 @@ const CarBottomSheetComponent = () => {
 
   useEffect(() => {
     const fetchCar = async () => {
+      let orderedRides: Ride[] = acceptedRides.filter((ride) => new Date(ride.timestamp) > new Date());
+      orderedRides = orderedRides.sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime());
+
       const { data, error } = await supabaseAdmin
         .from("Car")
         .select("*")
-        .eq("id", acceptedRides[0].car)
+        .eq("id", orderedRides[0].car)
         .limit(1)
         .single();
       if (error) console.log(error);
