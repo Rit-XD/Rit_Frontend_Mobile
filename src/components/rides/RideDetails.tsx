@@ -131,6 +131,7 @@ const RideDetails = ({ ride, closeDetails }: detailsProps) => {
   }, [ride.passenger_1]);
   
     const getChannel = async () => {
+      console.log("carecenter", ride.carecenter_id)
     try {
       const channel = client.channel("messaging", {
         members: [user!.id, ride.carecenter_id],
